@@ -78,6 +78,66 @@ function getChainFromAccount (network: Network): ChainType {
   }
 }
 
+export async function storeCode (
+  network: Network,
+  signingClient: any,
+  sender: string,
+  contractName: string,
+  wasmFileContent: Buffer,
+  customFees?: TxnStdFee,
+  source?: string,
+  builder?: string
+): Promise<{codeId: number, contractCodeHash: any}> {
+  if (network.config.accounts[0].address.startsWith("secret")) {
+    const inGasLimit = parseInt(customFees?.gas as string);
+    const inGasPrice =
+      parseFloat(customFees?.amount[0].amount as string) /
+      parseFloat(customFees?.gas as string);
+
+    const uploadReceipt = await signingClient.tx.compute.storeCode(
+      {
+        sender: sender,
+        wasm_byte_code: wasmFileContent,
+        source: source ?? "",
+        builder: builder ?? ""
+      },
+      {
+        gasLimit: Number.isNaN(inGasLimit) ? undefined : inGasLimit,
+        gasPriceInFeeDenom: Number.isNaN(inGasPrice) ? undefined : inGasPrice
+      }
+    );
+    const res = uploadReceipt?.arrayLog?.find(
+      (log: any) => log.type === "message" && log.key === "code_id"
+    );
+    if (res === undefined) {
+      throw new PolarError(ERRORS.GENERAL.STORE_RESPONSE_NOT_RECEIVED, {
+        jsonLog: JSON.stringify(uploadReceipt, null, 2),
+        contractName: contractName
+      });
+    }
+    const codeId = Number(res.value);
+
+    const contractCodeHash = await signingClient.query.compute.codeHashByCodeId({
+      code_id: codeId.toString()
+    });
+    return { contractCodeHash: contractCodeHash, codeId: codeId };
+  } else if (network.config.accounts[0].address.startsWith("juno")) {
+    const uploadReceipt = await signingClient.upload(
+      sender,
+      wasmFileContent,
+      customFees ?? defaultFeesJuno.upload,
+      "uploading"
+    );
+    const codeId: number = uploadReceipt.codeId;
+    return { codeId: codeId, contractCodeHash: { code_hash: "not_required" } };
+    // } else if (network.config.accounts[0].address.startsWith("inj")) {
+    //   return ChainType.Injective;
+  } else {
+    throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+      { account: network.config.accounts[0].address });
+  }
+}
+
 export async function executeTransaction (
   network: Network,
   signingClient: any,

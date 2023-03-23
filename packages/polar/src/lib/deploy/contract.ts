@@ -20,7 +20,7 @@ import type {
   UserAccount
 } from "../../types";
 import { loadCheckpoint, persistCheckpoint } from "../checkpoints";
-import { executeTransaction, getClient, getSigningClient, sendQuery } from "../client";
+import { executeTransaction, getClient, getSigningClient, sendQuery, storeCode } from "../client";
 
 export interface ExecArgs {
   account: Account | UserAccount
@@ -102,39 +102,18 @@ export class Contract {
     await compress(this.contractName);
 
     const wasmFileContent: Buffer = fs.readFileSync(this.contractPath);
-
-    const inGasLimit = parseInt(customFees?.gas as string);
-    const inGasPrice =
-      parseFloat(customFees?.amount[0].amount as string) /
-      parseFloat(customFees?.gas as string);
-
     const signingClient = getSigningClient(this.env.network, accountVal);
-    const uploadReceipt = await signingClient.tx.compute.storeCode(
-      {
-        sender: accountVal.address,
-        wasm_byte_code: wasmFileContent,
-        source: source ?? "",
-        builder: builder ?? ""
-      },
-      {
-        gasLimit: Number.isNaN(inGasLimit) ? undefined : inGasLimit,
-        gasPriceInFeeDenom: Number.isNaN(inGasPrice) ? undefined : inGasPrice
-      }
-    );
-    const res = uploadReceipt?.arrayLog?.find(
-      (log) => log.type === "message" && log.key === "code_id"
-    );
-    if (res === undefined) {
-      throw new PolarError(ERRORS.GENERAL.STORE_RESPONSE_NOT_RECEIVED, {
-        jsonLog: JSON.stringify(uploadReceipt, null, 2),
-        contractName: this.contractName
-      });
-    }
-    const codeId = Number(res.value);
 
-    const contractCodeHash = await signingClient.query.compute.codeHashByCodeId({
-      code_id: codeId.toString()
-    });
+    const { codeId, contractCodeHash } = await storeCode(
+      this.env.network,
+      signingClient,
+      accountVal.address,
+      this.contractName,
+      wasmFileContent,
+      customFees,
+      source,
+      builder
+    );
     this.codeId = codeId;
     const deployInfo: DeployInfo = {
       codeId: codeId,
