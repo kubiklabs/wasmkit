@@ -20,7 +20,7 @@ import type {
   UserAccount
 } from "../../types";
 import { loadCheckpoint, persistCheckpoint } from "../checkpoints";
-import { executeTransaction, getClient, getSigningClient, sendQuery, storeCode } from "../client";
+import { executeTransaction, getClient, getSigningClient, instantiateContract, sendQuery, storeCode } from "../client";
 
 export interface ExecArgs {
   account: Account | UserAccount
@@ -169,17 +169,18 @@ export class Contract {
     label: string,
     account: Account | UserAccount,
     transferAmount?: Coin[],
-    customFees?: TxnStdFee
+    customFees?: TxnStdFee,
+    contractAdmin?: string | undefined
   ): Promise<InstantiateInfo> {
     const accountVal: Account =
       (account as UserAccount).account !== undefined
         ? (account as UserAccount).account
         : (account as Account);
-    if (this.contractCodeHash === "mock_hash") {
-      throw new PolarError(ERRORS.GENERAL.CONTRACT_NOT_DEPLOYED, {
-        param: this.contractName
-      });
-    }
+    // if (this.contractCodeHash === "mock_hash") {
+    //   throw new PolarError(ERRORS.GENERAL.CONTRACT_NOT_DEPLOYED, {
+    //     param: this.contractName
+    //   });
+    // }
     let info;
     // Load instantiate info for tag
     for (const value of this.checkpointData[this.env.network.name].instantiateInfo ?? []) {
@@ -192,12 +193,6 @@ export class Contract {
       return info;
     }
     const signingClient = getSigningClient(this.env.network, accountVal);
-
-    const inGasLimit = parseInt(customFees?.gas as string);
-    const inGasPrice =
-      parseFloat(customFees?.amount[0].amount as string) /
-      parseFloat(customFees?.gas as string);
-
     const initTimestamp = String(new Date());
     label =
       this.env.runtimeArgs.command === "test"
@@ -205,32 +200,19 @@ export class Contract {
         : label;
     console.log(`Instantiating with label: ${label}`);
 
-    const tx = await signingClient.tx.compute.instantiateContract(
-      {
-        code_id: this.codeId,
-        sender: accountVal.address,
-        code_hash: this.contractCodeHash,
-        init_msg: initArgs,
-        label: label,
-        init_funds: transferAmount
-      },
-      {
-        gasLimit: Number.isNaN(inGasLimit) ? undefined : inGasLimit,
-        gasPriceInFeeDenom: Number.isNaN(inGasPrice) ? undefined : inGasPrice
-      }
+    this.contractAddress = await instantiateContract(
+      this.env.network,
+      signingClient,
+      this.codeId,
+      accountVal.address,
+      this.contractName,
+      this.contractCodeHash,
+      initArgs,
+      label,
+      transferAmount,
+      customFees,
+      contractAdmin
     );
-
-    // Find the contract_address in the logs
-    const res = tx?.arrayLog?.find(
-      (log) => log.type === "message" && log.key === "contract_address"
-    );
-    if (res === undefined) {
-      throw new PolarError(ERRORS.GENERAL.INIT_RESPONSE_NOT_RECEIVED, {
-        jsonLog: JSON.stringify(tx, null, 2),
-        contractName: this.contractName
-      });
-    }
-    this.contractAddress = res.value;
 
     const instantiateInfo: InstantiateInfo = {
       instantiateTag: this.instantiateTag,

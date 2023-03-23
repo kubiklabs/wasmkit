@@ -138,6 +138,82 @@ export async function storeCode (
   }
 }
 
+export async function instantiateContract (
+  network: Network,
+  signingClient: any,
+  codeId: number,
+  sender: string,
+  contractName: string,
+  contractCodeHash: string,
+  initArgs: Record<string, unknown>,
+  label: string,
+  transferAmount?: Coin[],
+  customFees?: TxnStdFee,
+  contractAdmin?: string | undefined
+): Promise<string> {
+  const chain = getChainFromAccount(network);
+  switch (chain) {
+    case ChainType.Secret: {
+      if (contractCodeHash === "mock_hash") {
+        throw new PolarError(ERRORS.GENERAL.CONTRACT_NOT_DEPLOYED, {
+          param: contractName
+        });
+      }
+      const inGasLimit = parseInt(customFees?.gas as string);
+      const inGasPrice =
+        parseFloat(customFees?.amount[0].amount as string) /
+        parseFloat(customFees?.gas as string);
+
+      const tx = await signingClient.tx.compute.instantiateContract(
+        {
+          code_id: codeId,
+          sender: sender,
+          code_hash: contractCodeHash,
+          init_msg: initArgs,
+          label: label,
+          init_funds: transferAmount
+        },
+        {
+          gasLimit: Number.isNaN(inGasLimit) ? undefined : inGasLimit,
+          gasPriceInFeeDenom: Number.isNaN(inGasPrice) ? undefined : inGasPrice
+        }
+      );
+
+      // Find the contract_address in the logs
+      const res = tx?.arrayLog?.find(
+        (log: any) => log.type === "message" && log.key === "contract_address"
+      );
+      if (res === undefined) {
+        throw new PolarError(ERRORS.GENERAL.INIT_RESPONSE_NOT_RECEIVED, {
+          jsonLog: JSON.stringify(tx, null, 2),
+          contractName: contractName
+        });
+      }
+      return res.value;
+    }
+    case ChainType.Juno: {
+      const contract = await signingClient.instantiate(
+        sender,
+        codeId,
+        initArgs,
+        label,
+        customFees ?? defaultFeesJuno.init,
+        {
+          funds: transferAmount,
+          admin: contractAdmin
+        }
+      );
+      return contract.contractAddress;
+    }
+    // case ChainType.Injective: {
+
+    // }
+    default: {
+      throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+        { account: network.config.accounts[0].address });
+    }
+  }
+}
 export async function executeTransaction (
   network: Network,
   signingClient: any,
