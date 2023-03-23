@@ -7,25 +7,60 @@ import { ERRORS } from "../internal/core/errors-list";
 import { Account, ChainType, Network } from "../types";
 
 export async function getClient (network: Network): Promise<SecretNetworkClient | CosmWasmClient> {
-  // get account type from config, also handle error if account not found
-  // enum
-  return new SecretNetworkClient({
-    chainId: network.config.chainId,
-    url: network.config.endpoint
-  });
+  const chain = getChainFromAccount(network);
+  switch (chain) {
+    case ChainType.Secret: {
+      return new SecretNetworkClient({
+        chainId: network.config.chainId,
+        url: network.config.endpoint
+      });
+    }
+    case ChainType.Juno: {
+      return await CosmWasmClient.connect(network.config.endpoint);
+    }
+    // case ChainType.Injective: {
+
+    // }
+    default: {
+      throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+        { account: network.config.accounts[0].address });
+    }
+  }
 }
 
-export function getSigningClient (
+export async function getSigningClient (
   network: Network,
   account: Account
-): SecretNetworkClient {
-  const wall = new Wallet(account.mnemonic);
-  return new SecretNetworkClient({
-    url: network.config.endpoint,
-    chainId: network.config.chainId,
-    wallet: wall,
-    walletAddress: account.address
-  });
+): Promise<SecretNetworkClient | SigningCosmWasmClient> {
+  const chain = getChainFromAccount(network);
+  switch (chain) {
+    case ChainType.Secret: {
+      const wall = new Wallet(account.mnemonic);
+      return new SecretNetworkClient({
+        url: network.config.endpoint,
+        chainId: network.config.chainId,
+        wallet: wall,
+        walletAddress: account.address
+      });
+    }
+    case ChainType.Juno: {
+      const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+        hdPaths: [makeCosmoshubPath(0)],
+        prefix: "juno"
+      });
+      return await SigningCosmWasmClient.connectWithSigner(
+        network.config.endpoint,
+        wallet
+      );
+    }
+    // case ChainType.Injective: {
+
+    // }
+    default: {
+      throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+        { account: network.config.accounts[0].address });
+    }
+  }
 }
 
 function getChainFromAccount (network: Network): ChainType {
