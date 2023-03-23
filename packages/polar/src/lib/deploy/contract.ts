@@ -1,3 +1,4 @@
+import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import fs from "fs-extra";
 import path from "path";
 import { SecretNetworkClient } from "secretjs";
@@ -19,7 +20,7 @@ import type {
   UserAccount
 } from "../../types";
 import { loadCheckpoint, persistCheckpoint } from "../checkpoints";
-import { getClient, getSigningClient } from "../client";
+import { executeTransaction, getClient, getSigningClient, sendQuery } from "../client";
 
 export interface ExecArgs {
   account: Account | UserAccount
@@ -34,7 +35,7 @@ export class Contract {
   private readonly env: PolarRuntimeEnvironment =
   PolarContext.getPolarContext().getRuntimeEnv();
 
-  private client?: SecretNetworkClient;
+  private client?: SecretNetworkClient | CosmWasmClient;
 
   public codeId: number;
   public contractCodeHash: string;
@@ -80,7 +81,7 @@ export class Contract {
   }
 
   async setupClient (): Promise<void> {
-    this.client = getClient(this.env.network);
+    this.client = await getClient(this.env.network);
   }
 
   async deploy (
@@ -283,11 +284,10 @@ export class Contract {
     if (this.client === undefined) {
       throw new PolarError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
     }
-    return await this.client.query.compute.queryContract({
-      contract_address: this.contractAddress,
-      query: msgData,
-      code_hash: this.contractCodeHash
-    });
+
+    return await sendQuery(
+      this.client, this.env.network, msgData, this.contractAddress, this.contractCodeHash
+    );
   }
 
   async executeMsg (
@@ -308,27 +308,18 @@ export class Contract {
     }
     // Send execute msg to the contract
     const signingClient = getSigningClient(this.env.network, accountVal);
-
-    const inGasLimit = parseInt(customFees?.gas as string);
-    const inGasPrice =
-      parseFloat(customFees?.amount[0].amount as string) /
-      parseFloat(customFees?.gas as string);
-
     console.log("Executing", this.contractAddress, msgData);
-    // Send the same handleMsg to increment multiple times
-    const txnResponse = await signingClient.tx.compute.executeContract(
-      {
-        sender: accountVal.address,
-        contract_address: this.contractAddress,
-        code_hash: this.contractCodeHash,
-        msg: msgData,
-        sent_funds: transferAmount as Coin[] | undefined
-      },
-      {
-        gasLimit: Number.isNaN(inGasLimit) ? undefined : inGasLimit,
-        gasPriceInFeeDenom: Number.isNaN(inGasPrice) ? undefined : inGasPrice,
-        memo: memo
-      }
+
+    const txnResponse = await executeTransaction(
+      this.env.network,
+      signingClient,
+      accountVal.address,
+      this.contractAddress,
+      this.contractCodeHash,
+      msgData,
+      transferAmount,
+      customFees,
+      memo
     );
 
     if (txnResponse.code !== 0) {

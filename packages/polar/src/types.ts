@@ -91,8 +91,8 @@ export interface PolarNetworkUserConfig {
   accounts: PolarNetworkAccountsUserConfig
   gasLimit?: string | number
   chainId: string
-  // TODO: check fees
-  fees?: Partial<FeePool>
+  // TODO: check fees // add type
+  fees?: Partial<any>
 }
 
 export interface NetworksUserConfig {

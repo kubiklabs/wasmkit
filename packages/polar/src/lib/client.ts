@@ -1,10 +1,12 @@
 import { CosmWasmClient, ExecuteResult, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet, makeCosmoshubPath } from "@cosmjs/proto-signing";
 import { SecretNetworkClient, Wallet } from "secretjs";
+import { Coin } from "secretjs/dist/protobuf/cosmos/base/v1beta1/coin";
 
 import { PolarError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
-import { Account, ChainType, Network } from "../types";
+import { Account, ChainType, Network, TxnStdFee } from "../types";
+import { defaultFees, defaultFeesJuno } from "./constants";
 
 export async function getClient (network: Network): Promise<SecretNetworkClient | CosmWasmClient> {
   const chain = getChainFromAccount(network);
@@ -73,6 +75,62 @@ function getChainFromAccount (network: Network): ChainType {
   } else {
     throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
       { account: network.config.accounts[0].address });
+  }
+}
+
+export async function executeTransaction (
+  network: Network,
+  signingClient: any,
+  sender: string,
+  contractAddress: string,
+  contractCodeHash: string,
+  msgData: Record<string, unknown>,
+  transferAmount?: readonly Coin[],
+  customFees?: TxnStdFee,
+  memo?: string
+): Promise<any> {
+  const chain = getChainFromAccount(network);
+
+  switch (chain) {
+    case ChainType.Secret: {
+      const inGasLimit = parseInt(customFees?.gas as string);
+      const inGasPrice =
+        parseFloat(customFees?.amount[0].amount as string) /
+        parseFloat(customFees?.gas as string);
+      return signingClient.tx.compute.executeContract(
+        {
+          sender: sender,
+          contract_address: contractAddress,
+          code_hash: contractCodeHash,
+          msg: msgData,
+          sent_funds: transferAmount as Coin[] | undefined
+        },
+        {
+          gasLimit: Number.isNaN(inGasLimit) ? undefined : inGasLimit,
+          gasPriceInFeeDenom: Number.isNaN(inGasPrice) ? undefined : inGasPrice,
+          memo: memo
+        }
+      );
+    }
+    case ChainType.Juno: {
+      const customFeesVal: TxnStdFee | undefined = customFees !== undefined
+        ? customFees : network.config.fees?.exec;
+      return signingClient.execute(
+        sender,
+        contractAddress,
+        msgData,
+        customFeesVal ?? defaultFeesJuno.exec,
+        memo === undefined ? "executing" : memo,
+        transferAmount
+      );
+    }
+    // case ChainType.Injective: {
+
+    // }
+    default: {
+      throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+        { account: network.config.accounts[0].address });
+    }
   }
 }
 
