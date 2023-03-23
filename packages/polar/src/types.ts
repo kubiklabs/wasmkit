@@ -16,6 +16,12 @@
 
 import * as types from "./internal/core/params/argument-types";
 
+export enum ChainType {
+  Secret,
+  Juno,
+  Injective,
+}
+
 export interface Account {
   name: string
   address: string
