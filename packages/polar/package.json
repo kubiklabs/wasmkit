@@ -1,9 +1,9 @@
 {
-  "name": "secret-polar",
+  "name": "wasm-kit",
   "version": "0.11.0",
   "main": "dist/index.js",
-  "repository": "https://github.com/arufa-research/polar.git",
-  "description": "Polar is a development environment to compile, deploy, test, run scrt contracts on different networks.",
+  "repository": "https://github.com/arufa-research/wasmkit.git",
+  "description": "Wasmkit is a development environment to compile, deploy, test, run cosmwasm contracts on different networks.",
   "authors": [
     {
       "name": "Coco sha",
@@ -21,6 +21,7 @@
   "keywords": [
     "cosmwasm",
     "secret-network",
+    "juno-network",
     "dev-tooling",
     "blockchain",
     "rust",
@@ -41,7 +42,7 @@
   },
   "types": "dist/index.d.ts",
   "bin": {
-    "polar": "dist/internal/cli/cli.js"
+    "wasmkit": "dist/internal/cli/cli.js"
   },
   "engines": {
     "node": ">=14.11.0"

@@ -65,7 +65,7 @@ export async function getSigningClient (
   }
 }
 
-function getChainFromAccount (network: Network): ChainType {
+export function getChainFromAccount (network: Network): ChainType {
   if (network.config.accounts[0].address.startsWith("secret")) {
     return ChainType.Secret;
   } else if (network.config.accounts[0].address.startsWith("juno")) {
