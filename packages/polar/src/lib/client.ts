@@ -33,10 +33,10 @@ function getChainFromAccount (network: Network): ChainType {
     return ChainType.Secret;
   } else if (network.config.accounts[0].address.startsWith("juno")) {
     return ChainType.Juno;
-  } else if (network.config.accounts[0].address.startsWith("inj")) {
-    return ChainType.Injective;
+    // } else if (network.config.accounts[0].address.startsWith("inj")) {
+    //   return ChainType.Injective;
   } else {
-    throw new PolarError(ERRORS.GENERAL.CLIENT_NOT_LOADED,
+    throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
       { account: network.config.accounts[0].address });
   }
 }
@@ -65,7 +65,7 @@ export async function sendQuery (
 
     // }
     default: {
-      throw new PolarError(ERRORS.GENERAL.CLIENT_NOT_LOADED,
+      throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }
   }

@@ -414,6 +414,14 @@ Please make sure your node is running, and check your internet connection and ne
 
 Try using another mnemonic or deriving less keys.`,
       shouldBeReported: false
+    },
+    UNKNOWN_NETWORK: {
+      number: 112,
+      message:
+        "Network not supported with %account%.",
+      title: 'Network not supported',
+      description: `Network not supported with %account%.`,
+      shouldBeReported: false
     }
   },
   TASK_DEFINITIONS: {
