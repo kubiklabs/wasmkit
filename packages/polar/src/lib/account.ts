@@ -19,12 +19,12 @@ export class UserAccountI implements UserAccount {
     this.client = await getClient(env.network);
   }
 
-  async getAccountInfo (): Promise<WasmAccount | undefined> {
-    if (this.client === undefined) {
-      throw new PolarError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
-    }
-    return (await this.client.query.auth.account({ address: this.account.address })).account;
-  }
+  // async getAccountInfo (): Promise<WasmAccount | undefined> {
+  //   if (this.client === undefined) {
+  //     throw new PolarError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
+  //   }
+  //   return (await this.client.query.auth.account({ address: this.account.address })).account;
+  // }
 
   async getBalance (): Promise<Coin[]> {
     const env: PolarRuntimeEnvironment = PolarContext.getPolarContext().getRuntimeEnv();

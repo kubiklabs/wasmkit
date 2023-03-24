@@ -339,3 +339,7 @@ Promise<Coin[]> {
     }
   }
 }
+
+// export async function accountInfo(): Promise<any> {
+
+// }

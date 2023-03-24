@@ -6,8 +6,7 @@ import { ERRORS } from "../../../internal/core/errors-list";
 import type {
   Account, Coin, UserAccount
 } from "../../../types";
-import { getClient } from "../../client";
-import { getBalance } from "./changeScrtBalance";
+import { getBalance, getClient } from "../../client";
 
 export function supportChangeTokenBalances (Assertion: Chai.AssertionStatic): void {
   Assertion.addMethod('changeTokenBalances', function (
@@ -72,7 +71,8 @@ async function getBalances (
   return await Promise.all(
     accountAddresses.map(async (accountAddr) => {
       return extractTokenBalance(
-        await getBalance(client, accountAddr),
+        await getBalance(
+          client, accountAddr, PolarContext.getPolarContext().getRuntimeEnv().network),
         token
       );
     })
