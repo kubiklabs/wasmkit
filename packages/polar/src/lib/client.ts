@@ -1,5 +1,6 @@
 import { CosmWasmClient, ExecuteResult, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet, makeCosmoshubPath } from "@cosmjs/proto-signing";
+import { Console } from "console";
 import { SecretNetworkClient, Wallet } from "secretjs";
 import { Coin } from "secretjs/dist/protobuf/cosmos/base/v1beta1/coin";
 
@@ -66,9 +67,11 @@ export async function getSigningClient (
 }
 
 export function getChainFromAccount (network: Network): ChainType {
+  console.log("Fetching chain");
   if (network.config.accounts[0].address.startsWith("secret")) {
     return ChainType.Secret;
   } else if (network.config.accounts[0].address.startsWith("juno")) {
+    console.log("KIINPMP JUNO");
     return ChainType.Juno;
     // } else if (network.config.accounts[0].address.startsWith("inj")) {
     //   return ChainType.Injective;

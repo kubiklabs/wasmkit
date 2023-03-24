@@ -11,7 +11,7 @@ export default function (): void {
 }
 
 async function nodeInfo (_taskArgs: TaskArguments, env: PolarRuntimeEnvironment): Promise<void> {
-  const client = getClient(env.network) as any;
+  const client = await getClient(env.network) as any;
   console.log("Network:", env.network.name);
   console.log("ChainId:", env.network.config.chainId);
   const chain = getChainFromAccount(env.network);
