@@ -1,21 +1,22 @@
+import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Account as WasmAccount, SecretNetworkClient } from "secretjs";
 
 import { PolarContext } from "../internal/context";
 import { PolarError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
 import { Account, Coin, PolarRuntimeEnvironment, UserAccount } from "../types";
-import { getClient } from "./client";
+import { getBalance, getClient } from "./client";
 
 export class UserAccountI implements UserAccount {
   account: Account;
-  client?: SecretNetworkClient;
+  client?: SecretNetworkClient | CosmWasmClient;
 
   constructor (account: Account) {
     this.account = account;
   }
 
   async setupClient (env: PolarRuntimeEnvironment): Promise<void> {
-    this.client = getClient(env.network);
+    this.client = await getClient(env.network);
   }
 
   async getAccountInfo (): Promise<WasmAccount | undefined> {
@@ -26,22 +27,8 @@ export class UserAccountI implements UserAccount {
   }
 
   async getBalance (): Promise<Coin[]> {
-    if (this.client === undefined) {
-      throw new PolarError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
-    }
-    const info = await this.client.query.bank.balance({
-      address: this.account.address,
-      denom: "uscrt"
-    });
-    if (info === undefined) {
-      throw new PolarError(ERRORS.GENERAL.BALANCE_UNDEFINED);
-    }
-
-    const infoBalance = info.balance ?? { amount: "0", denom: "uscrt" };
-    const normalisedBalance: Coin = (infoBalance.amount === undefined ||
-      infoBalance.denom === undefined) ? { amount: "0", denom: "uscrt" }
-      : { amount: infoBalance.amount, denom: infoBalance.denom };
-    return [normalisedBalance];
+    const env: PolarRuntimeEnvironment = PolarContext.getPolarContext().getRuntimeEnv();
+    return await getBalance(this.client, this.account.address, env.network);
   }
 }
 

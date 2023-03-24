@@ -299,3 +299,43 @@ export async function sendQuery (
     }
   }
 }
+
+export async function getBalance (client: any, accountAddress: string, network: Network):
+Promise<Coin[]> {
+  if (client === undefined) {
+    throw new PolarError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
+  }
+  const chain = getChainFromAccount(network);
+
+  switch (chain) {
+    case ChainType.Secret: {
+      const info = await client.query.bank.balance({
+        address: accountAddress,
+        denom: "uscrt"
+      });
+      if (info === undefined) {
+        throw new PolarError(ERRORS.GENERAL.BALANCE_UNDEFINED);
+      }
+
+      const infoBalance = info.balance ?? { amount: "0", denom: "uscrt" };
+      const normalisedBalance: Coin = (infoBalance.amount === undefined ||
+        infoBalance.denom === undefined) ? { amount: "0", denom: "uscrt" }
+        : { amount: infoBalance.amount, denom: infoBalance.denom };
+      return [normalisedBalance];
+    }
+    case ChainType.Juno: {
+      const info = await client?.getBalance(accountAddress, "ujuno");
+      if (info === undefined) {
+        throw new PolarError(ERRORS.GENERAL.BALANCE_UNDEFINED);
+      }
+      return info;
+    }
+    // case ChainType.Injective: {
+
+    // }
+    default: {
+      throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+        { account: network.config.accounts[0].address });
+    }
+  }
+}

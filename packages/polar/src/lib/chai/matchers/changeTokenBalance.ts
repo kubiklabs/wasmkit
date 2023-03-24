@@ -1,14 +1,12 @@
 import chalk from "chalk";
-import { Account as WasmAccount } from "secretjs";
 
 import { PolarContext } from "../../../internal/context";
 import { PolarError } from "../../../internal/core/errors";
 import { ERRORS } from "../../../internal/core/errors-list";
 import type {
-  Account, Coin, UserAccount
+  Account, Coin, PolarRuntimeEnvironment, UserAccount
 } from "../../../types";
-import { getClient } from "../../client";
-import { getBalance } from "./changeScrtBalance";
+import { getBalance, getClient } from "../../client";
 
 export function supportChangeTokenBalance (Assertion: Chai.AssertionStatic): void {
   Assertion.addMethod('changeTokenBalance', function (
@@ -71,9 +69,10 @@ export async function getBalanceChange (
   }
 
   const client = getClient(PolarContext.getPolarContext().getRuntimeEnv().network);
+  const env: PolarRuntimeEnvironment = PolarContext.getPolarContext().getRuntimeEnv();
 
   const balanceBefore = extractTokenBalance(
-    await getBalance(client, accountAddr),
+    await getBalance(client, accountAddr, env.network),
     token
   );
 
@@ -83,7 +82,7 @@ export async function getBalanceChange (
   }
 
   const balanceAfter = extractTokenBalance(
-    await getBalance(client, accountAddr),
+    await getBalance(client, accountAddr, env.network),
     token
   );
 

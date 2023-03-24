@@ -1,13 +1,12 @@
 import chalk from "chalk";
-import { SecretNetworkClient } from "secretjs";
 
 import { PolarContext } from "../../../internal/context";
 import { PolarError } from "../../../internal/core/errors";
 import { ERRORS } from "../../../internal/core/errors-list";
 import type {
-  Account, Coin, UserAccount
+  Account, Coin, PolarRuntimeEnvironment, UserAccount
 } from "../../../types";
-import { getClient } from "../../client";
+import { getBalance, getClient } from "../../client";
 import { defaultFees } from "../../constants";
 
 export function supportChangeScrtBalance (Assertion: Chai.AssertionStatic): void {
@@ -58,26 +57,6 @@ function extractScrtBalance (
   return 0;
 }
 
-export async function getBalance (client: SecretNetworkClient, accountAddress: string):
-Promise<Coin[]> {
-  if (client === undefined) {
-    throw new PolarError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
-  }
-  const info = await client.query.bank.balance({
-    address: accountAddress,
-    denom: "uscrt"
-  });
-  if (info === undefined) {
-    throw new PolarError(ERRORS.GENERAL.BALANCE_UNDEFINED);
-  }
-
-  const infoBalance = info.balance ?? { amount: "0", denom: "uscrt" };
-  const normalisedBalance: Coin = (infoBalance.amount === undefined ||
-    infoBalance.denom === undefined) ? { amount: "0", denom: "uscrt" }
-    : { amount: infoBalance.amount, denom: infoBalance.denom };
-  return [normalisedBalance];
-}
-
 export async function getBalanceChange ( // eslint-disable-line sonarjs/cognitive-complexity
   transaction: (() => Promise<any>), // eslint-disable-line  @typescript-eslint/no-explicit-any
   accountAddr: string,
@@ -91,8 +70,9 @@ export async function getBalanceChange ( // eslint-disable-line sonarjs/cognitiv
   }
 
   const client = getClient(PolarContext.getPolarContext().getRuntimeEnv().network);
+  const env: PolarRuntimeEnvironment = PolarContext.getPolarContext().getRuntimeEnv();
   const balanceBefore = extractScrtBalance(
-    await getBalance(client, accountAddr)
+    await getBalance(client, accountAddr, env.network)
   );
 
   const txResponse = await transaction();
@@ -113,7 +93,7 @@ export async function getBalanceChange ( // eslint-disable-line sonarjs/cognitiv
   }
 
   const balanceAfter = extractScrtBalance(
-    await getBalance(client, accountAddr)
+    await getBalance(client, accountAddr, env.network)
   );
 
   const fees = Object.assign(
