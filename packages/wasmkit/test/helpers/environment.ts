@@ -1,31 +1,31 @@
 import debug from "debug";
 
-import { PolarContext } from "../../src/internal/context";
+import { WasmkitContext } from "../../src/internal/context";
 import { loadConfigAndTasks } from "../../src/internal/core/config/config-loading";
 import { WasmkitError } from "../../src/internal/core/errors";
 import { ERRORS } from "../../src/internal/core/errors-list";
 import { getEnvRuntimeArgs } from "../../src/internal/core/params/env-variables";
-import { POLAR_PARAM_DEFINITIONS } from "../../src/internal/core/params/polar-params";
+import { WASMKIT_PARAM_DEFINITIONS } from "../../src/internal/core/params/polar-params";
 import { Environment } from "../../src/internal/core/runtime-env";
-import { resetPolarContext } from "../../src/internal/reset";
-import { NetworkConfig, PolarNetworkConfig, PolarRuntimeEnvironment, PromiseAny } from "../../src/types";
+import { resetWasmkitContext } from "../../src/internal/reset";
+import { NetworkConfig, WasmkitNetworkConfig, WasmkitRuntimeEnvironment, PromiseAny } from "../../src/types";
 
 declare module "mocha" {
   interface Context {
-    env: PolarRuntimeEnvironment
+    env: WasmkitRuntimeEnvironment
   }
 }
 
-let ctx: PolarContext;
+let ctx: WasmkitContext;
 
-export const defaultNetCfg: PolarNetworkConfig = {
+export const defaultNetCfg: WasmkitNetworkConfig = {
   accounts: [],
   endpoint: "http://localhost:1337/",
   chainId: "local"
 };
 
 export function useEnvironment (
-  beforeEachFn?: (polarRuntimeEnv: PolarRuntimeEnvironment) => PromiseAny
+  beforeEachFn?: (wasmkitRuntimeEnv: WasmkitRuntimeEnvironment) => PromiseAny
 ): void {
   beforeEach("Load environment", async function () {
     this.env = await getEnv(defaultNetCfg);
@@ -35,13 +35,14 @@ export function useEnvironment (
   });
 
   afterEach("reset builder context", function () {
-    resetPolarContext();
+    resetWasmkitContext();
   });
 }
 
-export async function getEnv (defaultNetworkCfg?: NetworkConfig): Promise<PolarRuntimeEnvironment> {
-  if (PolarContext.isCreated()) {
-    ctx = PolarContext.getPolarContext();
+export async function getEnv (
+  defaultNetworkCfg?: NetworkConfig): Promise<WasmkitRuntimeEnvironment> {
+  if (WasmkitContext.isCreated()) {
+    ctx = WasmkitContext.getWasmkitContext();
 
     // The most probable reason for this to happen is that this file was imported
     // from the config file
@@ -52,9 +53,9 @@ export async function getEnv (defaultNetworkCfg?: NetworkConfig): Promise<PolarR
     return ctx.environment;
   }
 
-  ctx = PolarContext.createPolarContext();
+  ctx = WasmkitContext.createWasmkitContext();
   const runtimeArgs = getEnvRuntimeArgs(
-    POLAR_PARAM_DEFINITIONS,
+    WASMKIT_PARAM_DEFINITIONS,
     process.env
   );
 

@@ -1,9 +1,9 @@
 import debug from "debug";
 
-import { PolarContext } from "./internal/context";
+import { WasmkitContext } from "./internal/context";
 import { loadConfigAndTasks } from "./internal/core/config/config-loading";
 import { getEnvRuntimeArgs } from "./internal/core/params/env-variables";
-import { POLAR_PARAM_DEFINITIONS } from "./internal/core/params/polar-params";
+import { WASMKIT_PARAM_DEFINITIONS } from "./internal/core/params/polar-params";
 import { Environment } from "./internal/core/runtime-env";
 import {
   disableReplWriterShowProxy,
@@ -11,16 +11,16 @@ import {
 } from "./internal/util/console";
 
 async function registerEnv (): Promise<void> {
-  if (!PolarContext.isCreated()) { return; }
+  if (!WasmkitContext.isCreated()) { return; }
 
   require("source-map-support/register");
 
-  const ctx = PolarContext.createPolarContext();
+  const ctx = WasmkitContext.createWasmkitContext();
 
   if (isNodeCalledWithoutAScript()) { disableReplWriterShowProxy(); }
 
   const runtimeArgs = getEnvRuntimeArgs(
-    POLAR_PARAM_DEFINITIONS,
+    WASMKIT_PARAM_DEFINITIONS,
     process.env
   );
 

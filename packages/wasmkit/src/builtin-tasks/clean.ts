@@ -6,7 +6,7 @@ import { task } from "../internal/core/config/config-env";
 import { WasmkitError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
 import { ARTIFACTS_DIR, isCwdProjectDir } from "../internal/core/project-structure";
-import type { PolarRuntimeEnvironment } from "../types";
+import type { WasmkitRuntimeEnvironment } from "../types";
 import { TASK_CLEAN } from "./task-names";
 
 export interface TaskCleanArg {
@@ -22,7 +22,7 @@ export default function (): void {
     )
     .setAction(async (
       { contractName }: TaskCleanArg,
-      env: PolarRuntimeEnvironment
+      env: WasmkitRuntimeEnvironment
     ) => {
       const contractNameNew = contractName.toString().replace(/-/g, '_');
       const comp = './artifacts/contracts/' + contractNameNew + '.wasm';

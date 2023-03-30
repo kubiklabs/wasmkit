@@ -5,3 +5,5 @@ multiproject/contracts/contract_1/target
 multiproject/contracts/contract_2/target
 testproject/contracts/target
 
+project-with-scripts/build/
+scripts-dir/build

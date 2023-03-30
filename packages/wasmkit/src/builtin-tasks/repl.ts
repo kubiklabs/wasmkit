@@ -5,7 +5,7 @@ import { runInNewContext } from "vm";
 import * as polar from "../index";
 import { task } from "../internal/core/config/config-env";
 import { isRecoverableError, preprocess } from "../internal/util/repl";
-import { PolarRuntimeEnvironment, TaskArguments } from "../types";
+import { WasmkitRuntimeEnvironment, TaskArguments } from "../types";
 import { TASK_REPL } from "./task-names";
 
 // handles top level await by preprocessing input and awaits the output before returning
@@ -24,7 +24,7 @@ async function evaluate (code: string, context: Record<string, unknown>, filenam
   }
 }
 
-async function startConsole (runtimeEnv: PolarRuntimeEnvironment): Promise<void> {
+async function startConsole (runtimeEnv: WasmkitRuntimeEnvironment): Promise<void> {
   await new Promise<void>((resolve, reject) => {
     console.log("★★★", chalk.blueBright(" Welcome to polar REPL"), "★★★");
     console.log(chalk.green('Try typing: config\n'));
@@ -50,7 +50,7 @@ export default function (): void {
     .setAction(
       async (
         _taskArgs: TaskArguments,
-        runtimeEnv: PolarRuntimeEnvironment
+        runtimeEnv: WasmkitRuntimeEnvironment
       ) => {
         if (!runtimeEnv.config.paths) {
           return;

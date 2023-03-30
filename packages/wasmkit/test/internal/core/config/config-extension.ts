@@ -5,8 +5,8 @@
 
 import { assert } from "chai";
 
-import { PolarContext } from "../../../../src/internal/context";
-import { resetPolarContext } from "../../../../src/internal/reset";
+import { WasmkitContext } from "../../../../src/internal/context";
+import { resetWasmkitContext } from "../../../../src/internal/reset";
 import { useEnvironment } from "../../../helpers/environment";
 import { useFixtureProject } from "../../../helpers/project";
 
@@ -30,11 +30,11 @@ describe("Config extensions", function () {
     useFixtureProject("invalid-config-extension");
 
     beforeEach(function () {
-      PolarContext.createPolarContext();
+      WasmkitContext.createWasmkitContext();
     });
 
     afterEach(function () {
-      resetPolarContext();
+      resetWasmkitContext();
     });
   });
 });

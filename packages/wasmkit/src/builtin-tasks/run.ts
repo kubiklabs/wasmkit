@@ -10,7 +10,7 @@ import { SCRIPTS_DIR } from "../internal/core/project-structure";
 import { runScript } from "../internal/util/script-runner";
 import { buildTsScripts } from "../lib/compile/scripts";
 import { assertDirChildren } from "../lib/files";
-import { PolarRuntimeEnvironment } from "../types";
+import { WasmkitRuntimeEnvironment } from "../types";
 import { TASK_RUN } from "./task-names";
 
 interface Input {
@@ -23,7 +23,7 @@ export function filterNonExistent (scripts: string[]): string[] {
 }
 
 async function runScripts (
-  runtimeEnv: PolarRuntimeEnvironment,
+  runtimeEnv: WasmkitRuntimeEnvironment,
   scriptNames: string[],
   force: boolean,
   logDebugTag: string,
@@ -44,7 +44,7 @@ async function runScripts (
 
 async function executeRunTask (
   { scripts, skipCheckpoints }: Input,
-  runtimeEnv: PolarRuntimeEnvironment
+  runtimeEnv: WasmkitRuntimeEnvironment
   // eslint-disable-next-line
 ): Promise<any> {
   const logDebugTag = "polar:tasks:run";

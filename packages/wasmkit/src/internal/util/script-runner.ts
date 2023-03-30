@@ -1,7 +1,7 @@
 import debug from "debug";
 import * as path from "path";
 
-import { PolarRuntimeEnvironment } from "../../types";
+import { WasmkitRuntimeEnvironment } from "../../types";
 import { WasmkitError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 
@@ -55,7 +55,7 @@ function displayErr (error: Error | WasmkitError | any, relativeScriptPath: stri
 
 export async function runScript (
   relativeScriptPath: string,
-  runtimeEnv: PolarRuntimeEnvironment
+  runtimeEnv: WasmkitRuntimeEnvironment
 ): Promise<void> {
   if (relativeScriptPath.endsWith('.ts')) {
     relativeScriptPath = path.join('build', relativeScriptPath.split('.ts')[0] + '.js');

@@ -3,7 +3,7 @@ import fs from "fs-extra";
 import path from "path";
 import { SecretNetworkClient } from "secretjs";
 
-import { PolarContext } from "../../internal/context";
+import { WasmkitContext } from "../../internal/context";
 import { WasmkitError } from "../../internal/core/errors";
 import { ERRORS } from "../../internal/core/errors-list";
 import { ARTIFACTS_DIR } from "../../internal/core/project-structure";
@@ -15,7 +15,7 @@ import type {
   Coin,
   DeployInfo,
   InstantiateInfo,
-  PolarRuntimeEnvironment,
+  WasmkitRuntimeEnvironment,
   TxnStdFee,
   UserAccount
 } from "../../types";
@@ -32,8 +32,8 @@ export class Contract {
   readonly contractName: string;
   readonly contractPath: string;
 
-  private readonly env: PolarRuntimeEnvironment =
-  PolarContext.getPolarContext().getRuntimeEnv();
+  private readonly env: WasmkitRuntimeEnvironment =
+  WasmkitContext.getWasmkitContext().getRuntimeEnv();
 
   private client?: SecretNetworkClient | CosmWasmClient;
 

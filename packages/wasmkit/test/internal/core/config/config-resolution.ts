@@ -1,21 +1,21 @@
 import { assert } from "chai";
 import * as path from "path";
 
-import { PolarContext } from "../../../../src/internal/context";
+import { WasmkitContext } from "../../../../src/internal/context";
 import { loadConfigAndTasks } from "../../../../src/internal/core/config/config-loading";
 import { resolveProjectPaths } from "../../../../src/internal/core/config/config-resolution";
-import { resetPolarContext } from "../../../../src/internal/reset";
+import { resetWasmkitContext } from "../../../../src/internal/reset";
 import { PolarNetworkUserConfig, UserPaths } from "../../../../src/types";
 import { useFixtureProject } from "../../../helpers/project";
 import { account } from "../../../mocks/account";
 
 describe("Config resolution", function () {
   beforeEach(() => {
-    PolarContext.createPolarContext();
+    WasmkitContext.createWasmkitContext();
   });
 
   afterEach(() => {
-    resetPolarContext();
+    resetWasmkitContext();
   });
 
   describe("Default config merging", () => {

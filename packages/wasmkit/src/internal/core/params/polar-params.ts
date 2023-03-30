@@ -1,7 +1,7 @@
 import { ParamDefinition, ParamDefinitions, ShortParamSubstitutions } from "../../../types";
 import * as types from "./argument-types";
 
-export const POLAR_PARAM_DEFINITIONS: ParamDefinitions = {
+export const WASMKIT_PARAM_DEFINITIONS: ParamDefinitions = {
   network: {
     name: "network",
     defaultValue: "default",
@@ -80,7 +80,7 @@ export const POLAR_PARAM_DEFINITIONS: ParamDefinitions = {
 
 // reverse lookup map for short parameters
 export const POLAR_SHORT_PARAM_SUBSTITUTIONS: ShortParamSubstitutions =
-  Object.entries(POLAR_PARAM_DEFINITIONS)
+  Object.entries(WASMKIT_PARAM_DEFINITIONS)
     .reduce((out: Record<string, string>, kv: [string, ParamDefinition<unknown>]) => {
       const [name, value] = kv;
       if (value.shortName) {

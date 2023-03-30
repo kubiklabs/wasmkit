@@ -8,7 +8,7 @@ import {
 import { WasmkitError } from "../errors";
 import { ErrorDescriptor, ERRORS } from "../errors-list";
 import * as types from "../params/argument-types";
-import { POLAR_PARAM_DEFINITIONS } from "../params/polar-params";
+import { WASMKIT_PARAM_DEFINITIONS } from "../params/polar-params";
 
 /**
  * This class creates a task definition, which consists of:
@@ -437,7 +437,7 @@ export class SimpleTaskDefinition implements TaskDefinition {
       });
     }
 
-    if (Object.keys(POLAR_PARAM_DEFINITIONS).includes(name)) {
+    if (Object.keys(WASMKIT_PARAM_DEFINITIONS).includes(name)) {
       throw new WasmkitError(
         ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_POLAR_PARAM,
         {

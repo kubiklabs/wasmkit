@@ -1,34 +1,34 @@
-import { ConfigExtender, PolarRuntimeEnvironment } from '../types';
+import { ConfigExtender, WasmkitRuntimeEnvironment } from '../types';
 import { ExtenderManager } from './core/config/extenders';
 import { WasmkitError } from './core/errors';
 import { ERRORS } from './core/errors-list';
 import { TasksDSL } from './core/tasks/dsl';
 
-export type GlobalWithPolarContext = NodeJS.Global & {
+export type GlobalWithWasmkitContext = NodeJS.Global & {
   // eslint-disable-next-line no-use-before-define
-  __polarContext: PolarContext
+  __WasmkitContext: WasmkitContext
 };
 
-export class PolarContext {
+export class WasmkitContext {
   public static isCreated (): boolean {
-    const globalWithPolarContext = global as unknown as GlobalWithPolarContext;
-    return globalWithPolarContext.__polarContext !== undefined;
+    const globalWithWasmkitContext = global as unknown as GlobalWithWasmkitContext;
+    return globalWithWasmkitContext.__WasmkitContext !== undefined;
   }
 
-  public static createPolarContext (): PolarContext {
+  public static createWasmkitContext (): WasmkitContext {
     if (this.isCreated()) {
       throw new WasmkitError(ERRORS.GENERAL.CONTEXT_ALREADY_CREATED);
     }
 
-    const globalWithPolarContext = global as unknown as GlobalWithPolarContext;
-    const ctx = new PolarContext();
-    globalWithPolarContext.__polarContext = ctx;
+    const globalWithWasmkitContext = global as unknown as GlobalWithWasmkitContext;
+    const ctx = new WasmkitContext();
+    globalWithWasmkitContext.__WasmkitContext = ctx;
     return ctx;
   }
 
-  public static getPolarContext (): PolarContext {
-    const globalWithPolarContext = global as unknown as GlobalWithPolarContext;
-    const ctx = globalWithPolarContext.__polarContext;
+  public static getWasmkitContext (): WasmkitContext {
+    const globalWithWasmkitContext = global as unknown as GlobalWithWasmkitContext;
+    const ctx = globalWithWasmkitContext.__WasmkitContext;
 
     if (ctx === undefined) {
       throw new WasmkitError(ERRORS.GENERAL.CONTEXT_NOT_CREATED);
@@ -37,27 +37,27 @@ export class PolarContext {
     return ctx;
   }
 
-  public static deletePolarContext (): void {
+  public static deleteWasmkitContext (): void {
     // eslint-disable-next-line
     const globalAsAny = global as any;
 
-    globalAsAny.__polarContext = undefined;
+    globalAsAny.__WasmkitContext = undefined;
   }
 
   public readonly tasksDSL = new TasksDSL();
   public readonly extendersManager = new ExtenderManager();
   public readonly loadedPlugins: string[] = [];
-  public environment?: PolarRuntimeEnvironment;
+  public environment?: WasmkitRuntimeEnvironment;
   public readonly configExtenders: ConfigExtender[] = [];
 
-  public setRuntimeEnv (env: PolarRuntimeEnvironment): void {
+  public setRuntimeEnv (env: WasmkitRuntimeEnvironment): void {
     if (this.environment !== undefined) {
       throw new WasmkitError(ERRORS.GENERAL.CONTEXT_PRE_ALREADY_DEFINED);
     }
     this.environment = env;
   }
 
-  public getRuntimeEnv (): PolarRuntimeEnvironment {
+  public getRuntimeEnv (): WasmkitRuntimeEnvironment {
     if (this.environment === undefined) {
       throw new WasmkitError(ERRORS.GENERAL.CONTEXT_PRE_NOT_DEFINED);
     }

@@ -4,12 +4,12 @@
  * This doesn't unload any loaded Polar plugin, so those have to be unloaded
  * manually with `unloadModule`.
  */
-import { PolarContext } from "./context";
+import { WasmkitContext } from "./context";
 import { getUserConfigPath } from "./core/project-structure";
 
-export function resetPolarContext (): void {
-  if (PolarContext.isCreated()) {
-    const ctx = PolarContext.getPolarContext();
+export function resetWasmkitContext (): void {
+  if (WasmkitContext.isCreated()) {
+    const ctx = WasmkitContext.getWasmkitContext();
     const globalAsAny = global as any; // eslint-disable-line @typescript-eslint/no-explicit-any
     if (ctx.environment !== undefined) {
       for (const key of Object.keys(ctx.environment)) {
@@ -33,7 +33,7 @@ export function resetPolarContext (): void {
         unloadModule(configPath);
       }
     }
-    PolarContext.deletePolarContext();
+    WasmkitContext.deleteWasmkitContext();
   }
 
   // Unload all the polar's entry-points.

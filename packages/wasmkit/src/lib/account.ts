@@ -1,10 +1,10 @@
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Account as WasmAccount, SecretNetworkClient } from "secretjs";
 
-import { PolarContext } from "../internal/context";
+import { WasmkitContext } from "../internal/context";
 import { WasmkitError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
-import { Account, Coin, PolarRuntimeEnvironment, UserAccount } from "../types";
+import { Account, Coin, WasmkitRuntimeEnvironment, UserAccount } from "../types";
 import { getBalance, getClient } from "./client";
 
 export class UserAccountI implements UserAccount {
@@ -15,7 +15,7 @@ export class UserAccountI implements UserAccount {
     this.account = account;
   }
 
-  async setupClient (env: PolarRuntimeEnvironment): Promise<void> {
+  async setupClient (env: WasmkitRuntimeEnvironment): Promise<void> {
     this.client = await getClient(env.network);
   }
 
@@ -27,7 +27,7 @@ export class UserAccountI implements UserAccount {
   // }
 
   async getBalance (): Promise<Coin[]> {
-    const env: PolarRuntimeEnvironment = PolarContext.getPolarContext().getRuntimeEnv();
+    const env: WasmkitRuntimeEnvironment = WasmkitContext.getWasmkitContext().getRuntimeEnv();
     return await getBalance(this.client, this.account.address, env.network);
   }
 }
@@ -35,7 +35,7 @@ export class UserAccountI implements UserAccount {
 export async function getAccountByName (
   name: string
 ): Promise<UserAccount> {
-  const env: PolarRuntimeEnvironment = PolarContext.getPolarContext().getRuntimeEnv();
+  const env: WasmkitRuntimeEnvironment = WasmkitContext.getWasmkitContext().getRuntimeEnv();
   if (env.network.config.accounts === undefined) {
     throw new WasmkitError(ERRORS.GENERAL.ACCOUNT_DOES_NOT_EXIST, { name: name });
   }

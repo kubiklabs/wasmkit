@@ -9,7 +9,7 @@ import { ERRORS } from "../internal/core/errors-list";
 import { TESTS_DIR } from "../internal/core/project-structure";
 import { buildTsScripts } from "../lib/compile/scripts";
 import { assertDirChildren } from "../lib/files";
-import { PolarRuntimeEnvironment } from "../types";
+import { WasmkitRuntimeEnvironment } from "../types";
 import { TASK_TEST } from "./task-names";
 
 interface Input {
@@ -21,7 +21,7 @@ export function filterNonExistent (scripts: string[]): string[] {
 }
 
 async function runTests (
-  runtimeEnv: PolarRuntimeEnvironment,
+  runtimeEnv: WasmkitRuntimeEnvironment,
   scriptNames: string[],
   logDebugTag: string
 ): Promise<void> {
@@ -44,7 +44,7 @@ async function runTests (
 
 async function executeTestTask (
   { tests }: Input,
-  runtimeEnv: PolarRuntimeEnvironment
+  runtimeEnv: WasmkitRuntimeEnvironment
 ): Promise<void> {
   const logDebugTag = "polar:tasks:test";
 

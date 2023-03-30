@@ -5,7 +5,7 @@ import {
   EnvironmentExtender,
   TaskArguments
 } from "../../../types";
-import { PolarContext } from "../../context";
+import { WasmkitContext } from "../../context";
 import * as argumentTypes from "../params/argument-types";
 import { usePlugin as usePluginImplementation } from "../plugins";
 
@@ -25,7 +25,7 @@ export function task<ArgsT extends TaskArguments> (
   descriptionOrAction?: string | ActionType<ArgsT>,
   action?: ActionType<ArgsT>
 ): ConfigurableTaskDefinition {
-  const ctx = PolarContext.getPolarContext();
+  const ctx = WasmkitContext.getWasmkitContext();
   const dsl = ctx.tasksDSL;
 
   if (descriptionOrAction === undefined) {
@@ -55,7 +55,7 @@ export function internalTask<ArgsT extends TaskArguments> (
   descriptionOrAction?: string | ActionType<ArgsT>,
   action?: ActionType<ArgsT>
 ): ConfigurableTaskDefinition {
-  const ctx = PolarContext.getPolarContext();
+  const ctx = WasmkitContext.getWasmkitContext();
   const dsl = ctx.tasksDSL;
 
   if (descriptionOrAction === undefined) {
@@ -79,13 +79,13 @@ export const types = argumentTypes;
  * Environment.
  */
 export function extendEnvironment (extender: EnvironmentExtender): void {
-  const ctx = PolarContext.getPolarContext();
+  const ctx = WasmkitContext.getWasmkitContext();
   const extenderManager = ctx.extendersManager;
   extenderManager.add(extender);
 }
 
 export function extendConfig (extender: ConfigExtender): void {
-  const ctx = PolarContext.getPolarContext();
+  const ctx = WasmkitContext.getWasmkitContext();
   ctx.configExtenders.push(extender);
 }
 
@@ -94,6 +94,6 @@ export function extendConfig (extender: ConfigExtender): void {
  * @param pluginName The plugin name.
  */
 export function usePlugin (pluginName: string): void {
-  const ctx = PolarContext.getPolarContext();
+  const ctx = WasmkitContext.getWasmkitContext();
   usePluginImplementation(ctx, pluginName);
 }

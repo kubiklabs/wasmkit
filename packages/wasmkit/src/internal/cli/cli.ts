@@ -7,14 +7,14 @@ import debug from "debug";
 import semver from "semver";
 
 import { TASK_HELP } from "../../builtin-tasks/task-names";
-import { PolarRuntimeEnvironment, RuntimeArgs, TaskArguments } from "../../types";
-import { PolarContext } from "../context";
+import { WasmkitRuntimeEnvironment, RuntimeArgs, TaskArguments } from "../../types";
+import { WasmkitContext } from "../context";
 import { loadConfigAndTasks } from "../core/config/config-loading";
 import { PolarPluginError, WasmkitError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 import { getEnvRuntimeArgs } from "../core/params/env-variables";
 import {
-  POLAR_PARAM_DEFINITIONS,
+  WASMKIT_PARAM_DEFINITIONS,
   POLAR_SHORT_PARAM_SUBSTITUTIONS
 } from "../core/params/polar-params";
 import { isCwdInsideProject } from "../core/project-structure";
@@ -59,7 +59,7 @@ function printStackTraces (showStackTraces: boolean, error: WasmkitError): void 
 }
 
 interface EnvAndArgs {
-  env: PolarRuntimeEnvironment
+  env: WasmkitRuntimeEnvironment
   taskName: string
   taskArguments: TaskArguments
 }
@@ -83,7 +83,7 @@ export async function gatherArguments (): Promise<RuntimeArgsAndPackageJson> {
   ensureValidNodeVersion(packageJson);
 
   const envVariableArguments = getEnvRuntimeArgs(
-    POLAR_PARAM_DEFINITIONS,
+    WASMKIT_PARAM_DEFINITIONS,
     process.env);
 
   const argumentsParser = new ArgumentsParser();
@@ -92,7 +92,7 @@ export async function gatherArguments (): Promise<RuntimeArgsAndPackageJson> {
     taskName: maybeTaskName,
     unparsedCLAs
   } = argumentsParser.parseRuntimeArgs(
-    POLAR_PARAM_DEFINITIONS,
+    WASMKIT_PARAM_DEFINITIONS,
     POLAR_SHORT_PARAM_SUBSTITUTIONS,
     envVariableArguments,
     process.argv.slice(2)
@@ -120,7 +120,7 @@ export async function loadEnvironmentAndArgs (
   argumentsParser: ArgumentsParser,
   unparsedCLAs: string[]
 ): Promise<EnvAndArgs> {
-  const ctx = PolarContext.createPolarContext();
+  const ctx = WasmkitContext.createWasmkitContext();
   const config = await loadConfigAndTasks(runtimeArgs);
   const envExtenders = ctx.extendersManager.getExtenders();
   const taskDefinitions = ctx.tasksDSL.getTaskDefinitions();

@@ -1,10 +1,10 @@
 import chalk from "chalk";
 
-import { PolarContext } from "../../../internal/context";
+import { WasmkitContext } from "../../../internal/context";
 import { WasmkitError } from "../../../internal/core/errors";
 import { ERRORS } from "../../../internal/core/errors-list";
 import type {
-  Account, Coin, PolarRuntimeEnvironment, UserAccount
+  Account, Coin, WasmkitRuntimeEnvironment, UserAccount
 } from "../../../types";
 import { getBalance, getClient } from "../../client";
 import { defaultFees } from "../../constants";
@@ -69,8 +69,8 @@ export async function getBalanceChange ( // eslint-disable-line sonarjs/cognitiv
     });
   }
 
-  const client = getClient(PolarContext.getPolarContext().getRuntimeEnv().network);
-  const env: PolarRuntimeEnvironment = PolarContext.getPolarContext().getRuntimeEnv();
+  const client = getClient(WasmkitContext.getWasmkitContext().getRuntimeEnv().network);
+  const env: WasmkitRuntimeEnvironment = WasmkitContext.getWasmkitContext().getRuntimeEnv();
   const balanceBefore = extractScrtBalance(
     await getBalance(client, accountAddr, env.network)
   );
@@ -98,7 +98,7 @@ export async function getBalanceChange ( // eslint-disable-line sonarjs/cognitiv
 
   const fees = Object.assign(
     Object.assign({}, defaultFees),
-    (PolarContext.getPolarContext().getRuntimeEnv().network.config.fees ?? {})
+    (WasmkitContext.getWasmkitContext().getRuntimeEnv().network.config.fees ?? {})
   );
 
   if (

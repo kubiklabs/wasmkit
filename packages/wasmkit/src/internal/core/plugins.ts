@@ -3,7 +3,7 @@ import * as path from "path";
 import * as semver from "semver";
 
 import { StrMap } from "../../types";
-import { PolarContext } from "../context";
+import { WasmkitContext } from "../context";
 import { WasmkitError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 import { ExecutionMode, getExecutionMode } from "./execution-mode";
@@ -21,12 +21,12 @@ interface PackageJson {
 /**
  * Validates a plugin dependencies and loads it.
  * @param pluginName - The plugin name
- * @param PolarContext - The PolarContext
+ * @param WasmkitContext - The WasmkitContext
  * @param from - Where to resolve plugins and dependencies from. Only for
  * testing purposes.
  */
 export function usePlugin (
-  PolarContext: PolarContext,
+  WasmkitContext: WasmkitContext,
   pluginName: string,
   from?: string
 ): void {
@@ -71,7 +71,7 @@ export function usePlugin (
   // We use the package.json's version of the name, as it is normalized.
   pluginName = pluginPackageJson.name;
 
-  if (PolarContext.loadedPlugins.includes(pluginName)) {
+  if (WasmkitContext.loadedPlugins.includes(pluginName)) {
     return;
   }
 
@@ -84,7 +84,7 @@ export function usePlugin (
   const pluginPath = require.resolve(pluginName, options);
   loadPluginFile(pluginPath);
 
-  PolarContext.setPluginAsLoaded(pluginName);
+  WasmkitContext.setPluginAsLoaded(pluginName);
 }
 
 function checkPeerDependencies (deps: StrMap, pluginName: string,

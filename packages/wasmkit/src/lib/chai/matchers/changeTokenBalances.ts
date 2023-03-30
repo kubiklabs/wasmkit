@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-import { PolarContext } from "../../../internal/context";
+import { WasmkitContext } from "../../../internal/context";
 import { WasmkitError } from "../../../internal/core/errors";
 import { ERRORS } from "../../../internal/core/errors-list";
 import type {
@@ -66,13 +66,13 @@ async function getBalances (
   accountAddresses: string[],
   token: string
 ): Promise<number[]> {
-  const client = getClient(PolarContext.getPolarContext().getRuntimeEnv().network);
+  const client = getClient(WasmkitContext.getWasmkitContext().getRuntimeEnv().network);
 
   return await Promise.all(
     accountAddresses.map(async (accountAddr) => {
       return extractTokenBalance(
         await getBalance(
-          client, accountAddr, PolarContext.getPolarContext().getRuntimeEnv().network),
+          client, accountAddr, WasmkitContext.getWasmkitContext().getRuntimeEnv().network),
         token
       );
     })

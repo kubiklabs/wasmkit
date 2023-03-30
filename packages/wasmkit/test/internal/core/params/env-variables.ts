@@ -6,7 +6,7 @@ import {
   getEnvVariablesMap,
   paramNameToEnvVariable
 } from "../../../../src/internal/core/params/env-variables";
-import { POLAR_PARAM_DEFINITIONS } from "../../../../src/internal/core/params/polar-params";
+import { WASMKIT_PARAM_DEFINITIONS } from "../../../../src/internal/core/params/polar-params";
 import { expectWasmkitError } from "../../../helpers/errors";
 
 describe("paramNameToEnvVariable", () => {
@@ -28,20 +28,20 @@ describe("paramNameToEnvVariable", () => {
 
 describe("Env vars arguments parsing", () => {
   it("Should use the default values if arguments are not defined", () => {
-    const args = getEnvRuntimeArgs(POLAR_PARAM_DEFINITIONS, {
+    const args = getEnvRuntimeArgs(WASMKIT_PARAM_DEFINITIONS, {
       IRRELEVANT_ENV_VAR: "123"
     });
-    assert.equal(args.help, POLAR_PARAM_DEFINITIONS.help.defaultValue);
-    assert.equal(args.network, POLAR_PARAM_DEFINITIONS.network.defaultValue);
+    assert.equal(args.help, WASMKIT_PARAM_DEFINITIONS.help.defaultValue);
+    assert.equal(args.network, WASMKIT_PARAM_DEFINITIONS.network.defaultValue);
     assert.equal(
       args.showStackTraces,
-      POLAR_PARAM_DEFINITIONS.showStackTraces.defaultValue
+      WASMKIT_PARAM_DEFINITIONS.showStackTraces.defaultValue
     );
-    assert.equal(args.version, POLAR_PARAM_DEFINITIONS.version.defaultValue);
+    assert.equal(args.version, WASMKIT_PARAM_DEFINITIONS.version.defaultValue);
   });
 
   it("Should accept values", () => {
-    const args = getEnvRuntimeArgs(POLAR_PARAM_DEFINITIONS, {
+    const args = getEnvRuntimeArgs(WASMKIT_PARAM_DEFINITIONS, {
       IRRELEVANT_ENV_VAR: "123",
       POLAR_NETWORK: "asd",
       POLAR_SHOW_STACK_TRACES: "true",
@@ -60,7 +60,7 @@ describe("Env vars arguments parsing", () => {
   it("should throw if an invalid value is passed", () => {
     expectWasmkitError(
       () =>
-        getEnvRuntimeArgs(POLAR_PARAM_DEFINITIONS, {
+        getEnvRuntimeArgs(WASMKIT_PARAM_DEFINITIONS, {
           POLAR_HELP: "123"
         }),
       ERRORS.ARGUMENTS.INVALID_ENV_VAR_VALUE

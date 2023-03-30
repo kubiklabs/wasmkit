@@ -2,7 +2,7 @@ import { task } from "../internal/core/config/config-env";
 import { boolean } from "../internal/core/params/argument-types";
 import { canCompile } from "../lib/compile/checkEnv";
 import { compile } from "../lib/compile/compile";
-import type { PolarRuntimeEnvironment } from "../types";
+import type { WasmkitRuntimeEnvironment } from "../types";
 import { TASK_COMPILE } from "./task-names";
 
 export default function (): void {
@@ -29,7 +29,7 @@ export interface TaskArgs {
 
 async function compileTask (
   { docker, sourceDir, force, skipSchema, skipSchemaErrors }: TaskArgs,
-  env: PolarRuntimeEnvironment
+  env: WasmkitRuntimeEnvironment
 ): Promise<void> {
   // check if proper version of rust wasm compiler is installed
   // If not, install it

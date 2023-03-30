@@ -9,7 +9,7 @@ import {
   string
 } from "../../../src/internal/core/params/argument-types";
 import {
-  POLAR_PARAM_DEFINITIONS,
+  WASMKIT_PARAM_DEFINITIONS,
   POLAR_SHORT_PARAM_SUBSTITUTIONS
 } from "../../../src/internal/core/params/polar-params";
 import {
@@ -33,7 +33,7 @@ function parseAndexpectWasmkitError (
     expectWasmkitError(
     () =>
       argumentsParser.parseRuntimeArgs(
-        POLAR_PARAM_DEFINITIONS,
+        WASMKIT_PARAM_DEFINITIONS,
         POLAR_SHORT_PARAM_SUBSTITUTIONS,
         envArgs,
         rawCLAs
@@ -113,14 +113,14 @@ describe("ArgumentsParser", () => {
     assert.isTrue(
       argumentsParser._isCLAParamName(
         "--show-stack-traces",
-        POLAR_PARAM_DEFINITIONS
+        WASMKIT_PARAM_DEFINITIONS
       )
     );
     assert.isFalse(
-      argumentsParser._isCLAParamName("sarasa", POLAR_PARAM_DEFINITIONS)
+      argumentsParser._isCLAParamName("sarasa", WASMKIT_PARAM_DEFINITIONS)
     );
     assert.isFalse(
-      argumentsParser._isCLAParamName("--sarasa", POLAR_PARAM_DEFINITIONS)
+      argumentsParser._isCLAParamName("--sarasa", WASMKIT_PARAM_DEFINITIONS)
     );
   });
 
@@ -139,7 +139,7 @@ describe("ArgumentsParser", () => {
         taskName,
         unparsedCLAs
       } = argumentsParser.parseRuntimeArgs(
-        POLAR_PARAM_DEFINITIONS,
+        WASMKIT_PARAM_DEFINITIONS,
         POLAR_SHORT_PARAM_SUBSTITUTIONS,
         envArgs,
         rawCLAs
@@ -165,7 +165,7 @@ describe("ArgumentsParser", () => {
         taskName,
         unparsedCLAs
       } = argumentsParser.parseRuntimeArgs(
-        POLAR_PARAM_DEFINITIONS,
+        WASMKIT_PARAM_DEFINITIONS,
         POLAR_SHORT_PARAM_SUBSTITUTIONS,
         envArgs,
         rawCLAs
@@ -206,7 +206,7 @@ describe("ArgumentsParser", () => {
         argumentsParser._parseArgumentAt(
           rawCLAs,
           0,
-          POLAR_PARAM_DEFINITIONS,
+          WASMKIT_PARAM_DEFINITIONS,
           runtimeArgs
         )
       );
@@ -216,7 +216,7 @@ describe("ArgumentsParser", () => {
         argumentsParser._parseArgumentAt(
           rawCLAs,
           1,
-          POLAR_PARAM_DEFINITIONS,
+          WASMKIT_PARAM_DEFINITIONS,
           runtimeArgs
         )
       );
@@ -255,7 +255,7 @@ describe("ArgumentsParser", () => {
 
     it("should only add non-present arguments", () => {
       const runtimeArgs = argumentsParser._addBuilderDefaultArguments(
-        POLAR_PARAM_DEFINITIONS,
+        WASMKIT_PARAM_DEFINITIONS,
         envArgs,
         {
           showStackTraces: true
@@ -277,7 +277,7 @@ describe("ArgumentsParser", () => {
         taskName,
         unparsedCLAs
       } = argumentsParser.parseRuntimeArgs(
-        POLAR_PARAM_DEFINITIONS,
+        WASMKIT_PARAM_DEFINITIONS,
         POLAR_SHORT_PARAM_SUBSTITUTIONS,
         envArgs,
         rawCLAs

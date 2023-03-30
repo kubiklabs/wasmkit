@@ -48,7 +48,7 @@ Please [report it](https://github.com/arufa-research/polar/issues/new) to help u
     },
     CONTEXT_ALREADY_CREATED: {
       number: 4,
-      message: 'PolarContext is already created.',
+      message: 'WasmkitContext is already created.',
       title: 'Polar was already initialized',
       description: `Polar initialization was executed twice. This is a bug.
 
@@ -57,7 +57,7 @@ Please [report it](https://github.com/arufa-research/polar/issues/new) to help u
     },
     CONTEXT_NOT_CREATED: {
       number: 5,
-      message: 'PolarContext is not created.',
+      message: 'WasmkitContext is not created.',
       title: "Polar wasn't initialized",
       description: `Polar initialization failed. This is a bug.
 
@@ -67,7 +67,7 @@ Please [report it](https://github.com/arufa-research/polar/issues/new) to help u
     CONTEXT_PRE_NOT_DEFINED: {
       number: 6,
       message:
-        'Polar Runtime Environment is not defined in the PolarContext.',
+        'Polar Runtime Environment is not defined in the WasmkitContext.',
       title: 'Polar Runtime Environment not created',
       description: `Polar initialization failed. This is a bug.
 
@@ -77,7 +77,7 @@ Please [report it](https://github.com/arufa-research/polar/issues/new) to help u
     CONTEXT_PRE_ALREADY_DEFINED: {
       number: 7,
       message:
-        'Polar Runtime Environment is already defined in the PolarContext',
+        'Polar Runtime Environment is already defined in the WasmkitContext',
       title: 'Tried to create the Polar Runtime Environment twice',
       description: `The Polar initialization process was executed twice. This is a bug.
 

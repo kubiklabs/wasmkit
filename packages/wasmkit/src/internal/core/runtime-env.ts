@@ -4,7 +4,7 @@ import type {
   EnvironmentExtender,
   Network,
   ParamDefinitionAny,
-  PolarRuntimeEnvironment,
+  WasmkitRuntimeEnvironment,
   ResolvedConfig,
   RunSuperFunction,
   RunTaskFunction,
@@ -19,7 +19,7 @@ import { OverriddenTaskDefinition } from "./tasks/task-definitions";
 
 const log = debug("polar:core:pre");
 
-export class Environment implements PolarRuntimeEnvironment {
+export class Environment implements WasmkitRuntimeEnvironment {
   private static readonly _BLACKLISTED_PROPERTIES: string[] = [
     "injectToGlobal",
     "_runTaskDefinition"

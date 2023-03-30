@@ -101,12 +101,12 @@ export interface NetworksUserConfig {
 
 export type NetworkUserConfig = PolarNetworkUserConfig;
 
-export type PolarNetworkConfig = PolarNetworkUserConfig;
+export type WasmkitNetworkConfig = PolarNetworkUserConfig;
 
-export type NetworkConfig = PolarNetworkConfig;
+export type NetworkConfig = WasmkitNetworkConfig;
 
 export interface Networks {
-  [networkName: string]: PolarNetworkConfig
+  [networkName: string]: WasmkitNetworkConfig
 }
 
 export type PolarNetworkAccountsConfig =
@@ -215,7 +215,7 @@ export type ConfigExtender = (
  * A function that receives a RuntimeEnv and
  * modify its properties or add new ones.
  */
-export type EnvironmentExtender = (env: PolarRuntimeEnvironment) => void;
+export type EnvironmentExtender = (env: WasmkitRuntimeEnvironment) => void;
 
 /**
  * @type TaskArguments {object-like} - the input arguments for a task.
@@ -245,7 +245,7 @@ export interface RunSuperFunction<ArgT extends TaskArguments> {
 
 export type ActionType<ArgsT extends TaskArguments> = (
   taskArgs: ArgsT,
-  env: PolarRuntimeEnvironment,
+  env: WasmkitRuntimeEnvironment,
   runSuper: RunSuperFunction<ArgsT>
 ) => PromiseAny;
 
@@ -386,7 +386,7 @@ export interface TasksMap {
   [name: string]: TaskDefinition
 }
 
-export interface PolarRuntimeEnvironment {
+export interface WasmkitRuntimeEnvironment {
   readonly config: ResolvedConfig
   readonly runtimeArgs: RuntimeArgs
   readonly tasks: TasksMap

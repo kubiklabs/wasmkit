@@ -6,10 +6,10 @@ import {
   TASK_HELP,
   TASK_INIT,
 } from "../../../../src/builtin-tasks/task-names";
-import { PolarContext } from "../../../../src/internal/context";
+import { WasmkitContext } from "../../../../src/internal/context";
 import { loadConfigAndTasks } from "../../../../src/internal/core/config/config-loading";
 import { ERRORS } from "../../../../src/internal/core/errors-list";
-import { resetPolarContext } from "../../../../src/internal/reset";
+import { resetWasmkitContext } from "../../../../src/internal/reset";
 import { useEnvironment } from "../../../helpers/environment";
 import { expectWasmkitErrorAsync } from "../../../helpers/errors";
 import {
@@ -35,11 +35,11 @@ describe("config loading", function () {
       useFixtureProject("invalid-config");
 
       beforeEach(function () {
-        PolarContext.createPolarContext();
+        WasmkitContext.createWasmkitContext();
       });
 
       afterEach(function () {
-        resetPolarContext();
+        resetWasmkitContext();
       });
 
       it("Should throw the right error", function () {
@@ -55,11 +55,11 @@ describe("config loading", function () {
     useFixtureProject("custom-config-file");
 
     beforeEach(function () {
-      PolarContext.createPolarContext();
+      WasmkitContext.createWasmkitContext();
     });
 
     afterEach(function () {
-      resetPolarContext();
+      resetWasmkitContext();
     });
 
     it("should accept a relative path from the CWD", async function () {
@@ -113,13 +113,13 @@ describe("config loading", function () {
     useFixtureProject("config-project");
 
     afterEach(function () {
-      resetPolarContext();
+      resetWasmkitContext();
     });
 
     it("should remove everything from global state after loading", async function () {
       const globalAsAny: any = global;
 
-      PolarContext.createPolarContext();
+      WasmkitContext.createWasmkitContext();
       await loadConfigAndTasks();
 
       assert.isUndefined(globalAsAny.internalTask);
@@ -128,9 +128,9 @@ describe("config loading", function () {
       assert.isUndefined(globalAsAny.extendEnvironment);
       assert.isUndefined(globalAsAny.usePlugin);
 
-      resetPolarContext();
+      resetWasmkitContext();
 
-      PolarContext.createPolarContext();
+      WasmkitContext.createWasmkitContext();
       await loadConfigAndTasks();
 
       assert.isUndefined(globalAsAny.internalTask);
@@ -138,7 +138,7 @@ describe("config loading", function () {
       assert.isUndefined(globalAsAny.types);
       assert.isUndefined(globalAsAny.extendEnvironment);
       assert.isUndefined(globalAsAny.usePlugin);
-      resetPolarContext();
+      resetWasmkitContext();
     });
   });
 

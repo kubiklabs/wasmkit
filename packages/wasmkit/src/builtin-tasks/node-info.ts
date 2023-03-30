@@ -2,7 +2,7 @@ import { task } from "../internal/core/config/config-env";
 import { WasmkitError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
 import { getChainFromAccount, getClient } from "../lib/client";
-import { ChainType, PolarRuntimeEnvironment, TaskArguments } from "../types";
+import { ChainType, WasmkitRuntimeEnvironment, TaskArguments } from "../types";
 import { TASK_NODE_INFO } from "./task-names";
 
 export default function (): void {
@@ -10,7 +10,7 @@ export default function (): void {
     .setAction(nodeInfo);
 }
 
-async function nodeInfo (_taskArgs: TaskArguments, env: PolarRuntimeEnvironment): Promise<void> {
+async function nodeInfo (_taskArgs: TaskArguments, env: WasmkitRuntimeEnvironment): Promise<void> {
   const client = await getClient(env.network) as any;
   console.log("Network:", env.network.name);
   console.log("ChainId:", env.network.config.chainId);
