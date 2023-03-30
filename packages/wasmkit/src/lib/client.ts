@@ -67,11 +67,9 @@ export async function getSigningClient (
 }
 
 export function getChainFromAccount (network: Network): ChainType {
-  console.log("Fetching chain");
   if (network.config.accounts[0].address.startsWith("secret")) {
     return ChainType.Secret;
   } else if (network.config.accounts[0].address.startsWith("juno")) {
-    console.log("KIINPMP JUNO");
     return ChainType.Juno;
     // } else if (network.config.accounts[0].address.startsWith("inj")) {
     //   return ChainType.Injective;
@@ -96,6 +94,7 @@ export async function storeCode (
     const inGasPrice =
       parseFloat(customFees?.amount[0].amount as string) /
       parseFloat(customFees?.gas as string);
+    signingClient = signingClient as SecretNetworkClient;
 
     const uploadReceipt = await signingClient.tx.compute.storeCode(
       {
@@ -109,6 +108,7 @@ export async function storeCode (
         gasPriceInFeeDenom: Number.isNaN(inGasPrice) ? undefined : inGasPrice
       }
     );
+    console.log(uploadReceipt, "sds");
     const res = uploadReceipt?.arrayLog?.find(
       (log: any) => log.type === "message" && log.key === "code_id"
     );

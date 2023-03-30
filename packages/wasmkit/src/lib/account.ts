@@ -4,7 +4,7 @@ import { Account as WasmAccount, SecretNetworkClient } from "secretjs";
 import { WasmkitContext } from "../internal/context";
 import { WasmkitError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
-import { Account, Coin, WasmkitRuntimeEnvironment, UserAccount } from "../types";
+import { Account, Coin, UserAccount, WasmkitRuntimeEnvironment } from "../types";
 import { getBalance, getClient } from "./client";
 
 export class UserAccountI implements UserAccount {

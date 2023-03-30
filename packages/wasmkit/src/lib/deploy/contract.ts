@@ -15,9 +15,9 @@ import type {
   Coin,
   DeployInfo,
   InstantiateInfo,
-  WasmkitRuntimeEnvironment,
   TxnStdFee,
-  UserAccount
+  UserAccount,
+  WasmkitRuntimeEnvironment
 } from "../../types";
 import { loadCheckpoint, persistCheckpoint } from "../checkpoints";
 import { executeTransaction, getClient, getSigningClient, instantiateContract, sendQuery, storeCode } from "../client";
@@ -102,7 +102,7 @@ export class Contract {
     await compress(this.contractName);
 
     const wasmFileContent: Buffer = fs.readFileSync(this.contractPath);
-    const signingClient = getSigningClient(this.env.network, accountVal);
+    const signingClient = await getSigningClient(this.env.network, accountVal);
 
     const { codeId, contractCodeHash } = await storeCode(
       this.env.network,
@@ -192,7 +192,7 @@ export class Contract {
       console.log("Warning: contract already instantiated, using checkpoints");
       return info;
     }
-    const signingClient = getSigningClient(this.env.network, accountVal);
+    const signingClient = await getSigningClient(this.env.network, accountVal);
     const initTimestamp = String(new Date());
     label =
       this.env.runtimeArgs.command === "test"
@@ -268,7 +268,7 @@ export class Contract {
       });
     }
     // Send execute msg to the contract
-    const signingClient = getSigningClient(this.env.network, accountVal);
+    const signingClient = await getSigningClient(this.env.network, accountVal);
     console.log("Executing", this.contractAddress, msgData);
 
     const txnResponse = await executeTransaction(
