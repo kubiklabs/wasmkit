@@ -30,11 +30,11 @@ export async function generateTsSchema (
 
   if (Object.prototype.hasOwnProperty.call(typeHash, 'Coin')) {
     body.push(
-      w.importStmt(['Contract', 'polarTypes'], 'secret-polar')
+      w.importStmt(['Contract', 'polarTypes'], '@arufa/wasmkit')
     );
   } else {
     body.push(
-      w.importStmt(['Contract', 'polarTypes', 'Coin'], 'secret-polar')
+      w.importStmt(['Contract', 'polarTypes', 'Coin'], '@arufa/wasmkit')
     );
   }
 
