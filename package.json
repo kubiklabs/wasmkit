@@ -1,7 +1,7 @@
 {
-  "name": "polar",
-  "description": "Polar is a development environment to compile, deploy, test, run scrt contracts on different networks.",
-  "repository": "https://github.com/arufa-research/polar.git",
+  "name": "Wasmkit",
+  "description": "Wasmkit is a development environment to compile, deploy, test, run cosmwasm contracts on different networks.",
+  "repository": "https://github.com/arufa-research/wasmkit.git",
   "author": "https://github.com/coco-sha",
   "license": "MIT",
   "private": true,
@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "yarn workspaces run build",
-    "watch": "tsc --build --watch packages/polar",
+    "watch": "tsc --build --watch packages/wasmkit",
     "test": "yarn workspaces run test",
     "lint": "yarn workspaces -p run lint",
     "lint:fix": "yarn workspaces -p run lint:fix",
