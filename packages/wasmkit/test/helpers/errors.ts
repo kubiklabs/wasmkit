@@ -1,6 +1,6 @@
 import { assert, AssertionError } from "chai";
 
-import { PolarError } from "../../src/internal/core/errors";
+import { WasmkitError } from "../../src/internal/core/errors";
 import { ErrorDescriptor } from "../../src/internal/core/errors-list";
 
 export async function expectErrorAsync (
@@ -18,13 +18,13 @@ export async function expectErrorAsync (
       return;
     }
     if (typeof matchMessage === "string") {
-      if ((err as PolarError).message !== matchMessage) {
-        notExactMatch.message += `${String((err as PolarError).message)}"`;
+      if ((err as WasmkitError).message !== matchMessage) {
+        notExactMatch.message += `${String((err as WasmkitError).message)}"`;
         throw notExactMatch; // eslint-disable-line @typescript-eslint/no-throw-literal
       }
     } else {
-      if (matchMessage.exec((err as PolarError).message) === null) {
-        notRegexpMatch.message += `${String((err as PolarError).message)}"`;
+      if (matchMessage.exec((err as WasmkitError).message) === null) {
+        notRegexpMatch.message += `${String((err as WasmkitError).message)}"`;
         throw notRegexpMatch; // eslint-disable-line @typescript-eslint/no-throw-literal
       }
     }
@@ -33,7 +33,7 @@ export async function expectErrorAsync (
   throw noError; // eslint-disable-line @typescript-eslint/no-throw-literal
 }
 
-export function expectPolarError (
+export function expectWasmkitError (
   f: () => any,
   errorDescriptor: ErrorDescriptor,
   matchMessage?: string | RegExp,
@@ -42,68 +42,68 @@ export function expectPolarError (
   try {
     const returnValue = f();
     if (returnValue instanceof Promise) {
-      throw new Error("Please use expectPolarErrorAsync() when working with async code");
+      throw new Error("Please use expectWasmkitErrorAsync() when working with async code");
     }
   } catch (error) {
-    assert.instanceOf(error, PolarError, errorMessage);
-    assert.equal((error as PolarError).number, errorDescriptor.number, errorMessage);
+    assert.instanceOf(error, WasmkitError, errorMessage);
+    assert.equal((error as WasmkitError).number, errorDescriptor.number, errorMessage);
     assert.notMatch(
-      (error as PolarError).message,
+      (error as WasmkitError).message,
       /%[a-zA-Z][a-zA-Z0-9]*%/,
-      "PolarError has an non-replaced variable tag"
+      "WasmkitError has an non-replaced variable tag"
     );
 
     if (typeof matchMessage === "string") {
-      assert.include((error as PolarError).message, matchMessage, errorMessage);
+      assert.include((error as WasmkitError).message, matchMessage, errorMessage);
     } else if (matchMessage !== undefined) {
-      assert.match((error as PolarError).message, matchMessage, errorMessage);
+      assert.match((error as WasmkitError).message, matchMessage, errorMessage);
     }
 
     return;
   }
   throw new AssertionError( // eslint-disable-line @typescript-eslint/no-throw-literal
-    `PolarError number ${errorDescriptor.number} expected, but no Error was thrown`
+    `WasmkitError number ${errorDescriptor.number} expected, but no Error was thrown`
   );
 }
 
-export async function expectPolarErrorAsync (
+export async function expectWasmkitErrorAsync (
   f: () => Promise<any>,
   errorDescriptor: ErrorDescriptor,
   matchMessage?: string | RegExp
 ): Promise<void> {
   const error = new AssertionError(
-    `PolarError number ${errorDescriptor.number} expected, but no Error was thrown`
+    `WasmkitError number ${errorDescriptor.number} expected, but no Error was thrown`
   );
 
   const match = String(matchMessage);
   const notExactMatch = new AssertionError(
-    `PolarError was correct, but should have include "${match}" but got "`
+    `WasmkitError was correct, but should have include "${match}" but got "`
   );
 
   const notRegexpMatch = new AssertionError(
-    `PolarError was correct, but should have matched regex ${match} but got "`
+    `WasmkitError was correct, but should have matched regex ${match} but got "`
   );
 
   try {
     await f();
   } catch (error) {
-    assert.instanceOf(error, PolarError);
-    assert.equal((error as PolarError).number, errorDescriptor.number);
+    assert.instanceOf(error, WasmkitError);
+    assert.equal((error as WasmkitError).number, errorDescriptor.number);
     assert.notMatch(
-      (error as PolarError).message,
+      (error as WasmkitError).message,
       /%[a-zA-Z][a-zA-Z0-9]*%/,
-      "PolarError has an non-replaced variable tag"
+      "WasmkitError has an non-replaced variable tag"
     );
 
     if (matchMessage !== undefined) {
       if (typeof matchMessage === "string") {
-        if (!(error as PolarError).message.includes(matchMessage)) {
-          notExactMatch.message += `${String((error as PolarError).message)}`;
+        if (!(error as WasmkitError).message.includes(matchMessage)) {
+          notExactMatch.message += `${String((error as WasmkitError).message)}`;
           throw notExactMatch; // eslint-disable-line @typescript-eslint/no-throw-literal
         }
       } else {
-        if (matchMessage.exec((error as PolarError).message) === null) {
-          notRegexpMatch.message += `${String((error as PolarError).message)}`;
+        if (matchMessage.exec((error as WasmkitError).message) === null) {
+          notRegexpMatch.message += `${String((error as WasmkitError).message)}`;
           throw notRegexpMatch; // eslint-disable-line @typescript-eslint/no-throw-literal
         }
       }

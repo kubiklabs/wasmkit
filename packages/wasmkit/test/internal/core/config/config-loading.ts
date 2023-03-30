@@ -11,7 +11,7 @@ import { loadConfigAndTasks } from "../../../../src/internal/core/config/config-
 import { ERRORS } from "../../../../src/internal/core/errors-list";
 import { resetPolarContext } from "../../../../src/internal/reset";
 import { useEnvironment } from "../../../helpers/environment";
-import { expectPolarErrorAsync } from "../../../helpers/errors";
+import { expectWasmkitErrorAsync } from "../../../helpers/errors";
 import {
   getFixtureProjectPath,
   useFixtureProject
@@ -43,7 +43,7 @@ describe("config loading", function () {
       });
 
       it("Should throw the right error", function () {
-        expectPolarErrorAsync(
+        expectWasmkitErrorAsync(
           () => loadConfigAndTasks(),
           ERRORS.GENERAL.INVALID_CONFIG
         ).catch((err) => console.log(err));

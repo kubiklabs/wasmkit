@@ -5,7 +5,7 @@ import os from "os";
 import path from "path";
 
 import { POLAR_NAME } from "../../lib/constants";
-import { PolarError } from "../core/errors";
+import { WasmkitError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 import { ExecutionMode, getExecutionMode } from "../core/execution-mode";
 import { getPackageJson, getPackageRoot } from "../util/packageInfo";
@@ -42,7 +42,7 @@ function copySampleProject (projectName: string): void {
         return false;
       }
       if (fsExtra.pathExistsSync(dest)) {
-        throw new PolarError(ERRORS.GENERAL.INIT_INSIDE_PROJECT, {
+        throw new WasmkitError(ERRORS.GENERAL.INIT_INSIDE_PROJECT, {
           clashingFile: relPath
         });
       }

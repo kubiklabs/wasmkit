@@ -4,7 +4,7 @@ import { Console } from "console";
 import { SecretNetworkClient, Wallet } from "secretjs";
 import { Coin } from "secretjs/dist/protobuf/cosmos/base/v1beta1/coin";
 
-import { PolarError } from "../internal/core/errors";
+import { WasmkitError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
 import { Account, ChainType, Network, TxnStdFee } from "../types";
 import { defaultFees, defaultFeesJuno } from "./constants";
@@ -25,7 +25,7 @@ export async function getClient (network: Network): Promise<SecretNetworkClient 
 
     // }
     default: {
-      throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+      throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }
   }
@@ -60,7 +60,7 @@ export async function getSigningClient (
 
     // }
     default: {
-      throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+      throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }
   }
@@ -76,7 +76,7 @@ export function getChainFromAccount (network: Network): ChainType {
     // } else if (network.config.accounts[0].address.startsWith("inj")) {
     //   return ChainType.Injective;
   } else {
-    throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+    throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
       { account: network.config.accounts[0].address });
   }
 }
@@ -113,7 +113,7 @@ export async function storeCode (
       (log: any) => log.type === "message" && log.key === "code_id"
     );
     if (res === undefined) {
-      throw new PolarError(ERRORS.GENERAL.STORE_RESPONSE_NOT_RECEIVED, {
+      throw new WasmkitError(ERRORS.GENERAL.STORE_RESPONSE_NOT_RECEIVED, {
         jsonLog: JSON.stringify(uploadReceipt, null, 2),
         contractName: contractName
       });
@@ -136,7 +136,7 @@ export async function storeCode (
     // } else if (network.config.accounts[0].address.startsWith("inj")) {
     //   return ChainType.Injective;
   } else {
-    throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+    throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
       { account: network.config.accounts[0].address });
   }
 }
@@ -158,7 +158,7 @@ export async function instantiateContract (
   switch (chain) {
     case ChainType.Secret: {
       if (contractCodeHash === "mock_hash") {
-        throw new PolarError(ERRORS.GENERAL.CONTRACT_NOT_DEPLOYED, {
+        throw new WasmkitError(ERRORS.GENERAL.CONTRACT_NOT_DEPLOYED, {
           param: contractName
         });
       }
@@ -187,7 +187,7 @@ export async function instantiateContract (
         (log: any) => log.type === "message" && log.key === "contract_address"
       );
       if (res === undefined) {
-        throw new PolarError(ERRORS.GENERAL.INIT_RESPONSE_NOT_RECEIVED, {
+        throw new WasmkitError(ERRORS.GENERAL.INIT_RESPONSE_NOT_RECEIVED, {
           jsonLog: JSON.stringify(tx, null, 2),
           contractName: contractName
         });
@@ -212,7 +212,7 @@ export async function instantiateContract (
 
     // }
     default: {
-      throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+      throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }
   }
@@ -267,7 +267,7 @@ export async function executeTransaction (
 
     // }
     default: {
-      throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+      throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }
   }
@@ -297,7 +297,7 @@ export async function sendQuery (
 
     // }
     default: {
-      throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+      throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }
   }
@@ -306,7 +306,7 @@ export async function sendQuery (
 export async function getBalance (client: any, accountAddress: string, network: Network):
 Promise<Coin[]> {
   if (client === undefined) {
-    throw new PolarError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
+    throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
   }
   const chain = getChainFromAccount(network);
 
@@ -317,7 +317,7 @@ Promise<Coin[]> {
         denom: "uscrt"
       });
       if (info === undefined) {
-        throw new PolarError(ERRORS.GENERAL.BALANCE_UNDEFINED);
+        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
       }
 
       const infoBalance = info.balance ?? { amount: "0", denom: "uscrt" };
@@ -329,7 +329,7 @@ Promise<Coin[]> {
     case ChainType.Juno: {
       const info = await client?.getBalance(accountAddress, "ujuno");
       if (info === undefined) {
-        throw new PolarError(ERRORS.GENERAL.BALANCE_UNDEFINED);
+        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
       }
       return info;
     }
@@ -337,7 +337,7 @@ Promise<Coin[]> {
 
     // }
     default: {
-      throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+      throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }
   }

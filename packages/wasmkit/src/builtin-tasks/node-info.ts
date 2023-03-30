@@ -1,5 +1,5 @@
 import { task } from "../internal/core/config/config-env";
-import { PolarError } from "../internal/core/errors";
+import { WasmkitError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
 import { getChainFromAccount, getClient } from "../lib/client";
 import { ChainType, PolarRuntimeEnvironment, TaskArguments } from "../types";
@@ -34,7 +34,7 @@ async function nodeInfo (_taskArgs: TaskArguments, env: PolarRuntimeEnvironment)
 
     // }
     default: {
-      throw new PolarError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+      throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: env.network.config.accounts[0].address });
     }
   }

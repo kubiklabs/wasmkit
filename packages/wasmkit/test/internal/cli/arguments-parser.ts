@@ -21,16 +21,16 @@ import {
   TaskArguments,
   TaskDefinition
 } from "../../../src/types";
-import { expectPolarError } from "../../helpers/errors";
+import { expectWasmkitError } from "../../helpers/errors";
 
 const SHOW_STACK = "--show-stack-traces";
 
-function parseAndexpectPolarError (
+function parseAndexpectWasmkitError (
   argumentsParser: ArgumentsParser,
   envArgs: RuntimeArgs,
   rawCLAs: string[],
   errorDescriptor: ErrorDescriptor): void {
-    expectPolarError(
+    expectWasmkitError(
     () =>
       argumentsParser.parseRuntimeArgs(
         POLAR_PARAM_DEFINITIONS,
@@ -79,17 +79,17 @@ describe("ArgumentsParser", () => {
   });
 
   it("Should throw if a param name CLA isn't all lowercase", () => {
-    expectPolarError(
+    expectWasmkitError(
       () => ArgumentsParser.cLAToParamName("--show-Stack-traces"),
       ERRORS.ARGUMENTS.PARAM_NAME_INVALID_CASING
     );
 
-    expectPolarError(
+    expectWasmkitError(
       () => ArgumentsParser.cLAToParamName("--shOw-stack-traces"),
       ERRORS.ARGUMENTS.PARAM_NAME_INVALID_CASING
     );
 
-    expectPolarError(
+    expectWasmkitError(
       () => ArgumentsParser.cLAToParamName("--show-stack-tRaces"),
       ERRORS.ARGUMENTS.PARAM_NAME_INVALID_CASING
     );
@@ -185,7 +185,7 @@ describe("ArgumentsParser", () => {
         "--network",
         "local"
       ];
-      parseAndexpectPolarError(
+      parseAndexpectWasmkitError(
         argumentsParser,
         envArgs,
         rawCLAs,
@@ -230,7 +230,7 @@ describe("ArgumentsParser", () => {
         "local",
         "--invalid-param"
       ];
-      parseAndexpectPolarError(
+      parseAndexpectWasmkitError(
         argumentsParser,
         envArgs,
         rawCLAs,
@@ -246,7 +246,7 @@ describe("ArgumentsParser", () => {
         "local",
         "compile"
       ];
-      parseAndexpectPolarError(
+      parseAndexpectWasmkitError(
         argumentsParser,
         envArgs,
         rawCLAs,
@@ -355,7 +355,7 @@ describe("ArgumentsParser", () => {
     });
 
     it("should fail when passing invalid parameter", () => {
-      expectPolarError(() => {
+      expectWasmkitError(() => {
         argumentsParser.parseTaskArguments(
           taskDefinition,
           ["--invalid-parameter", "not_valid"]);
@@ -368,7 +368,7 @@ describe("ArgumentsParser", () => {
         "a variadic params"
       );
 
-      expectPolarError(() => {
+      expectWasmkitError(() => {
         argumentsParser.parseTaskArguments(
           taskDefinition,
           ["--param", "testing", "--bleep", "1337"]);
@@ -379,13 +379,13 @@ describe("ArgumentsParser", () => {
       const definition = new SimpleTaskDefinition("compile", true);
       definition.addParam("param", "just a param");
       definition.addParam("bleep", "useless param", 1602, int, true);
-      expectPolarError(() => {
+      expectWasmkitError(() => {
         argumentsParser.parseTaskArguments(definition, []);
       }, ERRORS.ARGUMENTS.MISSING_TASK_ARGUMENT);
     });
 
     it("should fail when passing unneeded arguments", () => {
-      expectPolarError(() => {
+      expectWasmkitError(() => {
         argumentsParser.parseTaskArguments(taskDefinition, ["more", "arguments"]);
       }, ERRORS.ARGUMENTS.UNRECOGNIZED_POSITIONAL_ARG);
     });
@@ -415,7 +415,7 @@ describe("ArgumentsParser", () => {
         .addOptionalParam("b", "A boolean", true, boolean)
         .setAction(async () => {});
 
-      expectPolarError(
+      expectWasmkitError(
         () => argumentsParser.parseTaskArguments(taskDefinition, rawCLAs),
         ERRORS.ARGUMENTS.MISSING_TASK_ARGUMENT
       );

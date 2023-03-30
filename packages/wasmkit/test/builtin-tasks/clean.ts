@@ -6,7 +6,7 @@ import { ERRORS } from "../../src/internal/core/errors-list";
 import { ARTIFACTS_DIR } from "../../src/internal/core/project-structure";
 import { compile } from "../../src/lib/compile/compile";
 import { useEnvironment } from "../helpers/environment";
-import { expectPolarErrorAsync } from "../helpers/errors";
+import { expectWasmkitErrorAsync } from "../helpers/errors";
 import { useFixtureProject } from "../helpers/project";
 
 describe("Clean task", () => {
@@ -25,7 +25,7 @@ describe("Clean task", () => {
   }).timeout(200000);
 
   it("When there is no Artifacts directory and contract name is specified", async function () {
-    await expectPolarErrorAsync(
+    await expectWasmkitErrorAsync(
       async () => await this.env.run(TASK_CLEAN, { contractName: "sample-project" }),
       ERRORS.GENERAL.ARTIFACTS_NOT_FOUND
     );
@@ -34,7 +34,7 @@ describe("Clean task", () => {
   it("When contract name specified is incorrect", async function () {
     await compile(false, [], false, false, false);
 
-    await expectPolarErrorAsync(
+    await expectWasmkitErrorAsync(
       async () => await this.env.run(TASK_CLEAN, { contractName: "sample-project1" }),
       ERRORS.GENERAL.INCORRECT_CONTRACT_NAME
     );

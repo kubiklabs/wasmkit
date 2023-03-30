@@ -7,7 +7,7 @@ import {
   paramNameToEnvVariable
 } from "../../../../src/internal/core/params/env-variables";
 import { POLAR_PARAM_DEFINITIONS } from "../../../../src/internal/core/params/polar-params";
-import { expectPolarError } from "../../../helpers/errors";
+import { expectWasmkitError } from "../../../helpers/errors";
 
 describe("paramNameToEnvVariable", () => {
   it("should convert camelCase to UPPER_CASE and prepend POLAR_", () => {
@@ -58,7 +58,7 @@ describe("Env vars arguments parsing", () => {
   });
 
   it("should throw if an invalid value is passed", () => {
-    expectPolarError(
+    expectWasmkitError(
       () =>
         getEnvRuntimeArgs(POLAR_PARAM_DEFINITIONS, {
           POLAR_HELP: "123"

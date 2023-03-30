@@ -13,7 +13,7 @@ import type {
   TaskDefinition,
   TasksMap
 } from "../../types";
-import { PolarError } from "../core/errors";
+import { WasmkitError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 import { OverriddenTaskDefinition } from "./tasks/task-definitions";
 
@@ -54,7 +54,7 @@ export class Environment implements PolarRuntimeEnvironment {
     const ncfg = config.networks[runtimeArgs.network];
     // network configuration is required for all tasks except few setup tasks
     if (!ncfg && networkRequired) {
-      throw new PolarError(ERRORS.NETWORK.CONFIG_NOT_FOUND, {
+      throw new WasmkitError(ERRORS.NETWORK.CONFIG_NOT_FOUND, {
         network: runtimeArgs.network
       });
     }
@@ -86,7 +86,7 @@ export class Environment implements PolarRuntimeEnvironment {
     log("Running task %s", name);
 
     if (taskDefinition === undefined) {
-      throw new PolarError(ERRORS.ARGUMENTS.UNRECOGNIZED_TASK, {
+      throw new WasmkitError(ERRORS.ARGUMENTS.UNRECOGNIZED_TASK, {
         task: name
       });
     }
@@ -153,7 +153,7 @@ export class Environment implements PolarRuntimeEnvironment {
       runSuperFunction.isDefined = true;
     } else {
       runSuperFunction = async () => {
-        throw new PolarError(ERRORS.TASK_DEFINITIONS.RUNSUPER_NOT_AVAILABLE, {
+        throw new WasmkitError(ERRORS.TASK_DEFINITIONS.RUNSUPER_NOT_AVAILABLE, {
           taskName: taskDefinition.name
         });
       };
@@ -182,7 +182,7 @@ export class Environment implements PolarRuntimeEnvironment {
    * Also, populate missing, non-mandatory arguments with default param values (if any).
    *
    * @private
-   * @throws PolarError if any of the following are true:
+   * @throws WasmkitError if any of the following are true:
    *  > a required argument is missing
    *  > an argument's value's type doesn't match the defined param type
    *
@@ -205,7 +205,7 @@ export class Environment implements PolarRuntimeEnvironment {
     ];
 
     const initResolvedArguments: {
-      errors: PolarError[]
+      errors: WasmkitError[]
       values: TaskArguments
     } = { errors: [], values: {} };
 
@@ -222,7 +222,7 @@ export class Environment implements PolarRuntimeEnvironment {
             values[paramName] = resolvedArgumentValue;
           }
         } catch (error) {
-          errors.push(error as PolarError);
+          errors.push(error as WasmkitError);
         }
         return { errors, values };
       },
@@ -260,7 +260,7 @@ export class Environment implements PolarRuntimeEnvironment {
       }
 
       // undefined & mandatory argument -> error
-      throw new PolarError(ERRORS.ARGUMENTS.MISSING_TASK_ARGUMENT, {
+      throw new WasmkitError(ERRORS.ARGUMENTS.MISSING_TASK_ARGUMENT, {
         param: name
       });
     }

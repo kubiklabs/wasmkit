@@ -2,19 +2,19 @@ import { getClosestCallerPackage } from '../util/caller-package';
 import { replaceAll } from '../util/strings';
 import { ErrorDescriptor, ERRORS, getErrorCode } from './errors-list';
 
-export class PolarError extends Error {
-  public static isPolarError (other: any): other is PolarError { // eslint-disable-line  
+export class WasmkitError extends Error {
+  public static isWasmkitError (other: any): other is WasmkitError { // eslint-disable-line  
     return (
-      other !== undefined && other !== null && other._isPolarError === true
+      other !== undefined && other !== null && other._isWasmkitError === true
     );
   }
 
-  public static isPolarErrorType (
+  public static isWasmkitErrorType (
     other: any, // eslint-disable-line  
     descriptor: ErrorDescriptor
-  ): other is PolarError {
+  ): other is WasmkitError {
     return (
-      PolarError.isPolarError(other) &&
+      WasmkitError.isWasmkitError(other) &&
       other.errorDescriptor.number === descriptor.number
     );
   }
@@ -24,7 +24,7 @@ export class PolarError extends Error {
   public readonly messageArguments: Record<string, any>; // eslint-disable-line  @typescript-eslint/no-explicit-any
   public readonly parent?: Error;
 
-  private readonly _isPolarError: boolean;
+  private readonly _isWasmkitError: boolean;
 
   constructor (
     errorDescriptor: ErrorDescriptor,
@@ -48,8 +48,8 @@ export class PolarError extends Error {
       this.parent = parentError;
     }
 
-    this._isPolarError = true;
-    Object.setPrototypeOf(this, PolarError.prototype);
+    this._isWasmkitError = true;
+    Object.setPrototypeOf(this, WasmkitError.prototype);
   }
 }
 
@@ -174,6 +174,6 @@ export function assertPolarInvariant (
   message: string
 ): asserts invariant {
   if (!invariant) {
-    throw new PolarError(ERRORS.GENERAL.ASSERTION_ERROR, { message });
+    throw new WasmkitError(ERRORS.GENERAL.ASSERTION_ERROR, { message });
   }
 }

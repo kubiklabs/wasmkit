@@ -2,7 +2,7 @@
 import { assert } from "chai";
 
 import {
-  PolarError, PolarPluginError
+  WasmkitError, PolarPluginError
 } from "../../../src/internal/core/errors";
 import {
   ERROR_RANGES,
@@ -19,39 +19,39 @@ const mockErrorDescriptor: ErrorDescriptor = {
   shouldBeReported: false
 };
 
-describe("PolarError", () => {
+describe("WasmkitError", () => {
   describe("Type guard", () => {
-    it("Should return true for PolarErrors", () => {
+    it("Should return true for WasmkitErrors", () => {
       assert.isTrue(
-        PolarError.isPolarError(new PolarError(mockErrorDescriptor))
+        WasmkitError.isWasmkitError(new WasmkitError(mockErrorDescriptor))
       );
     });
 
     it("Should return false for everything else", () => {
-      assert.isFalse(PolarError.isPolarError(new Error()));
+      assert.isFalse(WasmkitError.isWasmkitError(new Error()));
       assert.isFalse(
-        PolarError.isPolarError(new PolarPluginError("asd", "asd"))
+        WasmkitError.isWasmkitError(new PolarPluginError("asd", "asd"))
       );
-      assert.isFalse(PolarError.isPolarError(undefined));
-      assert.isFalse(PolarError.isPolarError(null));
-      assert.isFalse(PolarError.isPolarError(123));
-      assert.isFalse(PolarError.isPolarError("123"));
-      assert.isFalse(PolarError.isPolarError({ asd: 123 }));
+      assert.isFalse(WasmkitError.isWasmkitError(undefined));
+      assert.isFalse(WasmkitError.isWasmkitError(null));
+      assert.isFalse(WasmkitError.isWasmkitError(123));
+      assert.isFalse(WasmkitError.isWasmkitError("123"));
+      assert.isFalse(WasmkitError.isWasmkitError({ asd: 123 }));
     });
   });
 
   describe("Without parent error", () => {
     it("should have the right error number", () => {
-      const error = new PolarError(mockErrorDescriptor);
+      const error = new WasmkitError(mockErrorDescriptor);
       assert.equal(error.number, mockErrorDescriptor.number);
     });
 
     it("should format the error code to 4 digits", () => {
-      const error = new PolarError(mockErrorDescriptor);
+      const error = new WasmkitError(mockErrorDescriptor);
       assert.equal(error.message.substr(0, 10), "PE123: err");
 
       assert.equal(
-        new PolarError({
+        new WasmkitError({
           number: 1,
           message: "",
           title: "Title",
@@ -63,12 +63,12 @@ describe("PolarError", () => {
     });
 
     it("should have the right error message", () => {
-      const error = new PolarError(mockErrorDescriptor);
+      const error = new WasmkitError(mockErrorDescriptor);
       assert.equal(error.message, `PE123: ${mockErrorDescriptor.message}`);
     });
 
     it("should format the error message with the template params", () => {
-      const error = new PolarError(
+      const error = new WasmkitError(
         {
           number: 12,
           message: "%a% %b% %c%",
@@ -82,24 +82,24 @@ describe("PolarError", () => {
     });
 
     it("shouldn't have a parent", () => {
-      assert.isUndefined(new PolarError(mockErrorDescriptor).parent);
+      assert.isUndefined(new WasmkitError(mockErrorDescriptor).parent);
     });
 
     it("Should work with instanceof", () => {
-      const error = new PolarError(mockErrorDescriptor);
-      assert.instanceOf(error, PolarError);
+      const error = new WasmkitError(mockErrorDescriptor);
+      assert.instanceOf(error, WasmkitError);
     });
   });
 
   describe("With parent error", () => {
     it("should have the right parent error", () => {
       const parent = new Error();
-      const error = new PolarError(mockErrorDescriptor, {}, parent);
+      const error = new WasmkitError(mockErrorDescriptor, {}, parent);
       assert.equal(error.parent, parent);
     });
 
     it("should format the error message with the template params", () => {
-      const error = new PolarError(
+      const error = new WasmkitError(
         {
           number: 12,
           message: "%a% %b% %c%",
@@ -115,8 +115,8 @@ describe("PolarError", () => {
 
     it("Should work with instanceof", () => {
       const parent = new Error();
-      const error = new PolarError(mockErrorDescriptor, {}, parent);
-      assert.instanceOf(error, PolarError);
+      const error = new WasmkitError(mockErrorDescriptor, {}, parent);
+      assert.instanceOf(error, WasmkitError);
     });
   });
 });
@@ -215,7 +215,7 @@ describe("PolarPluginError", () => {
       assert.isFalse(PolarPluginError.isPolarPluginError(new Error()));
       assert.isFalse(
         PolarPluginError.isPolarPluginError(
-          new PolarError(ERRORS.GENERAL.NOT_INSIDE_PROJECT)
+          new WasmkitError(ERRORS.GENERAL.NOT_INSIDE_PROJECT)
         )
       );
       assert.isFalse(PolarPluginError.isPolarPluginError(undefined));
@@ -307,17 +307,17 @@ describe("PolarPluginError", () => {
 // describe("applyErrorMessageTemplate", () => {
 //  describe("Variable names", () => {
 //    it("Should reject invalid variable names", () => {
-//      expectPolarError(
+//      expectWasmkitError(
 //        () => applyErrorMessageTemplate("", { "1": 1 }),
 //        ERRORS.INTERNAL.TEMPLATE_INVALID_VARIABLE_NAME
 //      );
 //
-//      expectPolarError(
+//      expectWasmkitError(
 //        () => applyErrorMessageTemplate("", { "asd%": 1 }),
 //        ERRORS.INTERNAL.TEMPLATE_INVALID_VARIABLE_NAME
 //      );
 //
-//      expectPolarError(
+//      expectWasmkitError(
 //        () => applyErrorMessageTemplate("", { "asd asd": 1 }),
 //        ERRORS.INTERNAL.TEMPLATE_INVALID_VARIABLE_NAME
 //      );
@@ -326,17 +326,17 @@ describe("PolarPluginError", () => {
 //
 //  describe("Values", () => {
 //    it("shouldn't contain valid variable tags", () => {
-//      expectPolarError(
+//      expectWasmkitError(
 //        () => applyErrorMessageTemplate("%asd%", { asd: "%as%" }),
 //        ERRORS.INTERNAL.TEMPLATE_VALUE_CONTAINS_VARIABLE_TAG
 //      );
 //
-//      expectPolarError(
+//      expectWasmkitError(
 //        () => applyErrorMessageTemplate("%asd%", { asd: "%a123%" }),
 //        ERRORS.INTERNAL.TEMPLATE_VALUE_CONTAINS_VARIABLE_TAG
 //      );
 //
-//      expectPolarError(
+//      expectWasmkitError(
 //        () =>
 //          applyErrorMessageTemplate("%asd%", {
 //            asd: { toString: () => "%asd%" },
@@ -346,7 +346,7 @@ describe("PolarPluginError", () => {
 //    });
 //
 //    it("Shouldn't contain the %% tag", () => {
-//      expectPolarError(
+//      expectWasmkitError(
 //        () => applyErrorMessageTemplate("%asd%", { asd: "%%" }),
 //        ERRORS.INTERNAL.TEMPLATE_VALUE_CONTAINS_VARIABLE_TAG
 //      );
@@ -444,7 +444,7 @@ describe("PolarPluginError", () => {
 //
 //    describe("Missing variable tag", () => {
 //      it("Should fail if a viable tag is missing and its value is not", () => {
-//        expectPolarError(
+//        expectWasmkitError(
 //          () => applyErrorMessageTemplate("", { asd: "123" }),
 //          ERRORS.INTERNAL.TEMPLATE_VARIABLE_TAG_MISSING
 //        );

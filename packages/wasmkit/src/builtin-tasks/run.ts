@@ -4,7 +4,7 @@ import path from "path";
 import * as ts from "typescript";
 
 import { task } from "../internal/core/config/config-env";
-import { PolarError } from "../internal/core/errors";
+import { WasmkitError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
 import { SCRIPTS_DIR } from "../internal/core/project-structure";
 import { runScript } from "../internal/util/script-runner";
@@ -53,7 +53,7 @@ async function executeRunTask (
 
   const nonExistent = filterNonExistent(scripts);
   if (nonExistent.length !== 0) {
-    throw new PolarError(ERRORS.BUILTIN_TASKS.RUN_FILES_NOT_FOUND, {
+    throw new WasmkitError(ERRORS.BUILTIN_TASKS.RUN_FILES_NOT_FOUND, {
       scripts: nonExistent
     });
   }

@@ -1,6 +1,6 @@
 import { ConfigExtender, PolarRuntimeEnvironment } from '../types';
 import { ExtenderManager } from './core/config/extenders';
-import { PolarError } from './core/errors';
+import { WasmkitError } from './core/errors';
 import { ERRORS } from './core/errors-list';
 import { TasksDSL } from './core/tasks/dsl';
 
@@ -17,7 +17,7 @@ export class PolarContext {
 
   public static createPolarContext (): PolarContext {
     if (this.isCreated()) {
-      throw new PolarError(ERRORS.GENERAL.CONTEXT_ALREADY_CREATED);
+      throw new WasmkitError(ERRORS.GENERAL.CONTEXT_ALREADY_CREATED);
     }
 
     const globalWithPolarContext = global as unknown as GlobalWithPolarContext;
@@ -31,7 +31,7 @@ export class PolarContext {
     const ctx = globalWithPolarContext.__polarContext;
 
     if (ctx === undefined) {
-      throw new PolarError(ERRORS.GENERAL.CONTEXT_NOT_CREATED);
+      throw new WasmkitError(ERRORS.GENERAL.CONTEXT_NOT_CREATED);
     }
 
     return ctx;
@@ -52,14 +52,14 @@ export class PolarContext {
 
   public setRuntimeEnv (env: PolarRuntimeEnvironment): void {
     if (this.environment !== undefined) {
-      throw new PolarError(ERRORS.GENERAL.CONTEXT_PRE_ALREADY_DEFINED);
+      throw new WasmkitError(ERRORS.GENERAL.CONTEXT_PRE_ALREADY_DEFINED);
     }
     this.environment = env;
   }
 
   public getRuntimeEnv (): PolarRuntimeEnvironment {
     if (this.environment === undefined) {
-      throw new PolarError(ERRORS.GENERAL.CONTEXT_PRE_NOT_DEFINED);
+      throw new WasmkitError(ERRORS.GENERAL.CONTEXT_PRE_NOT_DEFINED);
     }
     return this.environment;
   }

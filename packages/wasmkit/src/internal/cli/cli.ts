@@ -10,7 +10,7 @@ import { TASK_HELP } from "../../builtin-tasks/task-names";
 import { PolarRuntimeEnvironment, RuntimeArgs, TaskArguments } from "../../types";
 import { PolarContext } from "../context";
 import { loadConfigAndTasks } from "../core/config/config-loading";
-import { PolarError, PolarPluginError } from "../core/errors";
+import { PolarPluginError, WasmkitError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 import { getEnvRuntimeArgs } from "../core/params/env-variables";
 import {
@@ -33,15 +33,15 @@ async function printVersionMessage (packageJson: PackageJson): Promise<void> {
 function ensureValidNodeVersion (packageJson: PackageJson): void {
   const requirement = packageJson.engines.node;
   if (!semver.satisfies(process.version, requirement)) {
-    throw new PolarError(ERRORS.GENERAL.INVALID_NODE_VERSION, {
+    throw new WasmkitError(ERRORS.GENERAL.INVALID_NODE_VERSION, {
       requirement
     });
   }
 }
 
-function printErrRecur (error: PolarError): void {
+function printErrRecur (error: WasmkitError): void {
   if (error.parent) {
-    if (error.parent instanceof PolarError) {
+    if (error.parent instanceof WasmkitError) {
       printErrRecur(error.parent);
     } else {
       console.error(error.parent);
@@ -49,7 +49,7 @@ function printErrRecur (error: PolarError): void {
   }
 }
 
-function printStackTraces (showStackTraces: boolean, error: PolarError): void {
+function printStackTraces (showStackTraces: boolean, error: WasmkitError): void {
   if (error === undefined) { return; }
   if (showStackTraces) {
     printErrRecur(error);
@@ -126,7 +126,7 @@ export async function loadEnvironmentAndArgs (
   const taskDefinitions = ctx.tasksDSL.getTaskDefinitions();
   let taskName = maybeTaskName ?? TASK_HELP;
   if (taskDefinitions[taskName] == null) {
-    throw new PolarError(ERRORS.ARGUMENTS.UNRECOGNIZED_TASK, {
+    throw new WasmkitError(ERRORS.ARGUMENTS.UNRECOGNIZED_TASK, {
       task: taskName
     });
   }
@@ -149,7 +149,7 @@ export async function loadEnvironmentAndArgs (
 
   // Being inside of a project is non-mandatory for help and init
   if (!isSetup && !isCwdInsideProject()) {
-    throw new PolarError(ERRORS.GENERAL.NOT_INSIDE_PROJECT, { task: origTaskName });
+    throw new WasmkitError(ERRORS.GENERAL.NOT_INSIDE_PROJECT, { task: origTaskName });
   }
 
   const env = new Environment(
@@ -198,7 +198,7 @@ async function main (): Promise<void> {
 
     log(`Quitting polar after successfully running task ${taskName}`);
   } catch (error) {
-    if (PolarError.isPolarError(error)) {
+    if (WasmkitError.isWasmkitError(error)) {
       console.error(chalk.red(`Error ${error.message}`));
     } else if (PolarPluginError.isPolarPluginError(error)) {
       console.error(
@@ -214,7 +214,7 @@ async function main (): Promise<void> {
 
     console.log("");
 
-    printStackTraces(showStackTraces, error as PolarError);
+    printStackTraces(showStackTraces, error as WasmkitError);
 
     process.exit(1);
   }

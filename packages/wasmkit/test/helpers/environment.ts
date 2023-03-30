@@ -2,7 +2,7 @@ import debug from "debug";
 
 import { PolarContext } from "../../src/internal/context";
 import { loadConfigAndTasks } from "../../src/internal/core/config/config-loading";
-import { PolarError } from "../../src/internal/core/errors";
+import { WasmkitError } from "../../src/internal/core/errors";
 import { ERRORS } from "../../src/internal/core/errors-list";
 import { getEnvRuntimeArgs } from "../../src/internal/core/params/env-variables";
 import { POLAR_PARAM_DEFINITIONS } from "../../src/internal/core/params/polar-params";
@@ -46,7 +46,7 @@ export async function getEnv (defaultNetworkCfg?: NetworkConfig): Promise<PolarR
     // The most probable reason for this to happen is that this file was imported
     // from the config file
     if (ctx.environment === undefined) {
-      throw new PolarError(ERRORS.GENERAL.LIB_IMPORTED_FROM_THE_CONFIG);
+      throw new WasmkitError(ERRORS.GENERAL.LIB_IMPORTED_FROM_THE_CONFIG);
     }
 
     return ctx.environment;

@@ -4,7 +4,7 @@ import path from "path";
 import { SecretNetworkClient } from "secretjs";
 
 import { PolarContext } from "../../internal/context";
-import { PolarError } from "../../internal/core/errors";
+import { WasmkitError } from "../../internal/core/errors";
 import { ERRORS } from "../../internal/core/errors-list";
 import { ARTIFACTS_DIR } from "../../internal/core/project-structure";
 import { replaceAll } from "../../internal/util/strings";
@@ -177,7 +177,7 @@ export class Contract {
         ? (account as UserAccount).account
         : (account as Account);
     // if (this.contractCodeHash === "mock_hash") {
-    //   throw new PolarError(ERRORS.GENERAL.CONTRACT_NOT_DEPLOYED, {
+    //   throw new WasmkitError(ERRORS.GENERAL.CONTRACT_NOT_DEPLOYED, {
     //     param: this.contractName
     //   });
     // }
@@ -234,7 +234,7 @@ export class Contract {
 
   async queryMsg (msgData: Record<string, unknown>): Promise<any> { // eslint-disable-line  @typescript-eslint/no-explicit-any
     if (this.contractAddress === "mock_address") {
-      throw new PolarError(ERRORS.GENERAL.CONTRACT_NOT_INSTANTIATED, {
+      throw new WasmkitError(ERRORS.GENERAL.CONTRACT_NOT_INSTANTIATED, {
         param: this.contractName
       });
     }
@@ -243,7 +243,7 @@ export class Contract {
     console.log(this.contractAddress, msgData);
 
     if (this.client === undefined) {
-      throw new PolarError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
+      throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
     }
 
     return await sendQuery(
@@ -263,7 +263,7 @@ export class Contract {
         ? (account as UserAccount).account
         : (account as Account);
     if (this.contractAddress === "mock_address") {
-      throw new PolarError(ERRORS.GENERAL.CONTRACT_NOT_INSTANTIATED, {
+      throw new WasmkitError(ERRORS.GENERAL.CONTRACT_NOT_INSTANTIATED, {
         param: this.contractName
       });
     }
@@ -284,7 +284,7 @@ export class Contract {
     );
 
     if (txnResponse.code !== 0) {
-      throw new PolarError(ERRORS.INTERACTION.TRANSACTION_FAILURE, {
+      throw new WasmkitError(ERRORS.INTERACTION.TRANSACTION_FAILURE, {
         contractName: this.contractName,
         transaction: JSON.stringify(msgData, null, 2),
         message: JSON.stringify(txnResponse, null, 2)

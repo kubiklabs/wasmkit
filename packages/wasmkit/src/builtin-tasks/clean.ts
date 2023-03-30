@@ -3,7 +3,7 @@ import fsExtra from "fs-extra";
 import path from "path";
 
 import { task } from "../internal/core/config/config-env";
-import { PolarError } from "../internal/core/errors";
+import { WasmkitError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
 import { ARTIFACTS_DIR, isCwdProjectDir } from "../internal/core/project-structure";
 import type { PolarRuntimeEnvironment } from "../types";
@@ -30,7 +30,7 @@ export default function (): void {
         console.log(`Not in a valid polar project repo, exiting`);
         process.exit(1);
       } else if (!fsExtra.existsSync(`./${ARTIFACTS_DIR}`) && contractName.length) {
-        throw new PolarError(ERRORS.GENERAL.ARTIFACTS_NOT_FOUND);
+        throw new WasmkitError(ERRORS.GENERAL.ARTIFACTS_NOT_FOUND);
       } else if (contractNameNew.length !== 0 && fsExtra.existsSync(comp)) {
         const artifactsAbsPath = path.resolve(process.cwd(), ARTIFACTS_DIR);
         console.log(`Cleaning Artifacts directory: ${chalk.gray(artifactsAbsPath)}`);
@@ -38,7 +38,7 @@ export default function (): void {
         await fsExtra.remove('./artifacts/schema/' + contractNameNew + '/');
         await fsExtra.remove('./artifacts/checkpoints/' + contractNameNew + '.yaml}');
       } else if (contractNameNew.length !== 0 && !(fsExtra.existsSync(comp))) {
-        throw new PolarError(ERRORS.GENERAL.INCORRECT_CONTRACT_NAME);
+        throw new WasmkitError(ERRORS.GENERAL.INCORRECT_CONTRACT_NAME);
       } else {
         const artifactsAbsPath = path.resolve(process.cwd(), ARTIFACTS_DIR);
         console.log(`Cleaning Artifacts directory: ${chalk.gray(artifactsAbsPath)}`);

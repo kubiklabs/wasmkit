@@ -4,7 +4,7 @@ import * as semver from "semver";
 
 import { StrMap } from "../../types";
 import { PolarContext } from "../context";
-import { PolarError } from "../core/errors";
+import { WasmkitError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 import { ExecutionMode, getExecutionMode } from "./execution-mode";
 
@@ -61,7 +61,7 @@ export function usePlugin (
   if (pluginPackageJson === undefined) {
     const installExtraFlags = globalFlag;
 
-    throw new PolarError(ERRORS.PLUGINS.NOT_INSTALLED, {
+    throw new WasmkitError(ERRORS.PLUGINS.NOT_INSTALLED, {
       plugin: pluginName,
       extraMessage: globalWarning,
       extraFlags: installExtraFlags
@@ -99,7 +99,7 @@ function checkPeerDependencies (deps: StrMap, pluginName: string,
     }
 
     if (dependencyPackageJson === undefined) {
-      throw new PolarError(ERRORS.PLUGINS.MISSING_DEPENDENCIES, {
+      throw new WasmkitError(ERRORS.PLUGINS.MISSING_DEPENDENCIES, {
         plugin: pluginName,
         dependency: dependencyName,
         extraMessage: warning,
@@ -115,7 +115,7 @@ function checkPeerDependencies (deps: StrMap, pluginName: string,
         includePrerelease: true
       })
     ) {
-      throw new PolarError(ERRORS.PLUGINS.DEPENDENCY_VERSION_MISMATCH, {
+      throw new WasmkitError(ERRORS.PLUGINS.DEPENDENCY_VERSION_MISMATCH, {
         plugin: pluginName,
         dependency: dependencyName,
         extraMessage: warning,

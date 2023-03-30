@@ -4,7 +4,7 @@ import { readdirSync } from "fs";
 import fs from "fs-extra";
 import path from "path";
 
-import { PolarError } from "../../internal/core/errors";
+import { WasmkitError } from "../../internal/core/errors";
 import { ERRORS } from "../../internal/core/errors-list";
 import {
   ARTIFACTS_DIR,
@@ -48,7 +48,7 @@ export async function compile (
         // Check for similar contract names before compiling contracts.
         // For contract with same names raise an error.
         if (contractNames.has(val)) {
-          throw new PolarError(ERRORS.GENERAL.SAME_CONTRACT_NAMES, {
+          throw new WasmkitError(ERRORS.GENERAL.SAME_CONTRACT_NAMES, {
             val
           });
         } else {
@@ -87,7 +87,7 @@ export function compileContract (contractDir: string, docker: boolean): void {
     execSync(`RUSTFLAGS='-C link-arg=-s' cargo build --release --target wasm32-unknown-unknown`, { stdio: 'inherit' });
   } catch (error) {
     if (error instanceof Error) {
-      throw new PolarError(ERRORS.GENERAL.RUST_COMPILE_ERROR);
+      throw new WasmkitError(ERRORS.GENERAL.RUST_COMPILE_ERROR);
     } else {
       throw error;
     }

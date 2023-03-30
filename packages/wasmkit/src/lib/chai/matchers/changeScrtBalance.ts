@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
 import { PolarContext } from "../../../internal/context";
-import { PolarError } from "../../../internal/core/errors";
+import { WasmkitError } from "../../../internal/core/errors";
 import { ERRORS } from "../../../internal/core/errors-list";
 import type {
   Account, Coin, PolarRuntimeEnvironment, UserAccount
@@ -64,7 +64,7 @@ export async function getBalanceChange ( // eslint-disable-line sonarjs/cognitiv
   logResponse?: boolean
 ): Promise<number> {
   if (typeof transaction !== 'function') {
-    throw new PolarError(ERRORS.GENERAL.NOT_A_FUNCTION, {
+    throw new WasmkitError(ERRORS.GENERAL.NOT_A_FUNCTION, {
       param: transaction
     });
   }

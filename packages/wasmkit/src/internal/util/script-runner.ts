@@ -2,7 +2,7 @@ import debug from "debug";
 import * as path from "path";
 
 import { PolarRuntimeEnvironment } from "../../types";
-import { PolarError } from "../core/errors";
+import { WasmkitError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 
 const log = debug("polar:core:scripts-runner");
@@ -12,7 +12,7 @@ async function loadScript (relativeScriptPath: string): Promise<any> {
   try {
     return require(absoluteScriptPath);
   } catch (err) {
-    throw new PolarError(ERRORS.GENERAL.SCRIPT_LOAD_ERROR, {
+    throw new WasmkitError(ERRORS.GENERAL.SCRIPT_LOAD_ERROR, {
       script: absoluteScriptPath,
       error: (err as Error).message
     });
@@ -25,7 +25,7 @@ async function loadScript (relativeScriptPath: string): Promise<any> {
  */
 function attachLineNumbertoScriptPath (
   // eslint-disable-next-line
-  error: Error | PolarError | any, scriptPath: string
+  error: Error | WasmkitError | any, scriptPath: string
 ): string {
   const stackTraces = error.stack.split('\n');
   for (const trace of stackTraces) {
@@ -38,13 +38,13 @@ function attachLineNumbertoScriptPath (
   return scriptPath;
 }
 // eslint-disable-next-line
-function displayErr (error: Error | PolarError | any, relativeScriptPath: string): void {
-  if (error instanceof PolarError) {
+function displayErr (error: Error | WasmkitError | any, relativeScriptPath: string): void {
+  if (error instanceof WasmkitError) {
     throw error;
   }
   const relativeScriptPathWithLine = attachLineNumbertoScriptPath(error, relativeScriptPath);
 
-  throw new PolarError(
+  throw new WasmkitError(
     ERRORS.BUILTIN_TASKS.RUN_SCRIPT_ERROR, {
       script: relativeScriptPathWithLine,
       error: error.message
@@ -64,7 +64,7 @@ export async function runScript (
   log(`Running ${relativeScriptPath}.default()`);
   const requiredScript = await loadScript(relativeScriptPath);
   if (!requiredScript.default) {
-    throw new PolarError(ERRORS.GENERAL.NO_DEFAULT_EXPORT_IN_SCRIPT, {
+    throw new WasmkitError(ERRORS.GENERAL.NO_DEFAULT_EXPORT_IN_SCRIPT, {
       script: relativeScriptPath
     });
   }

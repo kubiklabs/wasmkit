@@ -1,7 +1,7 @@
 import { ParamDefinitions, RuntimeArgs } from "../../../types";
 import { ArgumentsParser } from "../../cli/arguments-parser";
 import { unsafeObjectKeys } from "../../util/unsafe";
-import { PolarError } from "../errors";
+import { WasmkitError } from "../errors";
 import { ERRORS } from "../errors-list";
 
 import ProcessEnv = NodeJS.ProcessEnv;
@@ -48,7 +48,7 @@ export function getEnvRuntimeArgs (
       try {
         envArgs[paramName] = definition.type.parse(paramName, rawValue);
       } catch (error) {
-        throw new PolarError(
+        throw new WasmkitError(
           ERRORS.ARGUMENTS.INVALID_ENV_VAR_VALUE,
           {
             varName: envVarName,

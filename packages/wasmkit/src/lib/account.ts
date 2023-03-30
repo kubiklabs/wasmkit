@@ -2,7 +2,7 @@ import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Account as WasmAccount, SecretNetworkClient } from "secretjs";
 
 import { PolarContext } from "../internal/context";
-import { PolarError } from "../internal/core/errors";
+import { WasmkitError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
 import { Account, Coin, PolarRuntimeEnvironment, UserAccount } from "../types";
 import { getBalance, getClient } from "./client";
@@ -21,7 +21,7 @@ export class UserAccountI implements UserAccount {
 
   // async getAccountInfo (): Promise<WasmAccount | undefined> {
   //   if (this.client === undefined) {
-  //     throw new PolarError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
+  //     throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
   //   }
   //   return (await this.client.query.auth.account({ address: this.account.address })).account;
   // }
@@ -37,7 +37,7 @@ export async function getAccountByName (
 ): Promise<UserAccount> {
   const env: PolarRuntimeEnvironment = PolarContext.getPolarContext().getRuntimeEnv();
   if (env.network.config.accounts === undefined) {
-    throw new PolarError(ERRORS.GENERAL.ACCOUNT_DOES_NOT_EXIST, { name: name });
+    throw new WasmkitError(ERRORS.GENERAL.ACCOUNT_DOES_NOT_EXIST, { name: name });
   }
   for (const value of env.network.config.accounts) {
     if (value.name === name) {
@@ -46,5 +46,5 @@ export async function getAccountByName (
       return res;
     }
   }
-  throw new PolarError(ERRORS.GENERAL.ACCOUNT_DOES_NOT_EXIST, { name: name });
+  throw new WasmkitError(ERRORS.GENERAL.ACCOUNT_DOES_NOT_EXIST, { name: name });
 }
