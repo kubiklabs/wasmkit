@@ -20,6 +20,7 @@ export enum ChainType {
   Secret,
   Juno,
   Injective,
+  Archway,
 }
 
 export interface Account {

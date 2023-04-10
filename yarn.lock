@@ -20,6 +20,23 @@
     call-me-maybe "^1.0.1"
     js-yaml "^4.1.0"
 
+"@archwayhq/arch3-core@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@archwayhq/arch3-core/-/arch3-core-0.1.0.tgz#efb0e7dbcfb2290bf074dc8307e82a574e315f95"
+  integrity sha512-YO3PQLvjgK9qnhgDtOlnqGZhH1VCQdvkzfCf4Z3l/ArM5fp1F4CfwYbCdsAUhre3g1zL6lvfHmZHfAXcBHME8Q==
+  dependencies:
+    "@cosmjs/cosmwasm-stargate" "^0.28.13"
+    "@cosmjs/proto-signing" "^0.28.13"
+    "@cosmjs/stargate" "^0.28.13"
+    "@cosmjs/tendermint-rpc" "^0.28.13"
+
+"@archwayhq/arch3.js@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@archwayhq/arch3.js/-/arch3.js-0.1.0.tgz#fd24705315ce089b7a12d2e3eb2e1d856fd153a0"
+  integrity sha512-3oC9NRkeNRu8rza+1tGR9KjpVSzCVIFoigERaNiZT4UCeM2M0W5ych57xvyQy1M8GcOXDT7kBUrCnApsERPUEg==
+  dependencies:
+    "@archwayhq/arch3-core" "0.1.0"
+
 "@babel/cli@7.17.10":
   version "7.17.10"
   resolved "https://registry.npmjs.org/@babel/cli/-/cli-7.17.10.tgz"
@@ -1132,7 +1149,7 @@
     "@cosmjs/math" "0.28.13"
     "@cosmjs/utils" "0.28.13"
 
-"@cosmjs/cosmwasm-stargate@^0.28.9":
+"@cosmjs/cosmwasm-stargate@^0.28.13", "@cosmjs/cosmwasm-stargate@^0.28.9":
   version "0.28.13"
   resolved "https://registry.yarnpkg.com/@cosmjs/cosmwasm-stargate/-/cosmwasm-stargate-0.28.13.tgz#bea77bc999aaafdb677f446465f648cd000c5b4a"
   integrity sha512-dVZNOiRd8btQreRUabncGhVXGCS2wToXqxi9l3KEHwCJQ2RWTshuqV+EZAdCaYHE5W6823s2Ol2W/ukA9AXJPw==
@@ -1237,7 +1254,7 @@
   dependencies:
     bn.js "^4.11.8"
 
-"@cosmjs/proto-signing@0.28.13", "@cosmjs/proto-signing@^0.28.9":
+"@cosmjs/proto-signing@0.28.13", "@cosmjs/proto-signing@^0.28.13", "@cosmjs/proto-signing@^0.28.9":
   version "0.28.13"
   resolved "https://registry.yarnpkg.com/@cosmjs/proto-signing/-/proto-signing-0.28.13.tgz#95ac12f0da0f0814f348f5ae996c3e96d015df61"
   integrity sha512-nSl/2ZLsUJYz3Ad0RY3ihZUgRHIow2OnYqKsESMu+3RA/jTi9bDYhiBu8mNMHI0xrEJry918B2CyI56pOUHdPQ==
@@ -1260,7 +1277,7 @@
     ws "^7"
     xstream "^11.14.0"
 
-"@cosmjs/stargate@0.28.13", "@cosmjs/stargate@^0.28.9":
+"@cosmjs/stargate@0.28.13", "@cosmjs/stargate@^0.28.13", "@cosmjs/stargate@^0.28.9":
   version "0.28.13"
   resolved "https://registry.yarnpkg.com/@cosmjs/stargate/-/stargate-0.28.13.tgz#a73d837a46ee8944e6eafe162f2ff6943c14350e"
   integrity sha512-dVBMazDz8/eActHsRcZjDHHptOBMqvibj5CFgEtZBp22gP6ASzoAUXTlkSVk5FBf4sfuUHoff6st134/+PGMAg==
@@ -1285,7 +1302,7 @@
   dependencies:
     xstream "^11.14.0"
 
-"@cosmjs/tendermint-rpc@0.28.13":
+"@cosmjs/tendermint-rpc@0.28.13", "@cosmjs/tendermint-rpc@^0.28.13":
   version "0.28.13"
   resolved "https://registry.yarnpkg.com/@cosmjs/tendermint-rpc/-/tendermint-rpc-0.28.13.tgz#0bf587ae66fa3f88319edbd258492d28e73f9f29"
   integrity sha512-GB+ZmfuJIGQm0hsRtLYjeR3lOxF7Z6XyCBR0cX5AAYOZzSEBJjevPgUHD6tLn8zIhvzxaW3/VKnMB+WmlxdH4w==

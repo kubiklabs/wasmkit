@@ -1,6 +1,6 @@
+import { ArchwayClient, SigningArchwayClient } from '@archwayhq/arch3.js';
 import { CosmWasmClient, ExecuteResult, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet, makeCosmoshubPath } from "@cosmjs/proto-signing";
-import { Console } from "console";
 import { SecretNetworkClient, Wallet } from "secretjs";
 import { Coin } from "secretjs/dist/protobuf/cosmos/base/v1beta1/coin";
 
@@ -20,6 +20,9 @@ export async function getClient (network: Network): Promise<SecretNetworkClient 
     }
     case ChainType.Juno: {
       return await CosmWasmClient.connect(network.config.endpoint);
+    }
+    case ChainType.Archway: {
+      return await ArchwayClient.connect(network.config.endpoint);
     }
     // case ChainType.Injective: {
 
@@ -56,6 +59,14 @@ export async function getSigningClient (
         wallet
       );
     }
+    case ChainType.Archway: {
+      const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+        prefix: 'archway'
+      });
+      return await SigningArchwayClient.connectWithSigner(network.config.endpoint, wallet, {
+        prefix: 'archway'
+      });
+    }
     // case ChainType.Injective: {
 
     // }
@@ -73,6 +84,8 @@ export function getChainFromAccount (network: Network): ChainType {
     return ChainType.Juno;
     // } else if (network.config.accounts[0].address.startsWith("inj")) {
     //   return ChainType.Injective;
+  } else if (network.config.accounts[0].address.startsWith("archway")) {
+    return ChainType.Archway;
   } else {
     throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
       { account: network.config.accounts[0].address });
@@ -89,55 +102,56 @@ export async function storeCode (
   source?: string,
   builder?: string
 ): Promise<{codeId: number, contractCodeHash: any}> {
-  if (network.config.accounts[0].address.startsWith("secret")) {
-    const inGasLimit = parseInt(customFees?.gas as string);
-    const inGasPrice =
-      parseFloat(customFees?.amount[0].amount as string) /
-      parseFloat(customFees?.gas as string);
-    signingClient = signingClient as SecretNetworkClient;
-
-    const uploadReceipt = await signingClient.tx.compute.storeCode(
-      {
-        sender: sender,
-        wasm_byte_code: wasmFileContent,
-        source: source ?? "",
-        builder: builder ?? ""
-      },
-      {
-        gasLimit: Number.isNaN(inGasLimit) ? undefined : inGasLimit,
-        gasPriceInFeeDenom: Number.isNaN(inGasPrice) ? undefined : inGasPrice
+  const networkName = getChainFromAccount(network);
+  switch (networkName) {
+    case ChainType.Secret: {
+      const inGasLimit = parseInt(customFees?.gas as string);
+      const inGasPrice =
+        parseFloat(customFees?.amount[0].amount as string) /
+        parseFloat(customFees?.gas as string);
+      signingClient = signingClient as SecretNetworkClient;
+      const uploadReceipt = await signingClient.tx.compute.storeCode(
+        {
+          sender: sender,
+          wasm_byte_code: wasmFileContent,
+          source: source ?? "",
+          builder: builder ?? ""
+        },
+        {
+          gasLimit: Number.isNaN(inGasLimit) ? undefined : inGasLimit,
+          gasPriceInFeeDenom: Number.isNaN(inGasPrice) ? undefined : inGasPrice
+        }
+      );
+      console.log(uploadReceipt, "sds");
+      const res = uploadReceipt?.arrayLog?.find(
+        (log: any) => log.type === "message" && log.key === "code_id"
+      );
+      if (res === undefined) {
+        throw new WasmkitError(ERRORS.GENERAL.STORE_RESPONSE_NOT_RECEIVED, {
+          jsonLog: JSON.stringify(uploadReceipt, null, 2),
+          contractName: contractName
+        });
       }
-    );
-    console.log(uploadReceipt, "sds");
-    const res = uploadReceipt?.arrayLog?.find(
-      (log: any) => log.type === "message" && log.key === "code_id"
-    );
-    if (res === undefined) {
-      throw new WasmkitError(ERRORS.GENERAL.STORE_RESPONSE_NOT_RECEIVED, {
-        jsonLog: JSON.stringify(uploadReceipt, null, 2),
-        contractName: contractName
+      const codeId = Number(res.value);
+      const contractCodeHash = await signingClient.query.compute.codeHashByCodeId({
+        code_id: codeId.toString()
       });
+      return { contractCodeHash: contractCodeHash, codeId: codeId };
     }
-    const codeId = Number(res.value);
-
-    const contractCodeHash = await signingClient.query.compute.codeHashByCodeId({
-      code_id: codeId.toString()
-    });
-    return { contractCodeHash: contractCodeHash, codeId: codeId };
-  } else if (network.config.accounts[0].address.startsWith("juno")) {
-    const uploadReceipt = await signingClient.upload(
-      sender,
-      wasmFileContent,
-      customFees ?? defaultFeesJuno.upload,
-      "uploading"
-    );
-    const codeId: number = uploadReceipt.codeId;
-    return { codeId: codeId, contractCodeHash: { code_hash: "not_required" } };
-    // } else if (network.config.accounts[0].address.startsWith("inj")) {
-    //   return ChainType.Injective;
-  } else {
-    throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
-      { account: network.config.accounts[0].address });
+    case ChainType.Juno || ChainType.Archway: {
+      const uploadReceipt = await signingClient.upload(
+        sender,
+        wasmFileContent,
+        customFees ?? defaultFeesJuno.upload,
+        "uploading"
+      );
+      const codeId: number = uploadReceipt.codeId;
+      return { codeId: codeId, contractCodeHash: { code_hash: "not_required" } };
+    }
+    default: {
+      throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
+        { account: network.config.accounts[0].address });
+    }
   }
 }
 
@@ -194,7 +208,7 @@ export async function instantiateContract (
       }
       return res.value;
     }
-    case ChainType.Juno: {
+    case ChainType.Juno || ChainType.Archway: {
       const contract = await signingClient.instantiate(
         sender,
         codeId,
@@ -251,7 +265,7 @@ export async function executeTransaction (
         }
       );
     }
-    case ChainType.Juno: {
+    case ChainType.Juno || ChainType.Archway: {
       const customFeesVal: TxnStdFee | undefined = customFees !== undefined
         ? customFees : network.config.fees?.exec;
       return signingClient.execute(
@@ -290,7 +304,7 @@ export async function sendQuery (
         code_hash: contractHash
       });
     }
-    case ChainType.Juno: {
+    case ChainType.Juno || ChainType.Archway: {
       return client.queryContractSmart(contractAddress, msgData);
     }
     // case ChainType.Injective: {
