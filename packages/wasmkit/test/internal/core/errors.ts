@@ -2,7 +2,7 @@
 import { assert } from "chai";
 
 import {
-  WasmkitError, PolarPluginError
+  WasmkitError, WasmKitPluginError
 } from "../../../src/internal/core/errors";
 import {
   ERROR_RANGES,
@@ -30,7 +30,7 @@ describe("WasmkitError", () => {
     it("Should return false for everything else", () => {
       assert.isFalse(WasmkitError.isWasmkitError(new Error()));
       assert.isFalse(
-        WasmkitError.isWasmkitError(new PolarPluginError("asd", "asd"))
+        WasmkitError.isWasmkitError(new WasmKitPluginError("asd", "asd"))
       );
       assert.isFalse(WasmkitError.isWasmkitError(undefined));
       assert.isFalse(WasmkitError.isWasmkitError(null));
@@ -201,28 +201,28 @@ describe("Error descriptors", () => {
   });
 });
 
-describe("PolarPluginError", () => {
+describe("WasmKitPluginError", () => {
   describe("Type guard", () => {
-    it("Should return true for PolarPluginError", () => {
+    it("Should return true for WasmKitPluginError", () => {
       assert.isTrue(
-        PolarPluginError.isPolarPluginError(
-          new PolarPluginError("asd", "asd")
+        WasmKitPluginError.isWasmKitPluginError(
+          new WasmKitPluginError("asd", "asd")
         )
       );
     });
 
     it("Should return false for everything else", () => {
-      assert.isFalse(PolarPluginError.isPolarPluginError(new Error()));
+      assert.isFalse(WasmKitPluginError.isWasmKitPluginError(new Error()));
       assert.isFalse(
-        PolarPluginError.isPolarPluginError(
+        WasmKitPluginError.isWasmKitPluginError(
           new WasmkitError(ERRORS.GENERAL.NOT_INSIDE_PROJECT)
         )
       );
-      assert.isFalse(PolarPluginError.isPolarPluginError(undefined));
-      assert.isFalse(PolarPluginError.isPolarPluginError(null));
-      assert.isFalse(PolarPluginError.isPolarPluginError(123));
-      assert.isFalse(PolarPluginError.isPolarPluginError("123"));
-      assert.isFalse(PolarPluginError.isPolarPluginError({ asd: 123 }));
+      assert.isFalse(WasmKitPluginError.isWasmKitPluginError(undefined));
+      assert.isFalse(WasmKitPluginError.isWasmKitPluginError(null));
+      assert.isFalse(WasmKitPluginError.isWasmKitPluginError(123));
+      assert.isFalse(WasmKitPluginError.isWasmKitPluginError("123"));
+      assert.isFalse(WasmKitPluginError.isWasmKitPluginError({ asd: 123 }));
     });
   });
 
@@ -232,7 +232,7 @@ describe("PolarPluginError", () => {
         const message = "m";
         const parent = new Error();
 
-        const error = new PolarPluginError(message, parent);
+        const error = new WasmKitPluginError(message, parent);
 
         assert.equal(error.message, message);
         assert.equal(error.parent, parent);
@@ -241,7 +241,7 @@ describe("PolarPluginError", () => {
       it("Should work without a parent error", () => {
         const message = "m2";
 
-        const error = new PolarPluginError(message);
+        const error = new WasmKitPluginError(message);
 
         assert.equal(error.message, message);
         assert.isUndefined(error.parent);
@@ -251,7 +251,7 @@ describe("PolarPluginError", () => {
         const message = "m";
         const parent = new Error();
 
-        const error = new PolarPluginError(message, parent);
+        const error = new WasmKitPluginError(message, parent);
 
         // This is being called from mocha, so that would be used as plugin name
         assert.equal(error.pluginName, "mocha");
@@ -261,9 +261,9 @@ describe("PolarPluginError", () => {
         const message = "m";
         const parent = new Error();
 
-        const error = new PolarPluginError(message, parent);
+        const error = new WasmKitPluginError(message, parent);
 
-        assert.instanceOf(error, PolarPluginError);
+        assert.instanceOf(error, WasmKitPluginError);
       });
     });
 
@@ -273,7 +273,7 @@ describe("PolarPluginError", () => {
         const message = "m";
         const parent = new Error();
 
-        const error = new PolarPluginError(plugin, message, parent);
+        const error = new WasmKitPluginError(plugin, message, parent);
 
         assert.equal(error.pluginName, plugin);
         assert.equal(error.message, message);
@@ -284,7 +284,7 @@ describe("PolarPluginError", () => {
         const plugin = "p2";
         const message = "m2";
 
-        const error = new PolarPluginError(plugin, message);
+        const error = new WasmKitPluginError(plugin, message);
 
         assert.equal(error.pluginName, plugin);
         assert.equal(error.message, message);
@@ -296,9 +296,9 @@ describe("PolarPluginError", () => {
         const message = "m";
         const parent = new Error();
 
-        const error = new PolarPluginError(plugin, message, parent);
+        const error = new WasmKitPluginError(plugin, message, parent);
 
-        assert.instanceOf(error, PolarPluginError);
+        assert.instanceOf(error, WasmKitPluginError);
       });
     });
   });

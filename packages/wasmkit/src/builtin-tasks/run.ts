@@ -47,7 +47,7 @@ async function executeRunTask (
   runtimeEnv: WasmkitRuntimeEnvironment
   // eslint-disable-next-line
 ): Promise<any> {
-  const logDebugTag = "polar:tasks:run";
+  const logDebugTag = "wasmkit:tasks:run";
 
   const currDir = process.cwd();
 
@@ -100,7 +100,7 @@ export default function (): void {
   task(TASK_RUN, "Runs a user-defined script after compiling the project")
     .addVariadicPositionalParam(
       "scripts",
-      "A js file to be run within polar's environment"
+      "A js file to be run within wasmKit's environment"
     )
     .addFlag("skipCheckpoints", "do not read from or write checkpoints")
     .setAction((input, env) => executeRunTask(input, env));

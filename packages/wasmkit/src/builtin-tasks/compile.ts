@@ -37,5 +37,5 @@ async function compileTask (
     process.exit(1);
   }
 
-  return await compile(docker, sourceDir, force, skipSchema, skipSchemaErrors);
+  return await compile(docker, sourceDir, force, skipSchema, skipSchemaErrors, env);
 }

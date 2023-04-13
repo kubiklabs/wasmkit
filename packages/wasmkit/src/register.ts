@@ -3,7 +3,7 @@ import debug from "debug";
 import { WasmkitContext } from "./internal/context";
 import { loadConfigAndTasks } from "./internal/core/config/config-loading";
 import { getEnvRuntimeArgs } from "./internal/core/params/env-variables";
-import { WASMKIT_PARAM_DEFINITIONS } from "./internal/core/params/polar-params";
+import { WASMKIT_PARAM_DEFINITIONS } from "./internal/core/params/wasmkit-params";
 import { Environment } from "./internal/core/runtime-env";
 import {
   disableReplWriterShowProxy,
@@ -24,7 +24,7 @@ async function registerEnv (): Promise<void> {
     process.env
   );
 
-  if (runtimeArgs.verbose) { debug.enable("polar*"); }
+  if (runtimeArgs.verbose) { debug.enable("wasmkit*"); }
 
   const config = await loadConfigAndTasks(runtimeArgs);
 

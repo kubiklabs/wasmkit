@@ -21,8 +21,14 @@ export async function getClient (network: Network): Promise<SecretNetworkClient 
     case ChainType.Juno: {
       return await CosmWasmClient.connect(network.config.endpoint);
     }
+    case ChainType.Terra: {
+      return await CosmWasmClient.connect(network.config.endpoint);
+    }
     case ChainType.Archway: {
       return await ArchwayClient.connect(network.config.endpoint);
+    }
+    case ChainType.Neutron: {
+      return await CosmWasmClient.connect(network.config.endpoint);
     }
     // case ChainType.Injective: {
 
@@ -59,6 +65,16 @@ export async function getSigningClient (
         wallet
       );
     }
+    case ChainType.Terra: {
+      const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+        hdPaths: [makeCosmoshubPath(0)],
+        prefix: "terra"
+      });
+      return await SigningCosmWasmClient.connectWithSigner(
+        network.config.endpoint,
+        wallet
+      );
+    }
     case ChainType.Archway: {
       const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
         prefix: 'archway'
@@ -86,6 +102,10 @@ export function getChainFromAccount (network: Network): ChainType {
     //   return ChainType.Injective;
   } else if (network.config.accounts[0].address.startsWith("archway")) {
     return ChainType.Archway;
+  } else if (network.config.accounts[0].address.startsWith("neutron")) {
+    return ChainType.Neutron;
+  } else if (network.config.accounts[0].address.startsWith("terra")) {
+    return ChainType.Terra;
   } else {
     throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
       { account: network.config.accounts[0].address });
@@ -138,7 +158,7 @@ export async function storeCode (
       });
       return { contractCodeHash: contractCodeHash, codeId: codeId };
     }
-    case ChainType.Juno || ChainType.Archway: {
+    case ChainType.Juno || ChainType.Archway || ChainType.Terra: {
       const uploadReceipt = await signingClient.upload(
         sender,
         wasmFileContent,
@@ -208,7 +228,7 @@ export async function instantiateContract (
       }
       return res.value;
     }
-    case ChainType.Juno || ChainType.Archway: {
+    case ChainType.Juno || ChainType.Archway || ChainType.Terra: {
       const contract = await signingClient.instantiate(
         sender,
         codeId,
@@ -265,7 +285,7 @@ export async function executeTransaction (
         }
       );
     }
-    case ChainType.Juno || ChainType.Archway: {
+    case ChainType.Juno || ChainType.Archway || ChainType.Terra: {
       const customFeesVal: TxnStdFee | undefined = customFees !== undefined
         ? customFees : network.config.fees?.exec;
       return signingClient.execute(
@@ -304,7 +324,7 @@ export async function sendQuery (
         code_hash: contractHash
       });
     }
-    case ChainType.Juno || ChainType.Archway: {
+    case ChainType.Juno || ChainType.Archway || ChainType.Terra: {
       return client.queryContractSmart(contractAddress, msgData);
     }
     // case ChainType.Injective: {
@@ -342,6 +362,13 @@ Promise<Coin[]> {
     }
     case ChainType.Juno: {
       const info = await client?.getBalance(accountAddress, "ujuno");
+      if (info === undefined) {
+        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
+      }
+      return info;
+    }
+    case ChainType.Terra: {
+      const info = await client?.getBalance(accountAddress, "uluna");
       if (info === undefined) {
         throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
       }

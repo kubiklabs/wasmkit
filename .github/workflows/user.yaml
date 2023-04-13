@@ -26,10 +26,10 @@ jobs:
         restore-keys: |
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
-    - name: Install polar
-      run: npm i -g secret-polar
+    - name: Install wasmKit
+      run: npm i -g @arufa/wasmkit
     - name: Run commands
-      run: polar help
-    - run: polar install
-    - run: polar init blue
-    - run: cd blue && polar compile
+      run: wasmkit help
+    - run: wasmkit install
+    - run: wasmkit init blue
+    - run: cd blue && wasmkit compile

@@ -4,7 +4,8 @@ import { WasmkitContext } from "../../../internal/context";
 import { WasmkitError } from "../../../internal/core/errors";
 import { ERRORS } from "../../../internal/core/errors-list";
 import type {
-  Account, Coin, WasmkitRuntimeEnvironment, UserAccount
+  Account, Coin, UserAccount,
+  WasmkitRuntimeEnvironment
 } from "../../../types";
 import { getBalance, getClient } from "../../client";
 import { defaultFees } from "../../constants";

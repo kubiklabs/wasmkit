@@ -189,13 +189,13 @@ export const createWasmExecMethod = (jsonschema: any): t.ClassProperty => {
       t.tSPropertySignature(
         t.identifier(accountVar),
         t.tsTypeAnnotation(
-          t.tsTypeReference(t.identifier('polarTypes.UserAccount'))
+          t.tsTypeReference(t.identifier('wasmKitTypes.UserAccount'))
         )
       ),
       t.tSPropertySignature(
         t.identifier(`${customFeesVar}?`),
         t.tsTypeAnnotation(
-          t.tsTypeReference(t.identifier('polarTypes.TxnStdFee'))
+          t.tsTypeReference(t.identifier('wasmKitTypes.TxnStdFee'))
         )
       ),
       t.tSPropertySignature(
@@ -451,13 +451,13 @@ export const createPropertyFunctionWithObjectParamsForExec = (
       t.tSPropertySignature(
         t.identifier(accountVar),
         t.tsTypeAnnotation(
-          t.tsTypeReference(t.identifier('polarTypes.UserAccount'))
+          t.tsTypeReference(t.identifier('wasmKitTypes.UserAccount'))
         )
       ),
       t.tSPropertySignature(
         t.identifier(`${customFeesVar}?`),
         t.tsTypeAnnotation(
-          t.tsTypeReference(t.identifier('polarTypes.TxnStdFee'))
+          t.tsTypeReference(t.identifier('wasmKitTypes.TxnStdFee'))
         )
       ),
       t.tSPropertySignature(

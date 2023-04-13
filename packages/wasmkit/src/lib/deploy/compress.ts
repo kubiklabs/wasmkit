@@ -6,10 +6,12 @@ import path from "path";
 import {
   CONTRACTS_OUT_DIR
 } from "../../internal/core/project-structure";
+import { WasmkitRuntimeEnvironment } from "../../types";
 import { compile } from "../compile/compile";
 
 export async function compress (
-  contractName: string
+  contractName: string,
+  env: WasmkitRuntimeEnvironment
 ): Promise<void> {
   const srcPath = path.join(CONTRACTS_OUT_DIR, `${contractName}.wasm`);
   const destPath = path.join(CONTRACTS_OUT_DIR, `${contractName}_compressed.wasm`);
@@ -21,7 +23,7 @@ export async function compress (
 
   if (!fs.existsSync(srcPath)) {
     console.log(`${contractName}.wasm file does not exist in artifacts dir, compiling...`);
-    await compile(false, [], false, false, false);
+    await compile(false, [], false, false, false, env);
   }
 
   const compressCmd = `npx wasm-opt -Oz ${srcPath} -o ${destPath}`;

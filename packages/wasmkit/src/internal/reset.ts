@@ -1,7 +1,7 @@
 /**
- * This function resets the polar context.
+ * This function resets the wasmKit context.
  *
- * This doesn't unload any loaded Polar plugin, so those have to be unloaded
+ * This doesn't unload any loaded WasmKit plugin, so those have to be unloaded
  * manually with `unloadModule`.
  */
 import { WasmkitContext } from "./context";
@@ -26,7 +26,7 @@ export function resetWasmkitContext (): void {
       try {
         configPath = getUserConfigPath();
       } catch (error) {
-        // We weren't in a polar project
+        // We weren't in a wasmKit project
       }
 
       if (configPath !== undefined) {
@@ -36,7 +36,7 @@ export function resetWasmkitContext (): void {
     WasmkitContext.deleteWasmkitContext();
   }
 
-  // Unload all the polar's entry-points.
+  // Unload all the wasmKit's entry-points.
   unloadModule("../register");
   unloadModule("./cli/cli");
   unloadModule("./lib/lib");

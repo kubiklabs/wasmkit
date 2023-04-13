@@ -1,9 +1,9 @@
 import { getAccountByName } from "./lib/account";
-import { polarChai } from "./lib/chai/chai";
+import { wasmKitChai } from "./lib/chai/chai";
 import { createAccounts } from "./lib/createAccounts";
 import { Contract } from "./lib/deploy/contract";
 import { getLogs } from "./lib/response";
-import * as polarTypes from "./types";
+import * as wasmKitTypes from "./types";
 import { Coin } from "./types";
 
-export { Contract, createAccounts, getAccountByName, polarChai, getLogs, polarTypes, Coin };
+export { Contract, createAccounts, getAccountByName, wasmKitChai, getLogs, wasmKitTypes, Coin };

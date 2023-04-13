@@ -1,6 +1,6 @@
-# Polar
+# WasmKit
 
-Polar is a development environment to compile, deploy, test, run scrt contracts on different networks efficiently with an enhanced user friendly experience.
+WasmKit is a development environment to compile, deploy, test, run scrt contracts on different networks efficiently with an enhanced user friendly experience.
 
 ## Requirements
 
@@ -10,19 +10,19 @@ The minimum packages/requirements are as follows:
 - Yarn v1.22+ or NPM `v6.0+**
 - Connection to an Secret node. 
 
-## Install polar
+## Install wasmkit
 
 ### Installation from released version
-To install polar globally in your system you can use:
-  - Using Yarn: `yarn global add secret-polar`
-  - Using NPM: `npm install -g secret-polar`
+To install wasmkit globally in your system you can use:
+  - Using Yarn: `yarn global add @arufa/wasmkit`
+  - Using NPM: `npm install -g @arufa/wasmkit`
 
 ## Usage
 
 ### Initialize a project
 
 ```bash
-$ polar init <project-name>
+$ wasmkit init <project-name>
 ```
 
 This will create a directory <project-name> inside current directory with boiler-plate code.
@@ -38,7 +38,7 @@ $ cd <project-name>
 Compile the project and generate `.wasm` files:
 
 ```bash
-$ polar compile
+$ wasmkit compile
 ```
 
 ## Run tests
@@ -49,4 +49,4 @@ $ yarn run test
 
 ## Documentation
 
-Check out detailed documentation [here](https://docs.arufaresearch.com/).
+Check out detailed documentation [here](https://wasmkit.arufaresearch.com/).

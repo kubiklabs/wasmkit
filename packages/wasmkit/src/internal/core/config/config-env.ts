@@ -73,9 +73,9 @@ export const types = argumentTypes;
 
 /**
  * Register an environment extender what will be run after the
- * polar Runtime Environment is initialized.
+ * wasmKit Runtime Environment is initialized.
  *
- * @param extender A function that receives the polar Runtime
+ * @param extender A function that receives the wasmKit Runtime
  * Environment.
  */
 export function extendEnvironment (extender: EnvironmentExtender): void {
@@ -90,7 +90,7 @@ export function extendConfig (extender: ConfigExtender): void {
 }
 
 /**
- * Loads a polar plugin
+ * Loads a wasmKit plugin
  * @param pluginName The plugin name.
  */
 export function usePlugin (pluginName: string): void {

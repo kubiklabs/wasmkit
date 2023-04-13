@@ -14,7 +14,7 @@ export const WASMKIT_PARAM_DEFINITIONS: ParamDefinitions = {
   command: {
     name: "command",
     defaultValue: "",
-    description: "Name of polar task ran.",
+    description: "Name of wasmKit task ran.",
     type: types.string,
     isFlag: false,
     isOptional: true,
@@ -61,7 +61,7 @@ export const WASMKIT_PARAM_DEFINITIONS: ParamDefinitions = {
   config: {
     name: "config",
     defaultValue: undefined,
-    description: "Path to POLAR config file.",
+    description: "Path to WASMKIT config file.",
     type: types.inputFile,
     isFlag: false,
     isOptional: true,
@@ -79,7 +79,7 @@ export const WASMKIT_PARAM_DEFINITIONS: ParamDefinitions = {
 };
 
 // reverse lookup map for short parameters
-export const POLAR_SHORT_PARAM_SUBSTITUTIONS: ShortParamSubstitutions =
+export const WASMKIT_SHORT_PARAM_SUBSTITUTIONS: ShortParamSubstitutions =
   Object.entries(WASMKIT_PARAM_DEFINITIONS)
     .reduce((out: Record<string, string>, kv: [string, ParamDefinition<unknown>]) => {
       const [name, value] = kv;

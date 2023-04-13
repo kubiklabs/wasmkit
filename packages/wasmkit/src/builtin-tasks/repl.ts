@@ -2,10 +2,10 @@ import chalk from "chalk";
 import repl from "repl";
 import { runInNewContext } from "vm";
 
-import * as polar from "../index";
+import * as wasmKit from "../index";
 import { task } from "../internal/core/config/config-env";
 import { isRecoverableError, preprocess } from "../internal/util/repl";
-import { WasmkitRuntimeEnvironment, TaskArguments } from "../types";
+import { TaskArguments, WasmkitRuntimeEnvironment } from "../types";
 import { TASK_REPL } from "./task-names";
 
 // handles top level await by preprocessing input and awaits the output before returning
@@ -26,16 +26,16 @@ async function evaluate (code: string, context: Record<string, unknown>, filenam
 
 async function startConsole (runtimeEnv: WasmkitRuntimeEnvironment): Promise<void> {
   await new Promise<void>((resolve, reject) => {
-    console.log("★★★", chalk.blueBright(" Welcome to polar REPL"), "★★★");
+    console.log("★★★", chalk.blueBright(" Welcome to wasmKit REPL"), "★★★");
     console.log(chalk.green('Try typing: config\n'));
 
     const server = repl.start({
-      prompt: 'polar> ',
+      prompt: 'wasmkit> ',
       eval: evaluate
     });
 
     // assign repl context
-    server.context.polar = polar;
+    server.context.wasmKit = wasmKit;
     server.context.config = runtimeEnv.network;
     server.context.env = runtimeEnv;
 
@@ -46,7 +46,7 @@ async function startConsole (runtimeEnv: WasmkitRuntimeEnvironment): Promise<voi
 }
 
 export default function (): void {
-  task(TASK_REPL, "Opens polar console")
+  task(TASK_REPL, "Opens wasmKit console")
     .setAction(
       async (
         _taskArgs: TaskArguments,

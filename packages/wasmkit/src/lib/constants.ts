@@ -1,4 +1,4 @@
-export const POLAR_NAME = "polar";
+export const WASMKIT_NAME = "wasmkit";
 
 export const defaultFees = {
   upload: {

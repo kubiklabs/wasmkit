@@ -4,20 +4,20 @@ import type {
   EnvironmentExtender,
   Network,
   ParamDefinitionAny,
-  WasmkitRuntimeEnvironment,
   ResolvedConfig,
   RunSuperFunction,
   RunTaskFunction,
   RuntimeArgs,
   TaskArguments,
   TaskDefinition,
-  TasksMap
+  TasksMap,
+  WasmkitRuntimeEnvironment
 } from "../../types";
 import { WasmkitError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 import { OverriddenTaskDefinition } from "./tasks/task-definitions";
 
-const log = debug("polar:core:pre");
+const log = debug("wasmkit:core:pre");
 
 export class Environment implements WasmkitRuntimeEnvironment {
   private static readonly _BLACKLISTED_PROPERTIES: string[] = [
@@ -30,14 +30,14 @@ export class Environment implements WasmkitRuntimeEnvironment {
   private readonly _extenders: EnvironmentExtender[];
 
   /**
-   * Initializes the polar Runtime Environment and the given
+   * Initializes the wasmKit Runtime Environment and the given
    * extender functions.
    *
    * @remarks The extenders' execution order is given by the order
-   * of the requires in the polar's config file and its plugins.
+   * of the requires in the wasmKit's config file and its plugins.
    *
-   * @param config The polar's config object.
-   * @param runtimeArgs The parsed polar's arguments.
+   * @param config The wasmKit's config object.
+   * @param runtimeArgs The parsed wasmKit's arguments.
    * @param tasks A map of tasks.
    * @param extenders A list of extenders.
    * @param networkRequired if true it will assert that a requested network is defined.
@@ -77,7 +77,7 @@ export class Environment implements WasmkitRuntimeEnvironment {
    * @param name The task's name.
    * @param taskArguments A map of task's arguments.
    *
-   * @throws a POLAR303 if there aren't any defined tasks with the given name.
+   * @throws a WASMKIT303 if there aren't any defined tasks with the given name.
    * @returns a promise with the task's execution result.
    */
   public readonly run: RunTaskFunction = async (name, taskArguments = {}) => {
@@ -100,7 +100,7 @@ export class Environment implements WasmkitRuntimeEnvironment {
   };
 
   /**
-   * Injects the properties of `this` (the polar Runtime Environment) into the global scope.
+   * Injects the properties of `this` (the wasmKit Runtime Environment) into the global scope.
    *
    * @param blacklist a list of property names that won't be injected.
    *
@@ -277,7 +277,7 @@ export class Environment implements WasmkitRuntimeEnvironment {
    * @param paramDefinition {ParamDefinition} - the param definition for validation
    * @param argumentValue - the value to be validated
    * @private
-   * @throws POLAR301 if value is not valid for the param type
+   * @throws WASMKIT301 if value is not valid for the param type
    */
   private _checkTypeValidation (
     paramDefinition: ParamDefinitionAny,

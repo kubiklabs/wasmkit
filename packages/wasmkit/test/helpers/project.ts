@@ -66,8 +66,8 @@ export function useFixtureProjectCopy (srcProjectName: string): void {
  */
 export function useCleanFixtureProject (projectName: string): void {
   useFixtureProject(projectName);
-  useEnvironment(async (polarEnv: WasmkitRuntimeEnvironment) => {
-    return await polarEnv.run(TASK_CLEAN, {});
+  useEnvironment(async (wasmKitEnv: WasmkitRuntimeEnvironment) => {
+    return await wasmKitEnv.run(TASK_CLEAN, {});
   });
 
   beforeEach(function () {

@@ -7,7 +7,7 @@
 // written in the user's config file.
 //
 // The other one, with the same name except without the User part, represents
-// the resolved value as used during the polar execution.
+// the resolved value as used during the wasmKit execution.
 //
 // Note that while many declarations are repeated here (i.e. network types'
 // fields), we don't use `extends` as that can interfere with plugin authors
@@ -19,6 +19,8 @@ import * as types from "./internal/core/params/argument-types";
 export enum ChainType {
   Secret,
   Juno,
+  Neutron,
+  Terra,
   Injective,
   Archway,
 }
@@ -85,11 +87,11 @@ export interface DeployInfo {
   deployTimestamp: string
 }
 
-export type PolarNetworkAccountsUserConfig = Account[];
+export type WasmKitNetworkAccountsUserConfig = Account[];
 
-export interface PolarNetworkUserConfig {
+export interface WasmKitNetworkUserConfig {
   endpoint: string
-  accounts: PolarNetworkAccountsUserConfig
+  accounts: WasmKitNetworkAccountsUserConfig
   gasLimit?: string | number
   chainId: string
   // TODO: check fees // add type
@@ -100,9 +102,9 @@ export interface NetworksUserConfig {
   [networkName: string]: NetworkUserConfig | undefined
 }
 
-export type NetworkUserConfig = PolarNetworkUserConfig;
+export type NetworkUserConfig = WasmKitNetworkUserConfig;
 
-export type WasmkitNetworkConfig = PolarNetworkUserConfig;
+export type WasmkitNetworkConfig = WasmKitNetworkUserConfig;
 
 export type NetworkConfig = WasmkitNetworkConfig;
 
@@ -110,16 +112,21 @@ export interface Networks {
   [networkName: string]: WasmkitNetworkConfig
 }
 
-export type PolarNetworkAccountsConfig =
-  | PolarNetworkHDAccountsConfig
-  | PolarNetworkAccountConfig[];
+export interface Commands {
+  compile: string
+  schema: string
+}
 
-export interface PolarNetworkAccountConfig {
+export type WasmKitNetworkAccountsConfig =
+  | WasmKitNetworkHDAccountsConfig
+  | WasmKitNetworkAccountConfig[];
+
+export interface WasmKitNetworkAccountConfig {
   privateKey: string
   balance: string
 }
 
-export interface PolarNetworkHDAccountsConfig {
+export interface WasmKitNetworkHDAccountsConfig {
   mnemonic: string
   initialIndex: number
   count: number
@@ -127,7 +134,7 @@ export interface PolarNetworkHDAccountsConfig {
   accountsBalance: string
 }
 
-export interface PolarNetworkForkingConfig {
+export interface WasmKitNetworkForkingConfig {
   enabled: boolean
   url: string
   blockNumber?: number
@@ -180,27 +187,30 @@ export interface ProjectPathsConfig {
   sources: string
 }
 
-// Polar config
+// WasmKit config
 export type UserPaths = Omit<Partial<ProjectPathsConfig>, "configFile">;
 
 export interface Config {
   networks?: Networks
   paths?: UserPaths
   mocha?: Mocha.MochaOptions
+  commands?: Commands
 }
 
-export interface PolarUserConfig {
+export interface WasmKitUserConfig {
   defaultNetwork?: string
   paths?: ProjectPathsUserConfig
   networks?: NetworksUserConfig
+  commands?: Commands
   mocha?: Mocha.MochaOptions
   docker?: DockerConfig
 }
 
-export interface PolarConfig {
+export interface WasmKitConfig {
   defaultNetwork: string
   paths: ProjectPathsConfig
   networks: Networks
+  commands: Commands
   mocha: Mocha.MochaOptions
   docker: DockerConfig
 }
@@ -209,7 +219,7 @@ export interface PolarConfig {
 
 export type ConfigExtender = (
   config: ResolvedConfig,
-  userConfig: Readonly<PolarUserConfig>
+  userConfig: Readonly<WasmKitUserConfig>
 ) => void;
 
 /**
@@ -260,19 +270,20 @@ interface RustVersion {
   version: string
 }
 
-export interface ResolvedConfig extends PolarUserConfig {
+export interface ResolvedConfig extends WasmKitUserConfig {
   paths?: ProjectPathsConfig
   rust?: RustVersion
   networks: Networks
+  commands: Commands
 }
 
 /**
- * Polar arguments:
+ * WasmKit arguments:
  * + network: the network to be used (default="default").
  * + showStackTraces: flag to show stack traces.
- * + version: flag to show polar's version.
- * + help: flag to show polar's help message.
- * + config: used to specify polar's config file.
+ * + version: flag to show wasmKit's version.
+ * + help: flag to show wasmKit's help message.
+ * + config: used to specify wasmKit's config file.
  */
 export interface RuntimeArgs {
   network: string

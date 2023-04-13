@@ -8,7 +8,7 @@ import {
 import { WasmkitError } from "../errors";
 import { ErrorDescriptor, ERRORS } from "../errors-list";
 import * as types from "../params/argument-types";
-import { WASMKIT_PARAM_DEFINITIONS } from "../params/polar-params";
+import { WASMKIT_PARAM_DEFINITIONS } from "../params/wasmkit-params";
 
 /**
  * This class creates a task definition, which consists of:
@@ -35,7 +35,7 @@ export class SimpleTaskDefinition implements TaskDefinition {
   /**
    * Creates an empty task definition.
    *
-   * This definition will have no params, and will throw a POLAR_ERROR205 if executed.
+   * This definition will have no params, and will throw a WASMKIT_ERROR205 if executed.
    *
    * @param name The task's name.
    * @param isInternal `true` if the task is internal, `false` otherwise.
@@ -77,7 +77,7 @@ export class SimpleTaskDefinition implements TaskDefinition {
    * Adds a paramater to the task's definition.
    *
    * @remarks This will throw if the `name` is already used by this task or
-   * by Polar's global parameters.
+   * by WasmKit's global parameters.
    *
    * @param name The parameter's name.
    * @param description The parameter's description.
@@ -194,7 +194,7 @@ export class SimpleTaskDefinition implements TaskDefinition {
    * Adds a positional paramater to the task's definition.
    *
    * @remarks This will throw if the `name` is already used by this task or
-   * by Polar's global parameters.
+   * by WasmKit's global parameters.
    * @remarks This will throw if `isOptional` is `false` and an optional positional
    * param was already set.
    * @remarks This will throw if a variadic positional param is already set.
@@ -411,7 +411,7 @@ export class SimpleTaskDefinition implements TaskDefinition {
   /**
    * Validates if the given param's name is after a variadic parameter.
    * @param name the param's name.
-   * @throws POLAR_ERROR200
+   * @throws WASMKIT_ERROR200
    */
   private _validateNotAfterVariadicParam (name: string): void {
     if (this._hasVariadicParam) {
@@ -426,8 +426,8 @@ export class SimpleTaskDefinition implements TaskDefinition {
    * Validates if the param's name is already used.
    * @param name the param's name.
    *
-   * @throws POLAR_ERROR201 if `name` is already used as a param.
-   * @throws POLAR_ERROR202 if `name` is already used as a param by Polar
+   * @throws WASMKIT_ERROR201 if `name` is already used as a param.
+   * @throws WASMKIT_ERROR202 if `name` is already used as a param by WasmKit
    */
   private _validateNameNotUsed (name: string): void {
     if (this._hasParamDefined(name)) {
@@ -439,7 +439,7 @@ export class SimpleTaskDefinition implements TaskDefinition {
 
     if (Object.keys(WASMKIT_PARAM_DEFINITIONS).includes(name)) {
       throw new WasmkitError(
-        ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_POLAR_PARAM,
+        ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_WASMKIT_PARAM,
         {
           paramName: name,
           taskName: this.name
@@ -465,7 +465,7 @@ export class SimpleTaskDefinition implements TaskDefinition {
    * @param name the param's name to be added.
    * @param isOptional true if the new param is optional, false otherwise.
    *
-   * @throws POLAR_ERROR203 if validation fail
+   * @throws WASMKIT_ERROR203 if validation fail
    */
   private _validateNoMandatoryParamAfterOptionalOnes (
     name: string,
@@ -696,8 +696,8 @@ export class OverriddenTaskDefinition implements TaskDefinition {
 
   /**
    * Add a flag param to the overridden task.
-   * @throws POLAR_ERROR201 if param name was already defined in any parent task.
-   * @throws POLAR_ERROR209 if param name is not in camelCase.
+   * @throws WASMKIT_ERROR201 if param name was already defined in any parent task.
+   * @throws WASMKIT_ERROR209 if param name is not in camelCase.
    */
   public addFlag (name: string, description?: string): this {
     this.parentTaskDefinition.addFlag(name, description);

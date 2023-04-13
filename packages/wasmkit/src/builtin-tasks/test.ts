@@ -46,7 +46,7 @@ async function executeTestTask (
   { tests }: Input,
   runtimeEnv: WasmkitRuntimeEnvironment
 ): Promise<void> {
-  const logDebugTag = "polar:tasks:test";
+  const logDebugTag = "wasmkit:tasks:test";
 
   const currDir = process.cwd();
 
@@ -108,7 +108,7 @@ export default function (): void {
   task(TASK_TEST, "Runs a user-defined test script after compiling the project")
     .addOptionalVariadicPositionalParam(
       "tests",
-      "A js file to be run within polar's environment"
+      "A js file to be run within wasmKit's environment"
     )
     .setAction((input, env) => executeTestTask(input, env));
 }

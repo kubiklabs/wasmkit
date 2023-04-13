@@ -1,14 +1,21 @@
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { sync as glob } from 'glob';
 import { compile } from 'polar-json-to-ts';
 
 import { parser } from "./schemaParser";
 
 export const readSchemas = (
-  schemaDir: string
+  schemaDir: string,
+  rawSchemaDir: string
 ): any[] => { // eslint-disable-line  @typescript-eslint/no-explicit-any
-  const files = glob(schemaDir + '/**/*.json');
-  return files.map(file => JSON.parse(readFileSync(file, 'utf-8')));
+  // raw files is for CosmWasm 1.1 schema files
+  if (existsSync(rawSchemaDir)) {
+    const files = glob(rawSchemaDir + '/**/*.json');
+    return (files).map(file => JSON.parse(readFileSync(file, 'utf-8')));
+  } else {
+    const files = glob(schemaDir + '/**/*.json');
+    return (files).map(file => JSON.parse(readFileSync(file, 'utf-8')));
+  }
 };
 
 export const findQueryMsg = (schemas: any[]): Record<string, unknown> => { // eslint-disable-line  @typescript-eslint/no-explicit-any

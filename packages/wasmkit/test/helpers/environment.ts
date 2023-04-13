@@ -5,10 +5,10 @@ import { loadConfigAndTasks } from "../../src/internal/core/config/config-loadin
 import { WasmkitError } from "../../src/internal/core/errors";
 import { ERRORS } from "../../src/internal/core/errors-list";
 import { getEnvRuntimeArgs } from "../../src/internal/core/params/env-variables";
-import { WASMKIT_PARAM_DEFINITIONS } from "../../src/internal/core/params/polar-params";
+import { WASMKIT_PARAM_DEFINITIONS } from "../../src/internal/core/params/wasmkit-params";
 import { Environment } from "../../src/internal/core/runtime-env";
 import { resetWasmkitContext } from "../../src/internal/reset";
-import { NetworkConfig, WasmkitNetworkConfig, WasmkitRuntimeEnvironment, PromiseAny } from "../../src/types";
+import { NetworkConfig, PromiseAny, WasmkitNetworkConfig, WasmkitRuntimeEnvironment } from "../../src/types";
 
 declare module "mocha" {
   interface Context {
@@ -60,7 +60,7 @@ export async function getEnv (
   );
 
   if (runtimeArgs.verbose) {
-    debug.enable("polar*");
+    debug.enable("wasmkit*");
   }
 
   const config = await loadConfigAndTasks(runtimeArgs);
