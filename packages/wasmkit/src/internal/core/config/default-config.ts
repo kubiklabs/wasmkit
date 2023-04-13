@@ -18,7 +18,7 @@ const defaultConfig: Config = {
   },
   commands: {
     compile: CARGO_COMPILE,
-    schema: CARGO_SCHEMA,
+    schema: CARGO_SCHEMA
   }
 };
 

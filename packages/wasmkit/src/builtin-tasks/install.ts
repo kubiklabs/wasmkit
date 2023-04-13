@@ -1,7 +1,7 @@
 import { execSync } from "child_process";
 
 import { task } from "../internal/core/config/config-env";
-import { WasmkitRuntimeEnvironment, TaskArguments } from "../types";
+import { TaskArguments, WasmkitRuntimeEnvironment } from "../types";
 import { TASK_INSTALL } from "./task-names";
 
 export default function (): void {

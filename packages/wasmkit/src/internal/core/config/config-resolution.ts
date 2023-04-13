@@ -46,10 +46,10 @@ export function resolveConfig (
     ...config,
     paths,
     networks: config.networks ?? {},
-    commands: config.commands ?? {  // TODO: clean this up
+    commands: config.commands ?? { // TODO: clean this up
       compile: "",
-      schema: "",
-    },
+      schema: ""
+    }
   };
 
   for (const extender of configExtenders) {

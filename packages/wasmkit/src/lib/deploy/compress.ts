@@ -11,7 +11,7 @@ import { compile } from "../compile/compile";
 
 export async function compress (
   contractName: string,
-  env: WasmkitRuntimeEnvironment,
+  env: WasmkitRuntimeEnvironment
 ): Promise<void> {
   const srcPath = path.join(CONTRACTS_OUT_DIR, `${contractName}.wasm`);
   const destPath = path.join(CONTRACTS_OUT_DIR, `${contractName}_compressed.wasm`);

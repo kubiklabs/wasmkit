@@ -22,20 +22,20 @@ import { generateTsSchema } from "./tsSchema";
 import { readSchemas } from "./utils";
 
 function parseProjectToml (
-  contractsDirPrefix: string,
+  contractsDirPrefix: string
 ): string[] {
   // read Cargo.toml in project's root dir
   const projectTomlFile = readFileSync('Cargo.toml');
   const tomlContent = tomlParse(projectTomlFile.toString());
 
-  let workspacesPath: string[] = [];
+  const workspacesPath: string[] = [];
   tomlContent.workspace.members.forEach((workspace: string) => {
     if (path.parse(workspace).name === '*') {
       const dirsInWorkspace = readdirSync(path.parse(workspace).dir);
       dirsInWorkspace.forEach((dir: string) => {
         const dirPath = path.join(path.parse(workspace).dir, path.basename(dir));
         workspacesPath.push(dirPath);
-      })
+      });
     } else {
       workspacesPath.push(workspace);
     }
@@ -52,7 +52,7 @@ export async function compile (
   force: boolean,
   skipSchema: boolean,
   skipSchemaErrors: boolean,
-  env: WasmkitRuntimeEnvironment,
+  env: WasmkitRuntimeEnvironment
 ): Promise<void> {
   await assertDir(CACHE_DIR);
   let contractDirs: string[] = [];
@@ -107,16 +107,16 @@ export function readContractName (tomlFilePath: string): string {
 export function compileContract (
   contractDir: string,
   docker: boolean,
-  env: WasmkitRuntimeEnvironment,
+  env: WasmkitRuntimeEnvironment
 ): void {
-  const cargo_commands = env.config.commands;
+  const cargoCommands = env.config.commands;
   const currDir = process.cwd();
   process.chdir(contractDir);
   console.log(`🛠 Compiling your contract in directory: ${chalk.gray(contractDir)}`);
   console.log("=============================================");
   // Compiles the contract and creates .wasm file alongside others
   try {
-    execSync(cargo_commands.compile, { stdio: 'inherit' });
+    execSync(cargoCommands.compile, { stdio: 'inherit' });
   } catch (error) {
     if (error instanceof Error) {
       throw new WasmkitError(ERRORS.GENERAL.RUST_COMPILE_ERROR);
@@ -133,15 +133,15 @@ export async function generateSchema (
   contractDir: string,
   docker: boolean,
   skipSchemaErrors: boolean,
-  env: WasmkitRuntimeEnvironment,
+  env: WasmkitRuntimeEnvironment
 ): Promise<void> {
-  const cargo_commands = env.config.commands;
+  const cargoCommands = env.config.commands;
   const currDir = process.cwd();
   process.chdir(contractDir);
   console.log(`Creating schema for contract in directory: ${chalk.gray(contractDir)}`);
 
   // Creates schema .json files
-  execSync(cargo_commands.schema, { stdio: 'inherit' });
+  execSync(cargoCommands.schema, { stdio: 'inherit' });
 
   process.chdir(currDir);
 
@@ -155,7 +155,7 @@ export async function generateSchema (
 
   const srcSchemas = readSchemas(
     path.join(contractDir, "schema"),
-    path.join(contractDir, "schema", "raw"),
+    path.join(contractDir, "schema", "raw")
   );
   await generateTsSchema(contractName, srcSchemas, contractTsSchemaDir, skipSchemaErrors);
 }

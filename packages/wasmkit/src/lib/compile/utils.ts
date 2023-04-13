@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { sync as glob } from 'glob';
 import { compile } from 'polar-json-to-ts';
 
@@ -6,7 +6,7 @@ import { parser } from "./schemaParser";
 
 export const readSchemas = (
   schemaDir: string,
-  rawSchemaDir: string,
+  rawSchemaDir: string
 ): any[] => { // eslint-disable-line  @typescript-eslint/no-explicit-any
   // raw files is for CosmWasm 1.1 schema files
   if (existsSync(rawSchemaDir)) {
