@@ -9,7 +9,8 @@ import { ERRORS } from "../internal/core/errors-list";
 import { Account, ChainType, Network, TxnStdFee } from "../types";
 import { defaultFees, defaultFeesJuno } from "./constants";
 
-export async function getClient (network: Network): Promise<SecretNetworkClient | CosmWasmClient> {
+export async function getClient (
+  network: Network): Promise<SecretNetworkClient | CosmWasmClient | ArchwayClient> {
   const chain = getChainFromAccount(network);
   switch (chain) {
     case ChainType.Secret: {
@@ -43,7 +44,7 @@ export async function getClient (network: Network): Promise<SecretNetworkClient 
 export async function getSigningClient (
   network: Network,
   account: Account
-): Promise<SecretNetworkClient | SigningCosmWasmClient> {
+): Promise<SecretNetworkClient | SigningCosmWasmClient | SigningArchwayClient> {
   const chain = getChainFromAccount(network);
   switch (chain) {
     case ChainType.Secret: {

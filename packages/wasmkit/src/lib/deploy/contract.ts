@@ -1,3 +1,4 @@
+import { ArchwayClient } from "@archwayhq/arch3.js/build";
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import fs from "fs-extra";
 import path from "path";
@@ -35,7 +36,7 @@ export class Contract {
   private readonly env: WasmkitRuntimeEnvironment =
   WasmkitContext.getWasmkitContext().getRuntimeEnv();
 
-  private client?: SecretNetworkClient | CosmWasmClient;
+  private client?: SecretNetworkClient | CosmWasmClient | ArchwayClient;
 
   public codeId: number;
   public contractCodeHash: string;
