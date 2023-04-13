@@ -79,5 +79,9 @@ module.exports = {
   },
   rust: {
     version: "1.63.0",
+  },
+  commands: {
+    compile: "RUSTFLAGS='-C link-arg=-s' cargo build --release --target wasm32-unknown-unknown",
+    schema: "cargo run --example schema",
   }
 };

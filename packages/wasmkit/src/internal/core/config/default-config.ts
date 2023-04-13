@@ -1,5 +1,7 @@
 import type { Config, WasmKitNetworkUserConfig } from "../../../types";
 const SCRT_CHAIN_NAME = "testnet";
+const CARGO_COMPILE = "RUSTFLAGS='-C link-arg=-s' cargo build --release --target wasm32-unknown-unknown";
+const CARGO_SCHEMA = "cargo run --example schema";
 
 const cfg: WasmKitNetworkUserConfig = {
   accounts: [],
@@ -13,6 +15,10 @@ const defaultConfig: Config = {
   },
   mocha: {
     timeout: 20000
+  },
+  commands: {
+    compile: CARGO_COMPILE,
+    schema: CARGO_SCHEMA,
   }
 };
 

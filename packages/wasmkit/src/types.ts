@@ -112,6 +112,11 @@ export interface Networks {
   [networkName: string]: WasmkitNetworkConfig
 }
 
+export interface Commands {
+  compile: string
+  schema: string
+}
+
 export type WasmKitNetworkAccountsConfig =
   | WasmKitNetworkHDAccountsConfig
   | WasmKitNetworkAccountConfig[];
@@ -189,12 +194,14 @@ export interface Config {
   networks?: Networks
   paths?: UserPaths
   mocha?: Mocha.MochaOptions
+  commands?: Commands
 }
 
 export interface WasmKitUserConfig {
   defaultNetwork?: string
   paths?: ProjectPathsUserConfig
   networks?: NetworksUserConfig
+  commands?: Commands
   mocha?: Mocha.MochaOptions
   docker?: DockerConfig
 }
@@ -203,6 +210,7 @@ export interface WasmKitConfig {
   defaultNetwork: string
   paths: ProjectPathsConfig
   networks: Networks
+  commands: Commands
   mocha: Mocha.MochaOptions
   docker: DockerConfig
 }
@@ -266,6 +274,7 @@ export interface ResolvedConfig extends WasmKitUserConfig {
   paths?: ProjectPathsConfig
   rust?: RustVersion
   networks: Networks
+  commands: Commands
 }
 
 /**

@@ -205,7 +205,7 @@ async function main (): Promise<void> {
         chalk.red(`Error in plugin ${error.pluginName ?? ""}: ${error.message}`)
       );
     } else if (error instanceof Error) {
-      console.error(chalk.red("An unexpected error occurred:"), error.message);
+      console.error(chalk.red("An unexpected error occurred:"), error);
       showStackTraces = true;
     } else {
       console.error(chalk.red("An unexpected error occurred."));
