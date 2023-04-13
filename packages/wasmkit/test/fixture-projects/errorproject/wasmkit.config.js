@@ -16,7 +16,6 @@ module.exports = {
       chainId: 'holodeck-2',
       trustNode: true,
       keyringBackend: 'test',
-      accounts: ['a', 'b'],
       types: {}
     }
   },
