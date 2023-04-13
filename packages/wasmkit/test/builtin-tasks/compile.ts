@@ -51,7 +51,7 @@ describe("Compile task", () => {
 
   describe("Compile fail when contract has compile errors", function () {
     useFixtureProject("errorproject");
-    it("Should raise Polar error", async function () {
+    it("Should raise WasmKit error", async function () {
       // check for Exception
       await expectWasmkitErrorAsync(
         async () => await compile(false, [], false, false, false),

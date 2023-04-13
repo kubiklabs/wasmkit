@@ -1,4 +1,8 @@
 
+// TODO: remove the address and derive the account address
+// using chain's derivation page
+// find a good way to show user the address based on the network
+// they choose to run the script against
 const testnet_accounts = [
   {
     name: 'account_0',
@@ -23,38 +27,57 @@ const localnet_accounts = [
 const mainnet_accounts = [
 ];
 
+// Default list covers most of the supported network
+// Networks which are not required can be removed from here
 const networks = {
   localnet: {
     endpoint: 'http://localhost:26657/',
     chainId: 'testing',
     accounts: localnet_accounts,
   },
-  testnet: {
+  secret_testnet: {
     endpoint: 'http://testnet.securesecrets.org:1317/',
     chainId: 'pulsar-2',
-    trustNode: true,
-    keyringBackend: 'test',
     accounts: testnet_accounts,
   },
-  mainnet: {
+  secret_mainnet: {
     endpoint: 'https://secretnetwork-lcd.stakely.io/',
     chainId: 'secret-4',
-    trustNode: true,
-    keyringBackend: 'test',
+    accounts: mainnet_accounts,
+  },
+  juno_testnet: {
+    endpoint: 'https://rpc.uni.juno.deuslabs.fi/',
+    chainId: 'uni-6',
+    accounts: testnet_accounts,
+  },
+  juno_mainnet: {
+    endpoint: 'https://juno-rpc.polkachu.com/',
+    chainId: 'juno-1',
+    accounts: mainnet_accounts,
+  },
+  neutron_testnet: {
+    endpoint: 'https://rpc.baryon.ntrn.info/',
+    chainId: 'baryon-1',
+    accounts: testnet_accounts,
+  },
+  neutron_mainnet: {
+    endpoint: 'http',
+    chainId: 'neutron-1',
     accounts: mainnet_accounts,
   },
 };
 
 module.exports = {
   networks: {
-    default: networks.testnet,
+    default: networks.juno_testnet,
+    testnet: networks.juno_testnet,
     localnet: networks.localnet,
-    mainnet: networks.mainnet,
+    mainnet: networks.juno_mainnet,
   },
   mocha: {
     timeout: 60000
   },
   rust: {
-    version: "1.60.0",
+    version: "1.63.0",
   }
 };

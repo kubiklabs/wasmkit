@@ -1,6 +1,6 @@
-# Polar
+# WasmKit
 
-Polar is a development framework for building the secret contracts. The aim of the project is to make Secret contracts development process simple, efficient and scalable. Users can focus on the logic of secret contracts and not much about further steps in development. It facilitates features such as initiating project repo from contract templates, easy compilation of contracts, deployment, Interacting with contracts using schema and contract testing framework.
+WasmKit is a development framework for building the secret contracts. The aim of the project is to make Secret contracts development process simple, efficient and scalable. Users can focus on the logic of secret contracts and not much about further steps in development. It facilitates features such as initiating project repo from contract templates, easy compilation of contracts, deployment, Interacting with contracts using schema and contract testing framework.
 
 ## Requirements
 
@@ -12,34 +12,34 @@ The minimum packages/requirements are as follows:
 
 ## Setup rust environment
 
-Polar requires a Rust environment installed on a local machine to work properly. This Rust environment can be installed with the help of polar in just a command.
+WasmKit requires a Rust environment installed on a local machine to work properly. This Rust environment can be installed with the help of wasmKit in just a command.
 
 ```bash
-polar install
+wasmkit install
 ```
 
-## Install polar
+## Install wasmkit
 
 ### Installation from released version
 
-To install polar globally in your system you can use:
-  - Using Yarn: `yarn global add secret-polar`
-  - Using NPM: `npm install -g secret-polar`
+To install wasmKit globally in your system you can use:
+  - Using Yarn: `yarn global add @arufa/wasmkit`
+  - Using NPM: `npm install -g @arufa/wasmkit`
 
 ### Installation from master.
 
 The master branch corresponds to the latest version.
 
-To use  `polar` on your system, follow the steps below:
+To use `wasmkit` on your system, follow the steps below:
 
 ```bash
-git clone https://github.com/arufa-research/polar.git
-cd polar
+git clone https://github.com/arufa-research/wasmkit.git
+cd wasmkit
 yarn install
 yarn build
-cd packages/polar
+cd packages/wasmkit
 yarn link
-chmod +x $HOME/.yarn/bin/polar
+chmod +x $HOME/.yarn/bin/wasmkit
 ```
 
 ### Install dependencies
@@ -58,7 +58,7 @@ Follow our infrastructure README for instructions on how to set up a private net
 ### Initialize a project
 
 ```bash
-polar init <project-name>
+wasmkit init <project-name>
 ```
 
 This will create a directory <project-name> inside the current directory with boiler-plate code. The `contracts/` directory has all the rust files for the contract logic. `scripts/` directory contains  `.js` scripts that users can write according to the use case, a sample script has been added to give some understanding of how a user script should look like. `test/` directory contains `.js` scripts to run tests for the deployed contracts.
@@ -68,7 +68,7 @@ This will create a directory <project-name> inside the current directory with bo
 To see the possible tasks (commands) that are available, go to the project's folder. 
 
 ```bash
-polar
+wasmkit
 ``` 
 
 This is the list of built-in tasks. This is your starting point to find out what tasks are available to run.
@@ -79,7 +79,7 @@ To compile the contracts, Go to project directory:
 
 ```bash
 cd <project-name>
-polar compile
+wasmkit compile
 ```
 
 This command will generate compiled .wasm files in artifacts/contracts/ dir and schema .json files in artifacts/schema/ dir.
@@ -89,12 +89,12 @@ This command will generate compiled .wasm files in artifacts/contracts/ dir and 
 To clear artifacts data, use
 
 ```bash
-polar clean
+wasmkit clean
 ``` 
 This will remove the artifacts directory completely. To clean artifacts for only one contract, use
 
 ```bash
-polar clean <contract-name>
+wasmkit clean <contract-name>
 ``` 
 This will remove specific files related to that contract.
 

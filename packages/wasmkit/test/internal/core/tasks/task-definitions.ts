@@ -160,42 +160,42 @@ describe("SimpleTaskDefinition", () => {
       });
     });
 
-    describe("param name clashes with polar's ones", () => {
+    describe("param name clashes with wasmKit's ones", () => {
       function testClashWith (name: string): void {
         expectWasmkitError(
           () => taskDefinition.addParam(name),
-          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_POLAR_PARAM
+          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_WASMKIT_PARAM
         );
         expectWasmkitError(
           () => taskDefinition.addOptionalParam(name),
-          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_POLAR_PARAM
+          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_WASMKIT_PARAM
         );
         expectWasmkitError(
           () => taskDefinition.addFlag(name),
-          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_POLAR_PARAM
+          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_WASMKIT_PARAM
         );
         expectWasmkitError(
           () => taskDefinition.addPositionalParam(name),
-          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_POLAR_PARAM
+          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_WASMKIT_PARAM
         );
         expectWasmkitError(
           () => taskDefinition.addOptionalPositionalParam(name),
-          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_POLAR_PARAM
+          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_WASMKIT_PARAM
         );
         expectWasmkitError(
           () => taskDefinition.addVariadicPositionalParam(name),
-          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_POLAR_PARAM
+          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_WASMKIT_PARAM
         );
         expectWasmkitError(
           () => taskDefinition.addOptionalVariadicPositionalParam(name),
-          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_POLAR_PARAM
+          ERRORS.TASK_DEFINITIONS.PARAM_CLASHES_WITH_WASMKIT_PARAM
         );
       }
 
       it("Should throw if a param clashes", () => {
-        // This is constructed to force a type error here if a polar arg is
+        // This is constructed to force a type error here if a wasmKit arg is
         // added and not tested.
-        const polarArgs: RuntimeArgs = {
+        const wasmKitArgs: RuntimeArgs = {
           showStackTraces: true,
           network: "",
           version: false,
@@ -203,7 +203,7 @@ describe("SimpleTaskDefinition", () => {
           verbose: false
         };
 
-        Object.keys(polarArgs).forEach((name) => testClashWith(name));
+        Object.keys(wasmKitArgs).forEach((name) => testClashWith(name));
       });
     });
 

@@ -1,9 +1,9 @@
 import { use } from "chai";
-import { getAccountByName, polarChai } from "secret-polar";
+import { getAccountByName, wasmKitChai } from "@arufa/wasmkit";
 
 import { SampleProjectContract } from "../artifacts/typescript_schema/SampleProjectContract";
 
-use(polarChai);
+use(wasmKitChai);
 
 describe("counter", () => {
 

@@ -5,7 +5,7 @@ import { WasmkitContext } from "../../../../src/internal/context";
 import { loadConfigAndTasks } from "../../../../src/internal/core/config/config-loading";
 import { resolveProjectPaths } from "../../../../src/internal/core/config/config-resolution";
 import { resetWasmkitContext } from "../../../../src/internal/reset";
-import { PolarNetworkUserConfig, UserPaths } from "../../../../src/types";
+import { UserPaths, WasmKitNetworkUserConfig } from "../../../../src/types";
 import { useFixtureProject } from "../../../helpers/project";
 import { account } from "../../../mocks/account";
 
@@ -31,7 +31,7 @@ describe("Config resolution", function () {
       it("should return the config merged ", async () => {
         const config = await loadConfigAndTasks();
         assert.containsAllKeys(config.networks, ["localhost", "custom"]);
-        const ncfg = config.networks.localhost as PolarNetworkUserConfig;
+        const ncfg = config.networks.localhost;
         assert.equal(ncfg.endpoint, "http://127.0.0.1");
         assert.deepEqual(config.networks.localhost.accounts, [account]);
       });

@@ -21,11 +21,11 @@ function mergeUserAndDefaultConfigs (
 }
 
 /**
- * This functions resolves the polar config by merging the user provided config
- * and the polar default config.
+ * This functions resolves the wasmKit config by merging the user provided config
+ * and the wasmKit default config.
  *
  * @param userConfigPath the user config filepath
- * @param defaultConfig  the polar's default config object
+ * @param defaultConfig  the wasmKit's default config object
  * @param userConfig     the user config object
  * @param configExtenders An array of ConfigExtenders
  *

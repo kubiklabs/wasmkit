@@ -1,5 +1,5 @@
 {
-  "name": "Wasmkit",
+  "name": "wasmkit",
   "description": "Wasmkit is a development environment to compile, deploy, test, run cosmwasm contracts on different networks.",
   "repository": "https://github.com/arufa-research/wasmkit.git",
   "author": "https://github.com/coco-sha",

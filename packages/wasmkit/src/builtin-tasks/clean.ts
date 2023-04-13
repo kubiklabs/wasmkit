@@ -27,7 +27,7 @@ export default function (): void {
       const contractNameNew = contractName.toString().replace(/-/g, '_');
       const comp = './artifacts/contracts/' + contractNameNew + '.wasm';
       if (!isCwdProjectDir()) {
-        console.log(`Not in a valid polar project repo, exiting`);
+        console.log(`Not in a valid wasmKit project repo, exiting`);
         process.exit(1);
       } else if (!fsExtra.existsSync(`./${ARTIFACTS_DIR}`) && contractName.length) {
         throw new WasmkitError(ERRORS.GENERAL.ARTIFACTS_NOT_FOUND);

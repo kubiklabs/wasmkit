@@ -1,4 +1,4 @@
-import { getAccountByName } from "secret-polar";
+import { getAccountByName } from "@arufa/wasmkit";
 
 import { SampleProjectContract } from "../artifacts/typescript_schema/SampleProjectContract";
 

@@ -8,7 +8,7 @@ import { WasmkitError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 import { ExecutionMode, getExecutionMode } from "./execution-mode";
 
-const log = debug("polar:core:plugins");
+const log = debug("wasmkit:core:plugins");
 
 interface PackageJson {
   name: string
@@ -34,18 +34,18 @@ export function usePlugin (
 
   // We have a special case for `ExecutionMode.EXECUTION_MODE_LINKED`
   //
-  // If polar is linked, a require without `from` would be executed in the
-  // context of polar, and not find any plugin (linked or not). We workaround
+  // If wasmKit is linked, a require without `from` would be executed in the
+  // context of wasmKit, and not find any plugin (linked or not). We workaround
   // this by using the CWD here.
   //
-  // This is not ideal, but the only reason to link polar is testing.
+  // This is not ideal, but the only reason to link wasmKit is testing.
   if (
     from === undefined &&
     getExecutionMode() === ExecutionMode.EXECUTION_MODE_LINKED
   ) {
     from = process.cwd();
 
-    log("polar is linked, searching for plugin starting from CWD", from);
+    log("wasmKit is linked, searching for plugin starting from CWD", from);
   }
 
   let globalFlag = "";
@@ -53,7 +53,7 @@ export function usePlugin (
   if (getExecutionMode() === ExecutionMode.EXECUTION_MODE_GLOBAL_INSTALLATION) {
     globalFlag = " --global";
     globalWarning =
-      "You are using a global installation of polar. Plugins and their dependencies must also be global.\n";
+      "You are using a global installation of wasmKit. Plugins and their dependencies must also be global.\n";
   }
 
   const pluginPackageJson = readPackageJson(pluginName, from);

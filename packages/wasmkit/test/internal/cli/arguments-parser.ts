@@ -10,8 +10,8 @@ import {
 } from "../../../src/internal/core/params/argument-types";
 import {
   WASMKIT_PARAM_DEFINITIONS,
-  POLAR_SHORT_PARAM_SUBSTITUTIONS
-} from "../../../src/internal/core/params/polar-params";
+  WASMKIT_SHORT_PARAM_SUBSTITUTIONS
+} from "../../../src/internal/core/params/wasmkit-params";
 import {
   OverriddenTaskDefinition,
   SimpleTaskDefinition
@@ -34,7 +34,7 @@ function parseAndexpectWasmkitError (
     () =>
       argumentsParser.parseRuntimeArgs(
         WASMKIT_PARAM_DEFINITIONS,
-        POLAR_SHORT_PARAM_SUBSTITUTIONS,
+        WASMKIT_SHORT_PARAM_SUBSTITUTIONS,
         envArgs,
         rawCLAs
       ),
@@ -124,8 +124,8 @@ describe("ArgumentsParser", () => {
     );
   });
 
-  describe("polar arguments", () => {
-    it("should parse polar arguments with task", () => {
+  describe("wasmKit arguments", () => {
+    it("should parse wasmKit arguments with task", () => {
       const rawCLAs: string[] = [
         SHOW_STACK,
         "--network",
@@ -140,7 +140,7 @@ describe("ArgumentsParser", () => {
         unparsedCLAs
       } = argumentsParser.parseRuntimeArgs(
         WASMKIT_PARAM_DEFINITIONS,
-        POLAR_SHORT_PARAM_SUBSTITUTIONS,
+        WASMKIT_SHORT_PARAM_SUBSTITUTIONS,
         envArgs,
         rawCLAs
       );
@@ -151,7 +151,7 @@ describe("ArgumentsParser", () => {
       assert.equal("--task-param", unparsedCLAs[0]);
     });
 
-    it("should parse polar arguments after taskname", () => {
+    it("should parse wasmKit arguments after taskname", () => {
       const rawCLAs: string[] = [
         "compile",
         "--task-param",
@@ -166,7 +166,7 @@ describe("ArgumentsParser", () => {
         unparsedCLAs
       } = argumentsParser.parseRuntimeArgs(
         WASMKIT_PARAM_DEFINITIONS,
-        POLAR_SHORT_PARAM_SUBSTITUTIONS,
+        WASMKIT_SHORT_PARAM_SUBSTITUTIONS,
         envArgs,
         rawCLAs
       );
@@ -192,7 +192,7 @@ describe("ArgumentsParser", () => {
         ERRORS.ARGUMENTS.UNRECOGNIZED_COMMAND_LINE_ARG);
     });
 
-    it("should parse a polar argument", () => {
+    it("should parse a wasmKit argument", () => {
       const rawCLAs: string[] = [
         "--show-stack-traces",
         "--network",
@@ -223,7 +223,7 @@ describe("ArgumentsParser", () => {
       assert.equal(runtimeArgs.network, "local");
     });
 
-    it("should fail trying to parse polar with invalid argument", () => {
+    it("should fail trying to parse wasmKit with invalid argument", () => {
       const rawCLAs: string[] = [
         SHOW_STACK,
         "--network",
@@ -278,7 +278,7 @@ describe("ArgumentsParser", () => {
         unparsedCLAs
       } = argumentsParser.parseRuntimeArgs(
         WASMKIT_PARAM_DEFINITIONS,
-        POLAR_SHORT_PARAM_SUBSTITUTIONS,
+        WASMKIT_SHORT_PARAM_SUBSTITUTIONS,
         envArgs,
         rawCLAs
       );

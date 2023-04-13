@@ -7,24 +7,24 @@ import debug from "debug";
 import semver from "semver";
 
 import { TASK_HELP } from "../../builtin-tasks/task-names";
-import { WasmkitRuntimeEnvironment, RuntimeArgs, TaskArguments } from "../../types";
+import { RuntimeArgs, TaskArguments, WasmkitRuntimeEnvironment } from "../../types";
 import { WasmkitContext } from "../context";
 import { loadConfigAndTasks } from "../core/config/config-loading";
-import { PolarPluginError, WasmkitError } from "../core/errors";
+import { WasmkitError, WasmKitPluginError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 import { getEnvRuntimeArgs } from "../core/params/env-variables";
 import {
   WASMKIT_PARAM_DEFINITIONS,
-  POLAR_SHORT_PARAM_SUBSTITUTIONS
-} from "../core/params/polar-params";
+  WASMKIT_SHORT_PARAM_SUBSTITUTIONS
+} from "../core/params/wasmkit-params";
 import { isCwdInsideProject } from "../core/project-structure";
 import { Environment } from "../core/runtime-env";
 import { isSetupTask } from "../core/tasks/builtin-tasks";
 import { getPackageJson, PackageJson } from "../util/packageInfo";
 import { ArgumentsParser } from "./arguments-parser";
 
-const POLAR_NAME = "polar";
-const log = debug("polar:core:cli");
+const WASMKIT_NAME = "wasmKit";
+const log = debug("wamkit:core:cli");
 
 async function printVersionMessage (packageJson: PackageJson): Promise<void> {
   console.log(packageJson.version);
@@ -54,7 +54,7 @@ function printStackTraces (showStackTraces: boolean, error: WasmkitError): void 
   if (showStackTraces) {
     printErrRecur(error);
   } else {
-    console.error(`For more info run ${POLAR_NAME} with --show-stack-traces or add --help to display task-specific help.`);
+    console.error(`For more info run ${WASMKIT_NAME} with --show-stack-traces or add --help to display task-specific help.`);
   }
 }
 
@@ -93,13 +93,13 @@ export async function gatherArguments (): Promise<RuntimeArgsAndPackageJson> {
     unparsedCLAs
   } = argumentsParser.parseRuntimeArgs(
     WASMKIT_PARAM_DEFINITIONS,
-    POLAR_SHORT_PARAM_SUBSTITUTIONS,
+    WASMKIT_SHORT_PARAM_SUBSTITUTIONS,
     envVariableArguments,
     process.argv.slice(2)
   );
 
   if (runtimeArgs.verbose) {
-    debug.enable("polar*");
+    debug.enable("wasmkit*");
   }
 
   showStackTraces = runtimeArgs.showStackTraces;
@@ -170,7 +170,7 @@ export async function loadEnvironmentAndArgs (
 
 /* eslint-disable sonarjs/cognitive-complexity */
 async function main (): Promise<void> {
-  log(`Initiating polar task !`);
+  log(`Initiating wasmKit task !`);
   let showStackTraces = false;
   try {
     const {
@@ -196,11 +196,11 @@ async function main (): Promise<void> {
     );
     await env.run(taskName, taskArguments);
 
-    log(`Quitting polar after successfully running task ${taskName}`);
+    log(`Quitting wasmKit after successfully running task ${taskName}`);
   } catch (error) {
     if (WasmkitError.isWasmkitError(error)) {
       console.error(chalk.red(`Error ${error.message}`));
-    } else if (PolarPluginError.isPolarPluginError(error)) {
+    } else if (WasmKitPluginError.isWasmKitPluginError(error)) {
       console.error(
         chalk.red(`Error in plugin ${error.pluginName ?? ""}: ${error.message}`)
       );

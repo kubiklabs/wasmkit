@@ -2,7 +2,7 @@ import { task } from "../internal/core/config/config-env";
 import { WasmkitError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
 import { getChainFromAccount, getClient } from "../lib/client";
-import { ChainType, WasmkitRuntimeEnvironment, TaskArguments } from "../types";
+import { ChainType, TaskArguments, WasmkitRuntimeEnvironment } from "../types";
 import { TASK_NODE_INFO } from "./task-names";
 
 export default function (): void {
@@ -12,22 +12,24 @@ export default function (): void {
 
 async function nodeInfo (_taskArgs: TaskArguments, env: WasmkitRuntimeEnvironment): Promise<void> {
   const client = await getClient(env.network) as any;
-  console.log("Network:", env.network.name);
-  console.log("ChainId:", env.network.config.chainId);
+  console.log("Network: ", env.network.name);
+  console.log("ChainId: ", env.network.config.chainId);
   const chain = getChainFromAccount(env.network);
 
   switch (chain) {
     case ChainType.Secret: {
-      console.log("Block height:", await client.query.tendermint.getLatestBlock({}));
-      const nodeInfo = await client.query.tendermint.getNodeInfo({})
+      const tendermintClient = client.query.tendermint;
+      const blockInfo = await tendermintClient.getLatestBlock({});
+      console.log("Block height: ", blockInfo);
+      const nodeInfo = await tendermintClient.getNodeInfo({})
         // eslint-disable-next-line
         .catch((err: any) => { throw new Error(`Could not fetch node info: ${err}`); });
-      console.log('Node Info: ', nodeInfo);
+      console.log("Node Info: ", nodeInfo);
       break;
     }
-    case ChainType.Juno: {
-      console.log("ChainId:", await client.getChainId());
-      console.log("Block height:", await client.getHeight());
+    case ChainType.Juno || ChainType.Terra: {
+      console.log("ChainId: ", await client.getChainId());
+      console.log("Block height: ", await client.getHeight());
       break;
     }
     // case ChainType.Injective: {

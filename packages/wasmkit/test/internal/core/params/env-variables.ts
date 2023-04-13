@@ -6,22 +6,22 @@ import {
   getEnvVariablesMap,
   paramNameToEnvVariable
 } from "../../../../src/internal/core/params/env-variables";
-import { WASMKIT_PARAM_DEFINITIONS } from "../../../../src/internal/core/params/polar-params";
+import { WASMKIT_PARAM_DEFINITIONS } from "../../../../src/internal/core/params/wasmkit-params";
 import { expectWasmkitError } from "../../../helpers/errors";
 
 describe("paramNameToEnvVariable", () => {
-  it("should convert camelCase to UPPER_CASE and prepend POLAR_", () => {
-    assert.equal(paramNameToEnvVariable("a"), "POLAR_A");
-    assert.equal(paramNameToEnvVariable("B"), "POLAR_B");
-    assert.equal(paramNameToEnvVariable("AC"), "POLAR_A_C");
-    assert.equal(paramNameToEnvVariable("aC"), "POLAR_A_C");
+  it("should convert camelCase to UPPER_CASE and prepend WASMKIT_", () => {
+    assert.equal(paramNameToEnvVariable("a"), "WASMKIT_A");
+    assert.equal(paramNameToEnvVariable("B"), "WASMKIT_B");
+    assert.equal(paramNameToEnvVariable("AC"), "WASMKIT_A_C");
+    assert.equal(paramNameToEnvVariable("aC"), "WASMKIT_A_C");
     assert.equal(
       paramNameToEnvVariable("camelCaseRight"),
-      "POLAR_CAMEL_CASE_RIGHT"
+      "WASMKIT_CAMEL_CASE_RIGHT"
     );
     assert.equal(
       paramNameToEnvVariable("somethingAB"),
-      "POLAR_SOMETHING_A_B"
+      "WASMKIT_SOMETHING_A_B"
     );
   });
 });
@@ -43,10 +43,10 @@ describe("Env vars arguments parsing", () => {
   it("Should accept values", () => {
     const args = getEnvRuntimeArgs(WASMKIT_PARAM_DEFINITIONS, {
       IRRELEVANT_ENV_VAR: "123",
-      POLAR_NETWORK: "asd",
-      POLAR_SHOW_STACK_TRACES: "true",
-      POLAR_VERSION: "true",
-      POLAR_HELP: "true"
+      WASMKIT_NETWORK: "asd",
+      WASMKIT_SHOW_STACK_TRACES: "true",
+      WASMKIT_VERSION: "true",
+      WASMKIT_HELP: "true"
     });
 
     assert.equal(args.network, "asd");
@@ -61,7 +61,7 @@ describe("Env vars arguments parsing", () => {
     expectWasmkitError(
       () =>
         getEnvRuntimeArgs(WASMKIT_PARAM_DEFINITIONS, {
-          POLAR_HELP: "123"
+          WASMKIT_HELP: "123"
         }),
       ERRORS.ARGUMENTS.INVALID_ENV_VAR_VALUE
     );
@@ -80,11 +80,11 @@ describe("getEnvVariablesMap", () => {
         config: undefined // config is optional
       }),
       {
-        POLAR_NETWORK: "asd",
-        POLAR_HELP: "true",
-        POLAR_SHOW_STACK_TRACES: "true",
-        POLAR_VERSION: "false",
-        POLAR_VERBOSE: "true"
+        WASMKIT_NETWORK: "asd",
+        WASMKIT_HELP: "true",
+        WASMKIT_SHOW_STACK_TRACES: "true",
+        WASMKIT_VERSION: "false",
+        WASMKIT_VERBOSE: "true"
       }
     );
   });
