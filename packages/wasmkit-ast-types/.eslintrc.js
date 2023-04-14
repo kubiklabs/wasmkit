@@ -1,6 +1,5 @@
 module.exports = {
-  plugins: ['prettier'],
-  extends: ['eslint:recommended', 'prettier'],
+  extends: ['eslint:recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: "./tsconfig.json",
@@ -58,14 +57,6 @@ module.exports = {
       {
         avoidEscape: true,
         allowTemplateLiterals: true
-      }
-    ],
-    'prettier/prettier': [
-      'error',
-      {
-        trailingComma: 'none',
-        singleQuote: true,
-        printWidth: 80
       }
     ]
   }
