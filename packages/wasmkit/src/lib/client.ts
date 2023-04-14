@@ -19,17 +19,13 @@ export async function getClient (
         url: network.config.endpoint
       });
     }
-    case ChainType.Juno: {
-      return await CosmWasmClient.connect(network.config.endpoint);
-    }
-    case ChainType.Terra: {
+    case ChainType.Juno:
+    case ChainType.Terra:
+    case ChainType.Neutron: {
       return await CosmWasmClient.connect(network.config.endpoint);
     }
     case ChainType.Archway: {
       return await ArchwayClient.connect(network.config.endpoint);
-    }
-    case ChainType.Neutron: {
-      return await CosmWasmClient.connect(network.config.endpoint);
     }
     // case ChainType.Injective: {
 
@@ -159,7 +155,9 @@ export async function storeCode (
       });
       return { contractCodeHash: contractCodeHash, codeId: codeId };
     }
-    case ChainType.Juno || ChainType.Archway || ChainType.Terra: {
+    case ChainType.Juno:
+    case ChainType.Archway:
+    case ChainType.Terra: {
       const uploadReceipt = await signingClient.upload(
         sender,
         wasmFileContent,
@@ -229,7 +227,9 @@ export async function instantiateContract (
       }
       return res.value;
     }
-    case ChainType.Juno || ChainType.Archway || ChainType.Terra: {
+    case ChainType.Juno:
+    case ChainType.Archway:
+    case ChainType.Terra: {
       const contract = await signingClient.instantiate(
         sender,
         codeId,
@@ -286,7 +286,9 @@ export async function executeTransaction (
         }
       );
     }
-    case ChainType.Juno || ChainType.Archway || ChainType.Terra: {
+    case ChainType.Juno:
+    case ChainType.Archway:
+    case ChainType.Terra: {
       const customFeesVal: TxnStdFee | undefined = customFees !== undefined
         ? customFees : network.config.fees?.exec;
       return signingClient.execute(
@@ -325,7 +327,9 @@ export async function sendQuery (
         code_hash: contractHash
       });
     }
-    case ChainType.Juno || ChainType.Archway || ChainType.Terra: {
+    case ChainType.Juno:
+    case ChainType.Archway:
+    case ChainType.Terra: {
       return client.queryContractSmart(contractAddress, msgData);
     }
     // case ChainType.Injective: {
