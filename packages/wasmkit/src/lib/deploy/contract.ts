@@ -272,7 +272,7 @@ export class Contract {
     const signingClient = await getSigningClient(this.env.network, accountVal);
     console.log("Executing", this.contractAddress, msgData);
 
-    const txnResponse = await executeTransaction(
+    return await executeTransaction(
       this.env.network,
       signingClient,
       accountVal.address,
@@ -283,14 +283,5 @@ export class Contract {
       customFees,
       memo
     );
-
-    if (txnResponse.code !== 0) {
-      throw new WasmkitError(ERRORS.INTERACTION.TRANSACTION_FAILURE, {
-        contractName: this.contractName,
-        transaction: JSON.stringify(msgData, null, 2),
-        message: JSON.stringify(txnResponse, null, 2)
-      });
-    }
-    return txnResponse;
   }
 }

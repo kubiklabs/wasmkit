@@ -35,6 +35,8 @@ export async function getClient (
 
     // }
     default: {
+      console.log("Error from client");
+
       throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }
@@ -88,6 +90,7 @@ export async function getSigningClient (
 
     // }
     default: {
+      console.log("Error from signing client");
       throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }
@@ -159,7 +162,9 @@ export async function storeCode (
       });
       return { contractCodeHash: contractCodeHash, codeId: codeId };
     }
-    case ChainType.Juno || ChainType.Archway || ChainType.Terra: {
+    case ChainType.Juno:
+    case ChainType.Archway:
+    case ChainType.Terra: {
       const uploadReceipt = await signingClient.upload(
         sender,
         wasmFileContent,
@@ -229,7 +234,9 @@ export async function instantiateContract (
       }
       return res.value;
     }
-    case ChainType.Juno || ChainType.Archway || ChainType.Terra: {
+    case ChainType.Juno:
+    case ChainType.Archway:
+    case ChainType.Terra: {
       const contract = await signingClient.instantiate(
         sender,
         codeId,
@@ -271,7 +278,8 @@ export async function executeTransaction (
       const inGasPrice =
         parseFloat(customFees?.amount[0].amount as string) /
         parseFloat(customFees?.gas as string);
-      return signingClient.tx.compute.executeContract(
+      // eslint-disable-next-line
+      return await signingClient.tx.compute.executeContract(
         {
           sender: sender,
           contract_address: contractAddress,
@@ -286,10 +294,13 @@ export async function executeTransaction (
         }
       );
     }
-    case ChainType.Juno || ChainType.Archway || ChainType.Terra: {
+    case ChainType.Juno:
+    case ChainType.Archway:
+    case ChainType.Terra: {
       const customFeesVal: TxnStdFee | undefined = customFees !== undefined
         ? customFees : network.config.fees?.exec;
-      return signingClient.execute(
+      // eslint-disable-next-line
+      return await signingClient.execute(
         sender,
         contractAddress,
         msgData,
@@ -325,8 +336,11 @@ export async function sendQuery (
         code_hash: contractHash
       });
     }
-    case ChainType.Juno || ChainType.Archway || ChainType.Terra: {
-      return client.queryContractSmart(contractAddress, msgData);
+    case ChainType.Juno:
+    case ChainType.Archway:
+    case ChainType.Terra: {
+      // eslint-disable-next-line
+      return await client.queryContractSmart(contractAddress, msgData);
     }
     // case ChainType.Injective: {
 
@@ -379,6 +393,7 @@ Promise<Coin[]> {
 
     // }
     default: {
+      console.log("Error ftom balance");
       throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }

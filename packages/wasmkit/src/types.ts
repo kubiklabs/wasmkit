@@ -19,10 +19,10 @@ import * as types from "./internal/core/params/argument-types";
 export enum ChainType {
   Secret,
   Juno,
+  Archway,
   Neutron,
   Terra,
   Injective,
-  Archway,
 }
 
 export interface Account {
