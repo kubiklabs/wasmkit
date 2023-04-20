@@ -7,7 +7,7 @@ import { Coin } from "secretjs/dist/protobuf/cosmos/base/v1beta1/coin";
 import { WasmkitError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
 import { Account, ChainType, Network, TxnStdFee } from "../types";
-import { defaultFees, defaultFeesJuno } from "./constants";
+import { defaultFees, defaultFeesTerra } from "./constants";
 
 export async function getClient (
   network: Network): Promise<SecretNetworkClient | CosmWasmClient | ArchwayClient> {
@@ -19,17 +19,13 @@ export async function getClient (
         url: network.config.endpoint
       });
     }
-    case ChainType.Juno: {
-      return await CosmWasmClient.connect(network.config.endpoint);
-    }
-    case ChainType.Terra: {
+    case ChainType.Juno:
+    case ChainType.Terra:
+    case ChainType.Neutron: {
       return await CosmWasmClient.connect(network.config.endpoint);
     }
     case ChainType.Archway: {
       return await ArchwayClient.connect(network.config.endpoint);
-    }
-    case ChainType.Neutron: {
-      return await CosmWasmClient.connect(network.config.endpoint);
     }
     // case ChainType.Injective: {
 
@@ -168,7 +164,7 @@ export async function storeCode (
       const uploadReceipt = await signingClient.upload(
         sender,
         wasmFileContent,
-        customFees ?? defaultFeesJuno.upload,
+        customFees ?? defaultFeesTerra.upload,
         "uploading"
       );
       const codeId: number = uploadReceipt.codeId;
@@ -242,7 +238,7 @@ export async function instantiateContract (
         codeId,
         initArgs,
         label,
-        customFees ?? defaultFeesJuno.init,
+        customFees ?? defaultFeesTerra.init,
         {
           funds: transferAmount,
           admin: contractAdmin
@@ -304,7 +300,7 @@ export async function executeTransaction (
         sender,
         contractAddress,
         msgData,
-        customFeesVal ?? defaultFeesJuno.exec,
+        customFeesVal ?? defaultFeesTerra.exec,
         memo === undefined ? "executing" : memo,
         transferAmount
       );
