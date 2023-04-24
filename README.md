@@ -1,6 +1,6 @@
 # WasmKit
 
-WasmKit is a development framework for building the secret contracts. The aim of the project is to make Secret contracts development process simple, efficient and scalable. Users can focus on the logic of secret contracts and not much about further steps in development. It facilitates features such as initiating project repo from contract templates, easy compilation of contracts, deployment, Interacting with contracts using schema and contract testing framework.
+WasmKit is a development framework for building the cosmwasm contracts. The aim of the project is to make cosmwasm contracts development process simple, efficient and scalable. Users can focus on the logic of cosmwasm contracts and not much about further steps in development. It facilitates features such as initiating project repo from contract templates, easy compilation of contracts, deployment, Interacting with contracts using schema and contract testing framework.
 
 ## Requirements
 
