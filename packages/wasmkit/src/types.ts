@@ -19,6 +19,7 @@ import * as types from "./internal/core/params/argument-types";
 export enum ChainType {
   Secret,
   Juno,
+  Osmosis,
   Archway,
   Neutron,
   Terra,

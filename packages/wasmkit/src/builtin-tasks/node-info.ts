@@ -29,6 +29,7 @@ async function nodeInfo (_taskArgs: TaskArguments, env: WasmkitRuntimeEnvironmen
       break;
     }
     case ChainType.Juno:
+    case ChainType.Osmosis:
     case ChainType.Archway:
     case ChainType.Neutron:
     case ChainType.Terra: {

@@ -20,6 +20,7 @@ export async function getClient (
       });
     }
     case ChainType.Juno:
+    case ChainType.Osmosis:
     case ChainType.Terra:
     case ChainType.Neutron: {
       return await CosmWasmClient.connect(network.config.endpoint);
@@ -64,6 +65,16 @@ export async function getSigningClient (
         wallet
       );
     }
+    case ChainType.Osmosis: {
+      const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+        hdPaths: [makeCosmoshubPath(0)],
+        prefix: "osmo"
+      });
+      return await SigningCosmWasmClient.connectWithSigner(
+        network.config.endpoint,
+        wallet
+      );
+    }
     case ChainType.Terra: {
       const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
         hdPaths: [makeCosmoshubPath(0)],
@@ -98,6 +109,8 @@ export function getChainFromAccount (network: Network): ChainType {
     return ChainType.Secret;
   } else if (network.config.accounts[0].address.startsWith("juno")) {
     return ChainType.Juno;
+  } else if (network.config.accounts[0].address.startsWith("osmo")) {
+    return ChainType.Osmosis;
     // } else if (network.config.accounts[0].address.startsWith("inj")) {
     //   return ChainType.Injective;
   } else if (network.config.accounts[0].address.startsWith("archway")) {
@@ -159,6 +172,7 @@ export async function storeCode (
       return { contractCodeHash: contractCodeHash, codeId: codeId };
     }
     case ChainType.Juno:
+    case ChainType.Osmosis:
     case ChainType.Archway:
     case ChainType.Terra: {
       const uploadReceipt = await signingClient.upload(
@@ -231,6 +245,7 @@ export async function instantiateContract (
       return res.value;
     }
     case ChainType.Juno:
+    case ChainType.Osmosis:
     case ChainType.Archway:
     case ChainType.Terra: {
       const contract = await signingClient.instantiate(
@@ -291,6 +306,7 @@ export async function executeTransaction (
       );
     }
     case ChainType.Juno:
+    case ChainType.Osmosis:
     case ChainType.Archway:
     case ChainType.Terra: {
       const customFeesVal: TxnStdFee | undefined = customFees !== undefined
@@ -333,6 +349,7 @@ export async function sendQuery (
       });
     }
     case ChainType.Juno:
+    case ChainType.Osmosis:
     case ChainType.Archway:
     case ChainType.Terra: {
       // eslint-disable-next-line
@@ -373,6 +390,13 @@ Promise<Coin[]> {
     }
     case ChainType.Juno: {
       const info = await client?.getBalance(accountAddress, "ujuno");
+      if (info === undefined) {
+        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
+      }
+      return info;
+    }
+    case ChainType.Osmosis: {
+      const info = await client?.getBalance(accountAddress, "uosmo");
       if (info === undefined) {
         throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
       }
