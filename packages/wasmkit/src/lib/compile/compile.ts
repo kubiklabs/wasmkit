@@ -79,7 +79,7 @@ export async function compile (
             contractName
           });
         } else {
-          contractNames.add(readContractName(path.join(contractPath, toml)));
+          contractNames.add(contractName);
           contractDirs.push(contractPath);
         }
       }
