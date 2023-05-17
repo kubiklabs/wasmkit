@@ -26,7 +26,7 @@ export async function compress (
     await compile(false, [], false, false, false, env);
   }
 
-  const compressCmd = `npx wasm-opt -Oz ${srcPath} -o ${destPath}`;
+  const compressCmd = `cp ${srcPath} ${destPath}`;
 
   console.log(chalk.greenBright(`Creating compressed .wasm file for ${contractName}`));
   execSync(compressCmd, { stdio: 'inherit' });
