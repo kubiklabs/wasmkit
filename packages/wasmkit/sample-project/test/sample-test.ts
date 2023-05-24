@@ -21,7 +21,7 @@ describe("counter", () => {
     const deploy_response = await contract.deploy(
       contract_owner,
       { // custom fees
-        amount: [{ amount: "90000", denom: "uscrt" }],
+        amount: [{ amount: "90000", denom: "ujunox" }],
         gas: "35000000",
       }
     );

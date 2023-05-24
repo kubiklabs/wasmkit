@@ -1,7 +1,7 @@
 [package]
 name = "sample-project"
-version = "0.1.0"
-authors = ["{{authors}}"]
+version = "1.0.0"
+authors = ["Udit Gulati"]
 edition = "2018"
 
 exclude = [
@@ -16,17 +16,18 @@ exclude = [
 crate-type = ["cdylib", "rlib"]
 
 [features]
-default = []
 # for quicker tests, cargo test --lib
 # for more explicit tests, cargo test --features=backtraces
 backtraces = ["cosmwasm-std/backtraces"]
+library = []
 
 [dependencies]
-cosmwasm-std = { git = "https://github.com/scrtlabs/cosmwasm", branch = "secret" }
-cosmwasm-storage = { git = "https://github.com/scrtlabs/cosmwasm", branch = "secret" }
+cosmwasm-std = { version = "1.0.0-beta8", features = ["staking"] }
 schemars = "0.8.1"
-serde = { version = "1.0.114", default-features = false, features = ["derive"] }
-thiserror = { version = "1.0" }
+serde = { version = "1.0.103", default-features = false, features = ["derive"] }
+snafu = { version = "0.6.3" }
+thiserror = { version = "1.0.23" }
+cw-storage-plus = { version = "0.13.2" }
 
-# [dev-dependencies]
-cosmwasm-schema = "1.0.0"
+[dev-dependencies]
+cosmwasm-schema = { version = "1.0.0-beta8" }

@@ -7,7 +7,7 @@ import { Coin } from "secretjs/dist/protobuf/cosmos/base/v1beta1/coin";
 import { WasmkitError } from "../internal/core/errors";
 import { ERRORS } from "../internal/core/errors-list";
 import { Account, ChainType, Network, TxnStdFee } from "../types";
-import { defaultFees, defaultFeesTerra } from "./constants";
+import { defaultFees } from "./constants";
 
 export async function getClient (
   network: Network): Promise<SecretNetworkClient | CosmWasmClient | ArchwayClient> {
@@ -178,7 +178,7 @@ export async function storeCode (
       const uploadReceipt = await signingClient.upload(
         sender,
         wasmFileContent,
-        customFees ?? defaultFeesTerra.upload,
+        customFees ?? defaultFees.upload,
         "uploading"
       );
       const codeId: number = uploadReceipt.codeId;
@@ -253,7 +253,7 @@ export async function instantiateContract (
         codeId,
         initArgs,
         label,
-        customFees ?? defaultFeesTerra.init,
+        customFees ?? defaultFees.init,
         {
           funds: transferAmount,
           admin: contractAdmin
@@ -316,7 +316,7 @@ export async function executeTransaction (
         sender,
         contractAddress,
         msgData,
-        customFeesVal ?? defaultFeesTerra.exec,
+        customFeesVal ?? defaultFees.exec,
         memo === undefined ? "executing" : memo,
         transferAmount
       );

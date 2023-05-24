@@ -1,23 +1,12 @@
 use schemars::JsonSchema;
+use cw_storage_plus::Item;
 use serde::{Deserialize, Serialize};
 
-use cosmwasm_std::{Addr, Storage};
-use cosmwasm_storage::{
-    singleton, singleton_read, ReadonlySingleton, Singleton,
-};
+pub const CONSTANTS: Item<Constants> = Item::new("constants");
 
-pub static CONFIG_KEY: &[u8] = b"config";
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, JsonSchema)]
-pub struct State {
+#[derive(Serialize, Debug, Deserialize, Clone, PartialEq, JsonSchema)]
+pub struct Constants {
     pub count: i32,
-    pub owner: Addr,
+    pub owner: String
 }
 
-pub fn config(storage: &mut dyn Storage) -> Singleton<State> {
-    singleton(storage, CONFIG_KEY)
-}
-
-pub fn config_read(storage: &dyn Storage) -> ReadonlySingleton<State> {
-    singleton_read(storage, CONFIG_KEY)
-}

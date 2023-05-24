@@ -4,19 +4,19 @@ export const WASMKIT_NAME = "wasmkit";
 
 export const defaultFees = {
   upload: {
-    amount: [{ amount: "250000", denom: "ujuno" }],
+    amount: [{ amount: "250000", denom: "ujunox" }],
     gas: "1000000"
   },
   init: {
-    amount: [{ amount: "125000", denom: "ujuno" }],
+    amount: [{ amount: "125000", denom: "ujunox" }],
     gas: "500000"
   },
   exec: {
-    amount: [{ amount: "50000", denom: "ujuno" }],
+    amount: [{ amount: "50000", denom: "ujunox" }],
     gas: "200000"
   },
   send: {
-    amount: [{ amount: "20000", denom: "ujuno" }],
+    amount: [{ amount: "20000", denom: "ujunox" }],
     gas: "80000"
   }
 };

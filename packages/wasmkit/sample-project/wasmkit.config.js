@@ -92,15 +92,15 @@ const networks = {
     accounts: osmosis_testnet_accounts,
     fees: {
       upload: {
-        amount: [{ amount: "100000", denom: "uluna" }],
+        amount: [{ amount: "100000", denom: "uosmo" }],
         gas: "500000",
       },
       init: {
-        amount: [{ amount: "50000", denom: "uluna" }],
+        amount: [{ amount: "50000", denom: "uosmo" }],
         gas: "250000",
       },
       exec: {
-        amount: [{ amount: "50000", denom: "uluna" }],
+        amount: [{ amount: "50000", denom: "uosmo" }],
         gas: "250000",
       }
     },
