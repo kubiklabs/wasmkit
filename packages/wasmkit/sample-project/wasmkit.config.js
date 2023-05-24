@@ -3,19 +3,6 @@
 // using chain's derivation page
 // find a good way to show user the address based on the network
 // they choose to run the script against
-const secret_testnet_accounts = [
-  {
-    name: 'account_0',
-    address: 'secret1l0g5czqw7vjvd20ezlk4x7ndgyn0rx5aumr8gk',
-    mnemonic: 'snack cable erode art lift better october drill hospital clown erase address'
-  },
-  {
-    name: 'account_1',
-    address: 'secret1ddfphwwzqtkp8uhcsc53xdu24y9gks2kug45zv',
-    mnemonic: 'sorry object nation also century glove small tired parrot avocado pulp purchase'
-  }
-];
-
 const juno_testnet_accounts = [
   {
     name: 'account_0',
@@ -31,7 +18,7 @@ const juno_testnet_accounts = [
 
 const neutron_testnet_accounts = [
   {
-    name: 'admin',
+    name: 'account_0',
     address: 'neutron1jtdje5vq42sknl22r4wu9sahryu5wcrdqsccjh',
     mnemonic: 'category fine rapid trumpet dune early wish under nothing dance property wreck'
   },
@@ -39,16 +26,16 @@ const neutron_testnet_accounts = [
 
 const archway_testnet_accounts = [
   {
-    name: 'admin',
+    name: 'account_0',
     address: 'archway1jtdje5vq42sknl22r4wu9sahryu5wcrd3yd7z8',
     mnemonic: 'category fine rapid trumpet dune early wish under nothing dance property wreck'
   },
 ];
 
-const terra_testnet_accounts = [
+const osmosis_testnet_accounts = [
   {
-    name: 'admin',
-    address: 'terra1jtdje5vq42sknl22r4wu9sahryu5wcrdztt62s',
+    name: 'account_0',
+    address: 'osmosis1jtdje5vq42sknl22r4wu9sahryu5wcrdztt62s',
     mnemonic: 'category fine rapid trumpet dune early wish under nothing dance property wreck'
   },
 ];
@@ -58,14 +45,17 @@ const localnet_accounts = [
     name: 'account_0',
     address: '',
     mnemonic: ''
+  },
+  {
+    name: 'account_1',
+    address: '',
+    mnemonic: ''
   }
 ];
 
-const secret_mainnet_accounts = [
-];
 const juno_mainnet_accounts = [
 ];
-const terra_mainnet_accounts = [
+const osmosis_mainnet_accounts = [
 ];
 
 // Default list covers most of the supported network
@@ -75,16 +65,6 @@ const networks = {
     endpoint: 'http://localhost:26657/',
     chainId: 'testing-1',
     accounts: localnet_accounts,
-  },
-  secret_testnet: {
-    endpoint: 'http://testnet.securesecrets.org:1317/',
-    chainId: 'pulsar-2',
-    accounts: secret_testnet_accounts,
-  },
-  secret_mainnet: {
-    endpoint: 'https://secretnetwork-lcd.stakely.io/',
-    chainId: 'secret-4',
-    accounts: secret_mainnet_accounts,
   },
   juno_testnet: {
     endpoint: 'https://rpc.uni.juno.deuslabs.fi/',
@@ -106,9 +86,10 @@ const networks = {
     chainId: 'constantine-2',
     accounts: archway_testnet_accounts,
   },
-  terra_testnet: {
-    endpoint: 'https://terra-testnet-rpc.polkachu.com:443/',
-    accounts: terra_testnet_accounts,
+  osmosis_testnet: {
+    endpoint: 'https://rpc.testnet.osmosis.zone/',
+    chainId: 'osmo-test-4',
+    accounts: osmosis_testnet_accounts,
     fees: {
       upload: {
         amount: [{ amount: "100000", denom: "uluna" }],
@@ -124,18 +105,41 @@ const networks = {
       }
     },
   },
-  terra_mainnet: {
-    endpoint: 'https://terra-rpc.stakely.io:443/',
-    accounts: terra_mainnet_accounts,
+  osmosis_mainnet: {
+    endpoint: 'https://rpc.osmosis.zone/',
+    chainId: 'osmosis-1',
+    accounts: osmosis_mainnet_accounts,
   }
 };
 
 module.exports = {
   networks: {
-    default: networks.neutron_testnet,
-    testnet: networks.neutron_testnet,
+    default: networks.juno_testnet,
+    testnet: networks.juno_testnet,
     localnet: networks.localnet,
     mainnet: networks.juno_mainnet,
+  },
+  localnetworks: {
+    juno: {
+      docker_image: "uditgulati0/juno-node",
+      rpc_port: 26657,
+      rest_port: 1317,
+      flags: ["GAS_LIMIT=10000000", "STAKE_TOKEN=ujunox", "TIMEOUT_COMMIT=5s"],
+      docker_command: "./setup_and_run.sh juno16g2rahf5846rxzp3fwlswy08fz8ccuwk03k57y",
+    },
+    neutron: {
+      docker_image: "uditgulati0/neutron-node",
+      rpc_port: 26657,
+      rest_port: 1317,
+      flags: ["RUN_BACKGROUND=0"],
+    },
+    osmosis: {
+      docker_image: "uditgulati0/osmosis-node",
+      rpc_port: 26657,
+      rest_port: 1317,
+      flags: [],
+      docker_command: "/osmosis/setup.sh",
+    },
   },
   mocha: {
     timeout: 60000

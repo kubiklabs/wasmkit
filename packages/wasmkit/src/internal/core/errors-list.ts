@@ -422,6 +422,14 @@ Try using another mnemonic or deriving less keys.`,
       title: 'Network not supported',
       description: `Network not supported with %account%.`,
       shouldBeReported: false
+    },
+    UNKNOWN_LOCAL_NETWORK: {
+      number: 113,
+      message:
+        "Local network %nodeType% not found in wasmkit.config.js file.",
+      title: 'Local network not found',
+      description: `Local network %nodeType% not found in wasmkit.config.js file.`,
+      shouldBeReported: false
     }
   },
   TASK_DEFINITIONS: {

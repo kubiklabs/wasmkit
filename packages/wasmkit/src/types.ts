@@ -99,18 +99,37 @@ export interface WasmKitNetworkUserConfig {
   fees?: Partial<any>
 }
 
+export interface WasmKitLocalNetworkUserConfig {
+  docker_image: string
+  rpc_port: number
+  rest_port: number
+  flags?: string[]
+  docker_command?: string
+}
+
 export interface NetworksUserConfig {
   [networkName: string]: NetworkUserConfig | undefined
 }
 
+export interface LocalNetworksUserConfig {
+  [localNetworkName: string]: LocalNetworkUserConfig | undefined
+}
+
 export type NetworkUserConfig = WasmKitNetworkUserConfig;
+export type LocalNetworkUserConfig = WasmKitLocalNetworkUserConfig;
 
 export type WasmkitNetworkConfig = WasmKitNetworkUserConfig;
+export type WasmkitLocalNetworkConfig = WasmKitLocalNetworkUserConfig;
 
 export type NetworkConfig = WasmkitNetworkConfig;
+export type LocalNetworkConfig = WasmkitLocalNetworkConfig;
 
 export interface Networks {
   [networkName: string]: WasmkitNetworkConfig
+}
+
+export interface LocalNetworks {
+  [localNetworkName: string]: WasmkitLocalNetworkConfig
 }
 
 export interface Commands {
@@ -193,6 +212,7 @@ export type UserPaths = Omit<Partial<ProjectPathsConfig>, "configFile">;
 
 export interface Config {
   networks?: Networks
+  localnetworks?: LocalNetworks
   paths?: UserPaths
   mocha?: Mocha.MochaOptions
   commands?: Commands
@@ -202,6 +222,7 @@ export interface WasmKitUserConfig {
   defaultNetwork?: string
   paths?: ProjectPathsUserConfig
   networks?: NetworksUserConfig
+  localnetworks?: LocalNetworksUserConfig
   commands?: Commands
   mocha?: Mocha.MochaOptions
   docker?: DockerConfig
@@ -211,6 +232,7 @@ export interface WasmKitConfig {
   defaultNetwork: string
   paths: ProjectPathsConfig
   networks: Networks
+  localnetworks: LocalNetworks
   commands: Commands
   mocha: Mocha.MochaOptions
   docker: DockerConfig
@@ -275,6 +297,7 @@ export interface ResolvedConfig extends WasmKitUserConfig {
   paths?: ProjectPathsConfig
   rust?: RustVersion
   networks: Networks
+  localnetworks: LocalNetworks
   commands: Commands
 }
 

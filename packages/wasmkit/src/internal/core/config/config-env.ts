@@ -9,12 +9,33 @@ import { WasmkitContext } from "../../context";
 import * as argumentTypes from "../params/argument-types";
 import { usePlugin as usePluginImplementation } from "../plugins";
 
+/**
+ * Creates a task, overriding any previous task with the same name.
+ *
+ * @remarks The action must await every async call made within it.
+ *
+ * @param name The task's name.
+ * @param description The task's description.
+ * @param action The task's action.
+ * @returns A task definition.
+ */
 export function task<ArgsT extends TaskArguments> (
   name: string,
   description?: string,
   action?: ActionType<ArgsT>
 ): ConfigurableTaskDefinition;
 
+/**
+ * Creates a task without description, overriding any previous task
+ * with the same name.
+ *
+ * @remarks The action must await every async call made within it.
+ *
+ * @param name The task's name.
+ * @param action The task's action.
+ *
+ * @returns A task definition.
+ */
 export function task<ArgsT extends TaskArguments> (
   name: string,
   action: ActionType<ArgsT>
@@ -39,12 +60,34 @@ export function task<ArgsT extends TaskArguments> (
   return dsl.task(name, descriptionOrAction, action);
 }
 
+/**
+ * Creates a internaltask, overriding any previous task with the same name.
+ *
+ * @remarks The internaltasks won't be displayed in the CLI help messages.
+ * @remarks The action must await every async call made within it.
+ *
+ * @param name The task's name.
+ * @param description The task's description.
+ * @param action The task's action.
+ * @returns A task definition.
+ */
 export function internalTask<ArgsT extends TaskArguments> (
   name: string,
   description?: string,
   action?: ActionType<ArgsT>
 ): ConfigurableTaskDefinition;
 
+/**
+ * Creates a internaltask without description, overriding any previous
+ * task with the same name.
+ *
+ * @remarks The internaltasks won't be displayed in the CLI help messages.
+ * @remarks The action must await every async call made within it.
+ *
+ * @param name The task's name.
+ * @param action The task's action.
+ * @returns A task definition.
+ */
 export function internalTask<ArgsT extends TaskArguments> (
   name: string,
   action: ActionType<ArgsT>

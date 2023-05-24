@@ -46,6 +46,7 @@ export function resolveConfig (
     ...config,
     paths,
     networks: config.networks ?? {},
+    localnetworks: config.localnetworks ?? {},
     commands: config.commands ?? { // TODO: clean this up
       compile: "",
       schema: ""
