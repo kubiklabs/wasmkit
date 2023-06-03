@@ -76,6 +76,20 @@ const networks = {
     endpoint: 'http://localhost:26657/',
     chainId: 'testing-1',
     accounts: neutron_localnet_accounts,
+    fees: {
+      upload: {
+        amount: [{ amount: "100000", denom: "untrn" }],
+        gas: "500000",
+      },
+      init: {
+        amount: [{ amount: "50000", denom: "untrn" }],
+        gas: "250000",
+      },
+      exec: {
+        amount: [{ amount: "50000", denom: "untrn" }],
+        gas: "250000",
+      }
+    },
   },
   juno_testnet: {
     endpoint: 'https://rpc.uni.juno.deuslabs.fi/',
