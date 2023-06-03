@@ -107,3 +107,5 @@ dist
 
 packages/wasmkit/dist
 packages/wasmkit/node_modules
+packages/wasmkit/sample-project/playground
+package-lock.json

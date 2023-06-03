@@ -233,6 +233,7 @@ module.exports = {
     localnet: networks.localnet,
     mainnet: networks.neutron_mainnet,
   },
+   
   localnetworks: {
     juno: {
       docker_image: "uditgulati0/juno-node",
@@ -264,5 +265,11 @@ module.exports = {
   commands: {
     compile: "RUSTFLAGS='-C link-arg=-s' cargo build --release --target wasm32-unknown-unknown",
     schema: "cargo run --example schema",
-  }
+  },
+  playground: {
+    backgroundDark: "bgDark.png",
+    backgroundLight:"bgLight.png",
+    logoDark:"logoDark.png",
+    logoLight: "logoLight.png"
+  },
 };

@@ -137,6 +137,13 @@ export interface Commands {
   schema: string
 }
 
+export interface Playground {
+  backgroundDark: string
+  backgroundLight: string
+  logoDark: string
+  logoLight: string
+}
+
 export type WasmKitNetworkAccountsConfig =
   | WasmKitNetworkHDAccountsConfig
   | WasmKitNetworkAccountConfig[];
@@ -299,6 +306,8 @@ export interface ResolvedConfig extends WasmKitUserConfig {
   networks: Networks
   localnetworks: LocalNetworks
   commands: Commands
+  playground: Playground
+
 }
 
 /**
@@ -452,3 +461,23 @@ export type AnyU8a = Uint8Array | number[] | string;
 export type ContractFunction<T = any> = ( // eslint-disable-line  @typescript-eslint/no-explicit-any
   ...args: any[] // eslint-disable-line  @typescript-eslint/no-explicit-any
 ) => Promise<T>;
+
+// playground creation related
+export interface Property {
+  name: string
+  type: string
+  modifiers?: string[]
+}
+
+export interface Structure {
+  kind: string
+  name: string
+  properties?: Property[]
+}
+
+export interface CounterData {
+  default: {
+    deployInfo: DeployInfo
+    instantiateInfo: InstantiateInfo[]
+  }
+}

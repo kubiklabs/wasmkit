@@ -50,6 +50,12 @@ export function resolveConfig (
     commands: config.commands ?? { // TODO: clean this up
       compile: "",
       schema: ""
+    },
+    playground: config.playground ?? {
+      backgroundDark: "",
+      backgroundLight: "",
+      logoDark: "",
+      logoLight: ""
     }
   };
 

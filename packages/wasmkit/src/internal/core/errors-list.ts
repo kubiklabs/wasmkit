@@ -294,6 +294,15 @@ Please check that the configured keypair are correct.`,
       title: "Error while instantiating contract",
       description: "Received error response: %jsonLog%",
       shouldBeReported: false
+    },
+    CHECKPOINTS_NOT_FOUND: {
+      number: 33,
+      message: 'Checkpoint directory is missing. First initiate the contract.',
+      title: 'Checkpoint info not present.',
+      description: `You are trying to create playground without compiling the contracts.
+
+      You can learn how to use WasmKit by reading the [Getting Started guide](../getting-started).`,
+      shouldBeReported: false
     }
   },
   NETWORK: {
