@@ -6595,17 +6595,6 @@ polar-json-to-ts@^0.0.1:
     mz "^2.7.0"
     prettier "^2.6.2"
 
-polar-wasm-ast-types@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/polar-wasm-ast-types/-/polar-wasm-ast-types-0.4.1.tgz#5c5208a6c0c75e0e4c574ac12184df56a2f4ae7e"
-  integrity sha512-vYyK6TrUpNQfXJTB0clp1/O3o11Dyd/VWeI8uG1boGBeeQlctzJ8mr4K0vTcV+84WF7OcgtGU2YOGczn4dPpjA==
-  dependencies:
-    "@babel/runtime" "^7.18.3"
-    "@babel/types" "^7.18.4"
-    "@typescript-eslint/parser" "^5.30.0"
-    ast-stringify "0.1.0"
-    case "1.6.3"
-
 prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz"
