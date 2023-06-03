@@ -184,9 +184,11 @@ export class Contract {
     // }
     let info;
     // Load instantiate info for tag
-    for (const value of this.checkpointData[this.env.network.name].instantiateInfo ?? []) {
-      if (value.instantiateTag === this.instantiateTag) {
-        info = value;
+    if (this.checkpointData[this.env.network.name] !== undefined) {
+      for (const value of this.checkpointData[this.env.network.name].instantiateInfo ?? []) {
+        if (value.instantiateTag === this.instantiateTag) {
+          info = value;
+        }
       }
     }
     if (info) {

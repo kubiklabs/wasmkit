@@ -10,7 +10,7 @@ describe("counter", () => {
   async function setup() {
     const contract_owner = await getAccountByName("account_0");
     const contract = new SampleProjectContract();
-    await contract.setUpclient();
+    await contract.setupClient();
 
     return { contract_owner, contract };
   }
@@ -21,17 +21,24 @@ describe("counter", () => {
     const deploy_response = await contract.deploy(
       contract_owner,
       { // custom fees
-        amount: [{ amount: "90000", denom: "ujunox" }],
+        amount: [{ amount: "90000", denom: "untrn" }],
         gas: "35000000",
       }
     );
     console.log(deploy_response);
+
+    const customFees = { // custom fees
+      amount: [{ amount: "750000", denom: "untrn" }],
+      gas: "3000000",
+    };
     const contract_info = await contract.instantiate(
       {
         "count": 102
       },
       `deploy test ${runTs}`,
       contract_owner,
+      undefined, // tokens to tranfer
+      customFees,
     );
     console.log(contract_info);
   });
