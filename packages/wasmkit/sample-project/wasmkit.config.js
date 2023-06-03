@@ -1,8 +1,4 @@
 
-// TODO: remove the address and derive the account address
-// using chain's derivation page
-// find a good way to show user the address based on the network
-// they choose to run the script against
 const juno_testnet_accounts = [
   {
     name: 'account_0',
@@ -40,20 +36,35 @@ const osmosis_testnet_accounts = [
   },
 ];
 
-const localnet_accounts = [
+const neutron_localnet_accounts = [
   {
     name: 'account_0',
-    address: '',
-    mnemonic: ''
+    address: 'neutron1m9l358xunhhwds0568za49mzhvuxx9ux8xafx2',
+    mnemonic: 'banner spread envelope side kite person disagree path silver will brother under couch edit food venture squirrel civil budget number acquire point work mass'
   },
   {
     name: 'account_1',
-    address: '',
-    mnemonic: ''
+    address: 'neutron10h9stc5v6ntgeygf5xf945njqq5h32r54rf7kf',
+    mnemonic: 'veteran try aware erosion drink dance decade comic dawn museum release episode original list ability owner size tuition surface ceiling depth seminar capable only'
+  },
+  {
+    name: 'account_2',
+    address: 'neutron14xcrdjwwxtf9zr7dvaa97wy056se6r5erln9pf',
+    mnemonic: 'obscure canal because tomorrow tribe sibling describe satoshi kiwi upgrade bless empty math trend erosion oblige donate label birth chronic hazard ensure wreck shine'
   }
 ];
 
+const juno_localnet_accounts = [
+  {
+    name: 'account_0',
+    address: 'juno16g2rahf5846rxzp3fwlswy08fz8ccuwk03k57y',
+    mnemonic: 'clip hire initial neck maid actor venue client foam budget lock catalog sweet steak waste crater broccoli pipe steak sister coyote moment obvious choose'
+  },
+];
+
 const juno_mainnet_accounts = [
+];
+const neutron_mainnet_accounts = [
 ];
 const osmosis_mainnet_accounts = [
 ];
@@ -64,27 +75,102 @@ const networks = {
   localnet: {
     endpoint: 'http://localhost:26657/',
     chainId: 'testing-1',
-    accounts: localnet_accounts,
+    accounts: neutron_localnet_accounts,
   },
   juno_testnet: {
     endpoint: 'https://rpc.uni.juno.deuslabs.fi/',
     chainId: 'uni-6',
     accounts: juno_testnet_accounts,
+    fees: {
+      upload: {
+        amount: [{ amount: "100000", denom: "ujuno" }],
+        gas: "500000",
+      },
+      init: {
+        amount: [{ amount: "50000", denom: "ujuno" }],
+        gas: "250000",
+      },
+      exec: {
+        amount: [{ amount: "50000", denom: "ujuno" }],
+        gas: "250000",
+      }
+    },
   },
   juno_mainnet: {
     endpoint: 'https://juno-rpc.polkachu.com/',
     chainId: 'juno-1',
     accounts: juno_mainnet_accounts,
+    fees: {
+      upload: {
+        amount: [{ amount: "100000", denom: "ujuno" }],
+        gas: "500000",
+      },
+      init: {
+        amount: [{ amount: "50000", denom: "ujuno" }],
+        gas: "250000",
+      },
+      exec: {
+        amount: [{ amount: "50000", denom: "ujuno" }],
+        gas: "250000",
+      }
+    },
   },
   neutron_testnet: {
-    endpoint: 'https://rpc.baryon.ntrn.info/',
-    chainId: 'baryon-1',
+    endpoint: 'https://rpc-palvus.pion-1.ntrn.tech/',
+    chainId: 'pion-1',
     accounts: neutron_testnet_accounts,
+    fees: {
+      upload: {
+        amount: [{ amount: "100000", denom: "untrn" }],
+        gas: "500000",
+      },
+      init: {
+        amount: [{ amount: "50000", denom: "untrn" }],
+        gas: "250000",
+      },
+      exec: {
+        amount: [{ amount: "50000", denom: "untrn" }],
+        gas: "250000",
+      }
+    },
+  },
+  neutron_mainnet: {
+    endpoint: 'https://rpc-kralum.neutron-1.neutron.org',
+    chainId: 'neutron-1',
+    accounts: neutron_mainnet_accounts,
+    fees: {
+      upload: {
+        amount: [{ amount: "100000", denom: "untrn" }],
+        gas: "500000",
+      },
+      init: {
+        amount: [{ amount: "50000", denom: "untrn" }],
+        gas: "250000",
+      },
+      exec: {
+        amount: [{ amount: "50000", denom: "untrn" }],
+        gas: "250000",
+      }
+    },
   },
   archway_testnet: {
     endpoint: 'https://rpc.constantine-2.archway.tech',
     chainId: 'constantine-2',
     accounts: archway_testnet_accounts,
+    fees: {
+      upload: {
+        amount: [{ amount: "100000", denom: "uconst" }],
+        gas: "500000",
+      },
+      init: {
+        amount: [{ amount: "50000", denom: "uconst" }],
+        gas: "250000",
+      },
+      exec: {
+        amount: [{ amount: "50000", denom: "uconst" }],
+        gas: "250000",
+      }
+    },
   },
   osmosis_testnet: {
     endpoint: 'https://rpc.testnet.osmosis.zone/',
@@ -109,15 +195,29 @@ const networks = {
     endpoint: 'https://rpc.osmosis.zone/',
     chainId: 'osmosis-1',
     accounts: osmosis_mainnet_accounts,
+    fees: {
+      upload: {
+        amount: [{ amount: "100000", denom: "uosmo" }],
+        gas: "500000",
+      },
+      init: {
+        amount: [{ amount: "50000", denom: "uosmo" }],
+        gas: "250000",
+      },
+      exec: {
+        amount: [{ amount: "50000", denom: "uosmo" }],
+        gas: "250000",
+      }
+    },
   }
 };
 
 module.exports = {
   networks: {
-    default: networks.juno_testnet,
-    testnet: networks.juno_testnet,
+    default: networks.neutron_testnet,
+    testnet: networks.neutron_testnet,
     localnet: networks.localnet,
-    mainnet: networks.juno_mainnet,
+    mainnet: networks.neutron_mainnet,
   },
   localnetworks: {
     juno: {

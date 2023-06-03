@@ -65,6 +65,16 @@ export async function getSigningClient (
         wallet
       );
     }
+    case ChainType.Neutron: {
+      const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+        hdPaths: [makeCosmoshubPath(0)],
+        prefix: "neutron"
+      });
+      return await SigningCosmWasmClient.connectWithSigner(
+        network.config.endpoint,
+        wallet
+      );
+    }
     case ChainType.Osmosis: {
       const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
         hdPaths: [makeCosmoshubPath(0)],
@@ -174,6 +184,7 @@ export async function storeCode (
     case ChainType.Juno:
     case ChainType.Osmosis:
     case ChainType.Archway:
+    case ChainType.Neutron:
     case ChainType.Terra: {
       const uploadReceipt = await signingClient.upload(
         sender,
@@ -245,6 +256,7 @@ export async function instantiateContract (
       return res.value;
     }
     case ChainType.Juno:
+    case ChainType.Neutron:
     case ChainType.Osmosis:
     case ChainType.Archway:
     case ChainType.Terra: {
@@ -306,6 +318,7 @@ export async function executeTransaction (
       );
     }
     case ChainType.Juno:
+    case ChainType.Neutron:
     case ChainType.Osmosis:
     case ChainType.Archway:
     case ChainType.Terra: {
@@ -349,6 +362,7 @@ export async function sendQuery (
       });
     }
     case ChainType.Juno:
+    case ChainType.Neutron:
     case ChainType.Osmosis:
     case ChainType.Archway:
     case ChainType.Terra: {
@@ -390,6 +404,13 @@ Promise<Coin[]> {
     }
     case ChainType.Juno: {
       const info = await client?.getBalance(accountAddress, "ujuno");
+      if (info === undefined) {
+        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
+      }
+      return info;
+    }
+    case ChainType.Neutron: {
+      const info = await client?.getBalance(accountAddress, "untrn");
       if (info === undefined) {
         throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
       }
