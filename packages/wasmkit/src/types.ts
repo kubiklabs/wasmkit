@@ -96,7 +96,29 @@ export interface WasmKitNetworkUserConfig {
   gasLimit?: string | number
   chainId: string
   // TODO: check fees // add type
-  fees?: Partial<any>
+  fees?: Partial<{
+    upload: {
+        amount: {
+            amount: string;
+            denom: string;
+        }[];
+        gas: string;
+    };
+    init: {
+        amount: {
+            amount: string;
+            denom: string;
+        }[];
+        gas: string;
+    };
+    exec: {
+        amount: {
+            amount: string;
+            denom: string;
+        }[];
+        gas: string;
+    };
+  }>
 }
 
 export interface WasmKitLocalNetworkUserConfig {

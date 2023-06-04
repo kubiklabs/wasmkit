@@ -72,22 +72,41 @@ const osmosis_mainnet_accounts = [
 // Default list covers most of the supported network
 // Networks which are not required can be removed from here
 const networks = {
-  localnet: {
+  neutron_localnet: {
     endpoint: 'http://localhost:26657/',
     chainId: 'testing-1',
     accounts: neutron_localnet_accounts,
     fees: {
       upload: {
-        amount: [{ amount: "100000", denom: "untrn" }],
-        gas: "500000",
+        amount: [{ amount: "750000", denom: "untrn" }],
+        gas: "3000000",
       },
       init: {
-        amount: [{ amount: "50000", denom: "untrn" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "untrn" }],
+        gas: "1000000",
       },
       exec: {
-        amount: [{ amount: "50000", denom: "untrn" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "untrn" }],
+        gas: "1000000",
+      }
+    },
+  },
+  juno_localnet: {
+    endpoint: 'http://localhost:26657/',
+    chainId: 'testing-1',
+    accounts: juno_localnet_accounts,
+    fees: {
+      upload: {
+        amount: [{ amount: "750000", denom: "ujunox" }],
+        gas: "3000000",
+      },
+      init: {
+        amount: [{ amount: "250000", denom: "ujunox" }],
+        gas: "1000000",
+      },
+      exec: {
+        amount: [{ amount: "250000", denom: "ujunox" }],
+        gas: "1000000",
       }
     },
   },
@@ -97,16 +116,16 @@ const networks = {
     accounts: juno_testnet_accounts,
     fees: {
       upload: {
-        amount: [{ amount: "100000", denom: "ujuno" }],
-        gas: "500000",
+        amount: [{ amount: "750000", denom: "ujunox" }],
+        gas: "3000000",
       },
       init: {
-        amount: [{ amount: "50000", denom: "ujuno" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "ujunox" }],
+        gas: "1000000",
       },
       exec: {
-        amount: [{ amount: "50000", denom: "ujuno" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "ujunox" }],
+        gas: "1000000",
       }
     },
   },
@@ -116,16 +135,16 @@ const networks = {
     accounts: juno_mainnet_accounts,
     fees: {
       upload: {
-        amount: [{ amount: "100000", denom: "ujuno" }],
-        gas: "500000",
+        amount: [{ amount: "750000", denom: "ujuno" }],
+        gas: "3000000",
       },
       init: {
-        amount: [{ amount: "50000", denom: "ujuno" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "ujuno" }],
+        gas: "1000000",
       },
       exec: {
-        amount: [{ amount: "50000", denom: "ujuno" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "ujuno" }],
+        gas: "1000000",
       }
     },
   },
@@ -135,16 +154,16 @@ const networks = {
     accounts: neutron_testnet_accounts,
     fees: {
       upload: {
-        amount: [{ amount: "100000", denom: "untrn" }],
-        gas: "500000",
+        amount: [{ amount: "750000", denom: "untrn" }],
+        gas: "3000000",
       },
       init: {
-        amount: [{ amount: "50000", denom: "untrn" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "untrn" }],
+        gas: "1000000",
       },
       exec: {
-        amount: [{ amount: "50000", denom: "untrn" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "untrn" }],
+        gas: "1000000",
       }
     },
   },
@@ -154,16 +173,16 @@ const networks = {
     accounts: neutron_mainnet_accounts,
     fees: {
       upload: {
-        amount: [{ amount: "100000", denom: "untrn" }],
-        gas: "500000",
+        amount: [{ amount: "750000", denom: "untrn" }],
+        gas: "3000000",
       },
       init: {
-        amount: [{ amount: "50000", denom: "untrn" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "untrn" }],
+        gas: "1000000",
       },
       exec: {
-        amount: [{ amount: "50000", denom: "untrn" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "untrn" }],
+        gas: "1000000",
       }
     },
   },
@@ -173,16 +192,16 @@ const networks = {
     accounts: archway_testnet_accounts,
     fees: {
       upload: {
-        amount: [{ amount: "100000", denom: "uconst" }],
-        gas: "500000",
+        amount: [{ amount: "750000", denom: "uconst" }],
+        gas: "3000000",
       },
       init: {
-        amount: [{ amount: "50000", denom: "uconst" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "uconst" }],
+        gas: "1000000",
       },
       exec: {
-        amount: [{ amount: "50000", denom: "uconst" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "uconst" }],
+        gas: "1000000",
       }
     },
   },
@@ -192,16 +211,16 @@ const networks = {
     accounts: osmosis_testnet_accounts,
     fees: {
       upload: {
-        amount: [{ amount: "100000", denom: "uosmo" }],
-        gas: "500000",
+        amount: [{ amount: "750000", denom: "uosmo" }],
+        gas: "3000000",
       },
       init: {
-        amount: [{ amount: "50000", denom: "uosmo" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "uosmo" }],
+        gas: "1000000",
       },
       exec: {
-        amount: [{ amount: "50000", denom: "uosmo" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "uosmo" }],
+        gas: "1000000",
       }
     },
   },
@@ -211,16 +230,16 @@ const networks = {
     accounts: osmosis_mainnet_accounts,
     fees: {
       upload: {
-        amount: [{ amount: "100000", denom: "uosmo" }],
-        gas: "500000",
+        amount: [{ amount: "750000", denom: "uosmo" }],
+        gas: "3000000",
       },
       init: {
-        amount: [{ amount: "50000", denom: "uosmo" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "uosmo" }],
+        gas: "1000000",
       },
       exec: {
-        amount: [{ amount: "50000", denom: "uosmo" }],
-        gas: "250000",
+        amount: [{ amount: "250000", denom: "uosmo" }],
+        gas: "1000000",
       }
     },
   }
@@ -230,7 +249,7 @@ module.exports = {
   networks: {
     default: networks.neutron_testnet,
     testnet: networks.neutron_testnet,
-    localnet: networks.localnet,
+    localnet: networks.juno_localnet,
     mainnet: networks.neutron_mainnet,
   },
    

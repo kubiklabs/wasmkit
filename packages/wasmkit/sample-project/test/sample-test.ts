@@ -27,10 +27,10 @@ describe("counter", () => {
     );
     console.log(deploy_response);
 
-    const customFees = { // custom fees
-      amount: [{ amount: "750000", denom: "untrn" }],
-      gas: "3000000",
-    };
+    // const customFees = { // custom fees
+    //   amount: [{ amount: "750000", denom: "untrn" }],
+    //   gas: "3000000",
+    // };
     const contract_info = await contract.instantiate(
       {
         "count": 102
@@ -38,7 +38,7 @@ describe("counter", () => {
       `deploy test ${runTs}`,
       contract_owner,
       undefined, // tokens to tranfer
-      customFees,
+      // customFees,
     );
     console.log(contract_info);
   });

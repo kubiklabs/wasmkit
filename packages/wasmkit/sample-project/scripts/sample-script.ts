@@ -10,24 +10,23 @@ export default async function run () {
 
  const deploy_response = await contract.deploy(
     contract_owner,
-    { // custom fees
-      amount: [{ amount: "750000", denom: "untrn" }],
-      gas: "3000000",
-    }
+    // { // custom fees
+    //   amount: [{ amount: "750000", denom: "untrn" }],
+    //   gas: "3000000",
+    // }
   );
   console.log(deploy_response);
 
-  const customFees = { // custom fees
-    amount: [{ amount: "750000", denom: "untrn" }],
-    gas: "3000000",
-
-  };
+  // const customFees = { // custom fees
+  //   amount: [{ amount: "750000", denom: "untrn" }],
+  //   gas: "3000000",
+  // };
   const contract_info = await contract.instantiate(
     {"count": 102},
     `deploy test ${runTs}`,
     contract_owner,
     undefined,  // transferAmount
-    customFees,
+    // customFees,
   );
   console.log(contract_info);
 
@@ -38,7 +37,10 @@ export default async function run () {
   console.log(response);
 
   const ex_response = await contract.increment(
-    {account: contract_owner, customFees: customFees}
+    {
+      account: contract_owner,
+      // customFees: customFees,
+    }
   );
   console.log(ex_response);
 }

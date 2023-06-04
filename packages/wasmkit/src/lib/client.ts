@@ -189,7 +189,7 @@ export async function storeCode (
       const uploadReceipt = await signingClient.upload(
         sender,
         wasmFileContent,
-        customFees ?? defaultFees.upload,
+        customFees ?? network.config.fees?.upload ?? defaultFees.upload,
         "uploading"
       );
       const codeId: number = uploadReceipt.codeId;
@@ -265,7 +265,7 @@ export async function instantiateContract (
         codeId,
         initArgs,
         label,
-        customFees ?? defaultFees.init,
+        customFees ?? network.config.fees?.init ?? defaultFees.init,
         {
           funds: transferAmount,
           admin: contractAdmin
@@ -329,7 +329,7 @@ export async function executeTransaction (
         sender,
         contractAddress,
         msgData,
-        customFeesVal ?? defaultFees.exec,
+        customFeesVal ?? network.config.fees?.exec ?? defaultFees.exec,
         memo === undefined ? "executing" : memo,
         transferAmount
       );
