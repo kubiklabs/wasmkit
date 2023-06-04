@@ -1,6 +1,6 @@
 {
   "name": "@arufa/wasmkit",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "main": "dist/index.js",
   "repository": "https://github.com/arufa-research/wasmkit.git",
   "description": "Wasmkit is a development environment to compile, deploy, test, run cosmwasm contracts on different networks.",
