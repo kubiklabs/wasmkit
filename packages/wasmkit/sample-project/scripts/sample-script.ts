@@ -1,32 +1,24 @@
 import { getAccountByName } from "@arufa/wasmkit";
 
-import { CounterContract } from "../artifacts/typescript_schema/CounterContract";
+import { SampleProjectContract } from "../artifacts/typescript_schema/SampleProjectContract";
 
 export default async function run () {
   const runTs = String(new Date());
   const contract_owner = await getAccountByName("account_0");
-  const contract = new CounterContract();
+  const contract = new SampleProjectContract();
   await contract.setupClient();
 
  const deploy_response = await contract.deploy(
     contract_owner,
-    // { // custom fees
-    //   amount: [{ amount: "750000", denom: "untrn" }],
-    //   gas: "3000000",
-    // }
   );
   console.log(deploy_response);
 
-  // const customFees = { // custom fees
-  //   amount: [{ amount: "750000", denom: "untrn" }],
-  //   gas: "3000000",
-  // };
   const contract_info = await contract.instantiate(
     {"count": 102},
     `deploy test ${runTs}`,
     contract_owner,
     undefined,  // transferAmount
-    // customFees,
+    // customFees, You add here
   );
   console.log(contract_info);
 
@@ -39,7 +31,6 @@ export default async function run () {
   const ex_response = await contract.increment(
     {
       account: contract_owner,
-      // customFees: customFees,
     }
   );
   console.log(ex_response);
