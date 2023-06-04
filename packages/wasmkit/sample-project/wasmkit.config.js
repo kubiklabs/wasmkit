@@ -15,8 +15,8 @@ const juno_testnet_accounts = [
 const neutron_testnet_accounts = [
   {
     name: 'account_0',
-    address: 'neutron1ytc8aerh9twa5w5lfn4d76nnj4r2svyz0yah6r',
-    mnemonic: 'fatigue renew birth gossip bar suffer peanut expire bulb forest garage upper'
+    address: 'neutron1jtdje5vq42sknl22r4wu9sahryu5wcrdqsccjh',
+    mnemonic: 'category fine rapid trumpet dune early wish under nothing dance property wreck'
   },
 ];
 

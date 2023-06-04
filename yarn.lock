@@ -37,8 +37,8 @@
   dependencies:
     "@archwayhq/arch3-core" "0.1.0"
 
-"@arufa/wasmkit@file:D:\\Arufa\\wasmkit-playground\\packages\\wasmkit":
-  version "0.1.6"
+"@arufa/wasmkit@file:/Users/ay/arufa-research/wasmkit/packages/wasmkit":
+  version "0.2.4"
   resolved "file:packages/wasmkit"
   dependencies:
     "@archwayhq/arch3.js" "^0.1.0"
@@ -2159,7 +2159,7 @@
   dependencies:
     "@types/ms" "*"
 
-"@types/download-git-repo@file:D:\\Arufa\\wasmkit-playground\\packages\\types-download-git-repo":
+"@types/download-git-repo@file:/Users/ay/arufa-research/wasmkit/packages/types-download-git-repo":
   version "0.1.0"
   resolved "file:packages/types-download-git-repo"
 
@@ -2304,9 +2304,7 @@
   integrity sha512-qjd88DrCxupx/kJD5yQgZdcYKZKSIGBVDIBE1/LTGcNm3d2Np/jxojkdePDdfnBHJc5W7vSMpbJ1aB7p/Py69A==
 
 "@types/node@^14.18.48":
-  version "14.18.48"
-  resolved "https://registry.npmjs.org/@types/node/-/node-14.18.48.tgz"
-  integrity sha512-iL0PIMwejpmuVHgfibHpfDwOdsbmB50wr21X71VnF5d7SsBF7WK+ZvP/SCcFm7Iwb9iiYSap9rlrdhToNAWdxg==
+  version "14.18.31"
 
 "@types/node@>=13.7.0":
   version "18.8.0"
@@ -4536,6 +4534,9 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
+
+fsevents@^2.3.2, fsevents@~2.3.1, fsevents@~2.3.2:
+  version "2.3.2"
 
 function-bind@^1.1.1:
   version "1.1.1"
@@ -8047,7 +8048,7 @@ wasm-opt@^1.2.1:
     node-fetch "^2.6.7"
     tar "^6.1.11"
 
-wasmkit-ast-types@^0.4.1, "wasmkit-ast-types@file:D:\\Arufa\\wasmkit-playground\\packages\\wasmkit-ast-types":
+wasmkit-ast-types@^0.4.1, "wasmkit-ast-types@file:/Users/ay/arufa-research/wasmkit/packages/wasmkit-ast-types":
   version "0.4.1"
   resolved "file:packages/wasmkit-ast-types"
   dependencies:
