@@ -32,6 +32,7 @@ async function nodeInfo (_taskArgs: TaskArguments, env: WasmkitRuntimeEnvironmen
     case ChainType.Osmosis:
     case ChainType.Archway:
     case ChainType.Neutron:
+    case ChainType.Atom:
     case ChainType.Terra: {
       console.log("ChainId: ", await client.getChainId());
       console.log("Block height: ", await client.getHeight());

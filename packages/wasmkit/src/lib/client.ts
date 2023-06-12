@@ -22,6 +22,7 @@ export async function getClient (
     case ChainType.Juno:
     case ChainType.Osmosis:
     case ChainType.Terra:
+    case ChainType.Atom:
     case ChainType.Neutron: {
       return await CosmWasmClient.connect(network.config.endpoint);
     }
@@ -69,6 +70,16 @@ export async function getSigningClient (
       const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
         hdPaths: [makeCosmoshubPath(0)],
         prefix: "neutron"
+      });
+      return await SigningCosmWasmClient.connectWithSigner(
+        network.config.endpoint,
+        wallet
+      );
+    }
+    case ChainType.Atom: {
+      const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+        hdPaths: [makeCosmoshubPath(0)],
+        prefix: "cosmos"
       });
       return await SigningCosmWasmClient.connectWithSigner(
         network.config.endpoint,
@@ -127,6 +138,8 @@ export function getChainFromAccount (network: Network): ChainType {
     return ChainType.Archway;
   } else if (network.config.accounts[0].address.startsWith("neutron")) {
     return ChainType.Neutron;
+  } else if (network.config.accounts[0].address.startsWith("cosmos")) {
+    return ChainType.Atom;
   } else if (network.config.accounts[0].address.startsWith("terra")) {
     return ChainType.Terra;
   } else {
@@ -185,6 +198,7 @@ export async function storeCode (
     case ChainType.Osmosis:
     case ChainType.Archway:
     case ChainType.Neutron:
+    case ChainType.Atom:
     case ChainType.Terra: {
       const uploadReceipt = await signingClient.upload(
         sender,
@@ -257,6 +271,7 @@ export async function instantiateContract (
     }
     case ChainType.Juno:
     case ChainType.Neutron:
+    case ChainType.Atom:
     case ChainType.Osmosis:
     case ChainType.Archway:
     case ChainType.Terra: {
@@ -319,6 +334,7 @@ export async function executeTransaction (
     }
     case ChainType.Juno:
     case ChainType.Neutron:
+    case ChainType.Atom:
     case ChainType.Osmosis:
     case ChainType.Archway:
     case ChainType.Terra: {
@@ -363,6 +379,7 @@ export async function sendQuery (
     }
     case ChainType.Juno:
     case ChainType.Neutron:
+    case ChainType.Atom:
     case ChainType.Osmosis:
     case ChainType.Archway:
     case ChainType.Terra: {
@@ -411,6 +428,13 @@ Promise<Coin[]> {
     }
     case ChainType.Neutron: {
       const info = await client?.getBalance(accountAddress, "untrn");
+      if (info === undefined) {
+        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
+      }
+      return info;
+    }
+    case ChainType.Atom: {
+      const info = await client?.getBalance(accountAddress, "uatom");
       if (info === undefined) {
         throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
       }

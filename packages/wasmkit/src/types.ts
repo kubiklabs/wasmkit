@@ -22,6 +22,7 @@ export enum ChainType {
   Osmosis,
   Archway,
   Neutron,
+  Atom,
   Terra,
   Injective,
 }
