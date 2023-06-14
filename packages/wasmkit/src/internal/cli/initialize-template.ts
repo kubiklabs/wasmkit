@@ -3,11 +3,9 @@ import enquirer from "enquirer";
 import fse from "fs-extra";
 import path from "path";
 
+import { DEFAULT_TEMPLATE, TEMPLATES_GIT_REMOTE } from "../../lib/constants";
 import { copyTemplatetoDestination, fetchRepository, setUpTempDirectory } from "../util/fetch";
 import { createConfirmationPrompt, installDependencies, printSuggestedCommands, printWelcomeMessage } from "./project-creation";
-
-const TEMPLATES_GIT_REMOTE = 'arufa-research/wasmkit-templates';
-const DEFAULT_TEMPLATE = 'counter';
 
 function isYarnProject (destination: string): boolean {
   return fse.existsSync(path.join(destination, "yarn.lock"));

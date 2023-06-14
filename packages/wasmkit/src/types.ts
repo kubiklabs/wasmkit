@@ -99,26 +99,26 @@ export interface WasmKitNetworkUserConfig {
   // TODO: check fees // add type
   fees?: Partial<{
     upload: {
-        amount: {
-            amount: string;
-            denom: string;
-        }[];
-        gas: string;
-    };
+      amount: Array<{
+        amount: string
+        denom: string
+      }>
+      gas: string
+    }
     init: {
-        amount: {
-            amount: string;
-            denom: string;
-        }[];
-        gas: string;
-    };
+      amount: Array<{
+        amount: string
+        denom: string
+      }>
+      gas: string
+    }
     exec: {
-        amount: {
-            amount: string;
-            denom: string;
-        }[];
-        gas: string;
-    };
+      amount: Array<{
+        amount: string
+        denom: string
+      }>
+      gas: string
+    }
   }>
 }
 
@@ -246,6 +246,7 @@ export interface Config {
   paths?: UserPaths
   mocha?: Mocha.MochaOptions
   commands?: Commands
+  playground?: Playground
 }
 
 export interface WasmKitUserConfig {
@@ -256,6 +257,7 @@ export interface WasmKitUserConfig {
   commands?: Commands
   mocha?: Mocha.MochaOptions
   docker?: DockerConfig
+  playground?: Playground
 }
 
 export interface WasmKitConfig {
@@ -266,6 +268,7 @@ export interface WasmKitConfig {
   commands: Commands
   mocha: Mocha.MochaOptions
   docker: DockerConfig
+  playground: Playground
 }
 
 // Plugins config functionality
@@ -329,7 +332,7 @@ export interface ResolvedConfig extends WasmKitUserConfig {
   networks: Networks
   localnetworks: LocalNetworks
   commands: Commands
-  playground: Playground
+  playground?: Playground
 
 }
 
@@ -498,9 +501,8 @@ export interface Structure {
   properties?: Property[]
 }
 
-export interface CounterData {
-  default: {
-    deployInfo: DeployInfo
-    instantiateInfo: InstantiateInfo[]
-  }
+export interface ContractListInfo {
+  chainId: string |undefined
+  codeId: number | undefined
+  contractAddress: string |undefined
 }

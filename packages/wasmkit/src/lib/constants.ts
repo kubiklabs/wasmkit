@@ -39,3 +39,11 @@ export const defaultFeesTerra = {
     gas: "1250000"
   }
 };
+// initialize template
+export const TEMPLATES_GIT_REMOTE = 'arufa-research/wasmkit-templates';
+export const DEFAULT_TEMPLATE = 'counter';
+
+// playground related constants
+
+export const TEMPLATES_GIT_REMOTE_PLAYGROUND = "arufa-research/wasmkit-react-playground";
+export const DEFAULT_TEMPLATE_PLAYGROUND = "playground";

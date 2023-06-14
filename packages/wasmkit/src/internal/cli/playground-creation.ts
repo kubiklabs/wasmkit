@@ -1,47 +1,69 @@
 import chalk from "chalk";
+import { ExecException } from "child_process";
+import { error } from "console";
 import * as fs from "fs";
 import * as yaml from "js-yaml";
-// import fsExtra from "fs-extra";
 import path from "path";
 import * as ts from "typescript";
 
-import { CounterData, Property, Structure, WasmkitRuntimeEnvironment } from "../../types";
+import { loadCheckpoint } from "../../lib/checkpoints";
+import { CheckpointInfo, ContractListInfo, Property, Structure, WasmkitRuntimeEnvironment } from "../../types";
 import { WasmkitError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 import { initialize } from "./initialize-playground";
-export function printSuggestedCommands (projectName: string): void {
+export function printSuggestedCommands (
+  projectName: string,
+  packageManager: string,
+  shouldShowInstallationInstructions: boolean
+): void {
   const currDir = process.cwd();
   const projectPath = path.join(currDir, projectName);
   console.log(`Success! Created project at ${chalk.greenBright(projectPath)}.`);
 
   console.log(`Begin by typing:`);
-  console.log(`  cd ${projectName}`);
-  console.log(`  npm install`);
-  console.log(`  npm start`);
+  console.log(chalk.yellow(`  cd ${projectName}`));
+  if (shouldShowInstallationInstructions) {
+    console.log(chalk.yellow(`  ${packageManager} install`));
+  }
+  console.log(chalk.yellow(`  ${packageManager} start`));
 }
 
-function createContractListJson (contractDir: string, destinationDir: string): void {
+function createContractListJson (
+  contractDir: string,
+  destinationDir: string,
+  env: WasmkitRuntimeEnvironment
+): void {
   const files = fs.readdirSync(contractDir); // Get an array of all files in the directory
   const dest = path.join(destinationDir, "contractList.json");
   for (const file of files) {
     const fileName = path.parse(file).name;
     const filePath = path.join(contractDir, file);
-    const yamlFile = fs.readFileSync(filePath, "utf8");
-    const yamlData = yaml.load(yamlFile) as CounterData;
-    const codeId = yamlData.default.deployInfo.codeId;
-    const codeAddress = yamlData.default.instantiateInfo[0].contractAddress;
-    const jsonData = {
-      [fileName]: {
-        codeId,
-        codeAddress
+    const yamlData = loadCheckpoint(filePath);
+    const temp = Object.keys(yamlData);
+    const jsonData: Record<string, Record<string, ContractListInfo>> = {};
+    temp.forEach((keys) => {
+      const info: CheckpointInfo = yamlData[keys];
+      const checkpointInf: ContractListInfo = {
+        chainId: env.config.networks[keys].chainId,
+        codeId: info.deployInfo?.codeId,
+        contractAddress: info.instantiateInfo?.[0].contractAddress
+      };
+      const data: Record<string, ContractListInfo> = {
+        [keys]: checkpointInf
+      };
+      if (jsonData[fileName]) {
+        // Merge existing data with new data
+        jsonData[fileName] = { ...jsonData[fileName], ...data };
+      } else {
+        // Add new data
+        jsonData[fileName] = data;
       }
-    };
+    });
     let existingData: Record<string, unknown> = {};
     if (fs.existsSync(dest)) {
       const existingContent = fs.readFileSync(dest, "utf8");
       existingData = JSON.parse(existingContent);
     }
-    // Merge existing data with new data
     const mergedData = { ...existingData, ...jsonData };
     fs.writeFileSync(dest, JSON.stringify(mergedData, null, 2));
   }
@@ -114,7 +136,6 @@ function convertTypescriptFileToJson (
     const existingContent = fs.readFileSync(outputFilePath, "utf8");
     existingData = JSON.parse(existingContent);
   }
-  // Merge existing data with new data
   const mergedData = { ...existingData, ...jsonData };
   fs.writeFileSync(outputFilePath, JSON.stringify(mergedData, null, 2));
 }
@@ -125,7 +146,6 @@ function processFilesInFolder (folderPath: string, destPath: string): void {
   files.forEach((file) => {
     const filePath = path.join(folderPath, file);
     const name = path.parse(file).name;
-    // console.log(schemaDest);
     convertTypescriptFileToJson(filePath, schemaDest, name);
   });
 }
@@ -143,9 +163,13 @@ function copyStaticFiles (
   destinationPath: string,
   env: WasmkitRuntimeEnvironment
 ): void {
-  const data: any = env.config.playground;
-  for (const key in data) {
-    handleStaticFile(path.join(srcPath, data[key]), path.join(destinationPath), key);
+  if (env.config.playground) {
+    const data: any = env.config.playground;
+    for (const key in data) {
+      if (data[key].length !== 0) {
+        handleStaticFile(path.join(srcPath, data[key]), path.join(destinationPath), key);
+      }
+    }
   }
 }
 
@@ -187,27 +211,21 @@ export async function createPlayground (
     const ContractDir = path.join(playgroundDest, "contracts");
     createDir(ContractDir);
     const schemaDest = path.join(ContractDir, "schema");
-    // const contracts = path.join(artifacts, "contracts");
     const instantiateDir = path.join(ContractDir, "instantiateInfo");
     createDir(instantiateDir);
-
-    createContractListJson(checkpointsDir, instantiateDir);
-    // createYamlToJson(checkpointsDir, instantiateDir);
-
+    createContractListJson(checkpointsDir, instantiateDir, env);
     const contractsSchema = path.join(artifacts, "typescript_schema");
     createDir(schemaDest);
     processFilesInFolder(contractsSchema, schemaDest);
-    const staticFilesDest = path.join(playgroundDest, "assets", "img");
-    const staticFilesSrc = path.join(currDir, "static");
-    copyStaticFiles(staticFilesSrc, staticFilesDest, env);
-    //  console.log(staticFilesDest);
+    if (env.config.playground) {
+      const staticFilesDest = path.join(playgroundDest, "assets", "img");
+      const staticFilesSrc = path.join(currDir);
+      copyStaticFiles(staticFilesSrc, staticFilesDest, env);
+    }
     return;
   }
-
   console.log(chalk.cyan(`★ Welcome to Junokit Playground v1.0 ★`));
   console.log("\n★", chalk.cyan("Project created"), "★\n");
-
-  printSuggestedCommands(projectName);
 }
 
 export function createConfirmationPrompt (
@@ -247,18 +265,35 @@ export function createConfirmationPrompt (
     }
   };
 }
+export async function installDependencies (
+  packageManager: string,
+  args: string,
+  location?: string
+): Promise<boolean> {
+  const { exec } = await import("child_process");
+  const command = packageManager + " " + args;
+  return await new Promise((resolve, reject) => {
+    const childProcess = exec(command, { cwd: location });
 
-// function isInstalled (dep: string): boolean {
-//   const packageJson = fsExtra.readJSONSync("package.json");
-//   const allDependencies = {
-//     ...packageJson.dependencies,
-//     ...packageJson.devDependencies,
-//     ...packageJson.optionalDependencies
-//   };
+    childProcess.stdout?.on("data", (data: string) => {
+      console.log(data.toString());
+    });
 
-//   return dep in allDependencies;
-// }
+    childProcess.stderr?.on("data", (data: string) => {
+      console.error(data.toString());
+    });
 
-// function isYarnProject (): boolean {
-//   return fsExtra.pathExistsSync("yarn.lock");
-// }
+    childProcess.on("close", (code: number) => {
+      if (code === 0) {
+        resolve(true);
+      } else {
+        reject(new Error(`Command failed with code: ${code}`));
+      }
+    });
+
+    childProcess.on("error", (error: ExecException) => {
+      console.error("Error executing command:", error);
+      reject(error);
+    });
+  });
+}
