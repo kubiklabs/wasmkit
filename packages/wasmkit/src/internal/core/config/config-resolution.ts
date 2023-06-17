@@ -39,23 +39,36 @@ export function resolveConfig (
 ): ResolvedConfig {
   const config: Partial<ResolvedConfig> = mergeUserAndDefaultConfigs(defaultConfig, userConfig);
 
-  const paths = userConfigPath !== undefined
-    ? resolveProjectPaths(userConfigPath, userConfig.paths)
-    : undefined;
+  const paths =
+    userConfigPath !== undefined
+      ? resolveProjectPaths(userConfigPath, userConfig.paths)
+      : undefined;
   const resolved: ResolvedConfig = {
     ...config,
     paths,
     networks: config.networks ?? {},
     localnetworks: config.localnetworks ?? {},
-    commands: config.commands ?? { // TODO: clean this up
+    commands: config.commands ?? {
+      // TODO: clean this up
       compile: "",
       schema: ""
     },
     playground: config.playground ?? {
-      backgroundDark: "",
-      backgroundLight: "",
+      title: "",
+      tagline: "",
+      favicon: "",
+      logoLight: "",
       logoDark: "",
-      logoLight: ""
+      theme: {
+        light_background: "",
+        dark_background: ""
+      },
+      socials: {
+        twitter: "",
+        discord: "",
+        telegram: "",
+        github: ""
+      }
     }
   };
 
@@ -96,9 +109,9 @@ export function resolveProjectPaths (
   const configDir = path.dirname(userConfigPath);
   const root = resolvePathFrom(configDir, "", userPaths.root);
 
-  const otherPathsEntries = Object.entries<string>(userPaths as StrMap).map<
-  [string, string]
-  >(([name, value]) => [name, resolvePathFrom(root, value)]);
+  const otherPathsEntries = Object.entries<string>(userPaths as StrMap).map<[string, string]>(
+    ([name, value]) => [name, resolvePathFrom(root, value)]
+  );
 
   const otherPaths = fromEntries(otherPathsEntries);
 

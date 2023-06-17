@@ -161,10 +161,22 @@ export interface Commands {
 }
 
 export interface Playground {
-  backgroundDark: string
-  backgroundLight: string
-  logoDark: string
+  title: string
+  tagline: string
+  favicon: string
   logoLight: string
+  logoDark: string
+  theme: {
+    light_background: string
+    dark_background: string
+  }
+  socials: {
+    twitter: string
+    discord: string
+    telegram: string
+    github: string
+  }
+
 }
 
 export type WasmKitNetworkAccountsConfig =

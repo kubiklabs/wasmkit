@@ -1,3 +1,4 @@
+import { RecordExpression } from "@babel/types";
 import chalk from "chalk";
 import { ExecException } from "child_process";
 import { error } from "console";
@@ -28,7 +29,7 @@ export function printSuggestedCommands (
   console.log(chalk.yellow(`  ${packageManager} start`));
 }
 
-function createContractListJson (
+export function createContractListJson (
   contractDir: string,
   destinationDir: string,
   env: WasmkitRuntimeEnvironment
@@ -69,7 +70,7 @@ function createContractListJson (
   }
 }
 
-function convertTypescriptFileToJson (
+export function convertTypescriptFileToJson (
   inputFilePath: string,
   outputFilePath: string,
   name: string
@@ -139,7 +140,7 @@ function convertTypescriptFileToJson (
   const mergedData = { ...existingData, ...jsonData };
   fs.writeFileSync(outputFilePath, JSON.stringify(mergedData, null, 2));
 }
-function processFilesInFolder (folderPath: string, destPath: string): void {
+export function processFilesInFolder (folderPath: string, destPath: string): void {
   const files = fs.readdirSync(folderPath);
   const fileName = "contractSchema";
   const schemaDest = path.join(destPath, fileName + ".json");
@@ -150,7 +151,7 @@ function processFilesInFolder (folderPath: string, destPath: string): void {
   });
 }
 
-function createDir (dir: string): void {
+export function createDir (dir: string): void {
   fs.mkdir(dir, { recursive: true }, (err) => {
     if (err) {
       console.error("error", err);
@@ -163,13 +164,22 @@ function copyStaticFiles (
   destinationPath: string,
   env: WasmkitRuntimeEnvironment
 ): void {
-  if (env.config.playground) {
-    const data: any = env.config.playground;
+  if (env.config.playground?.theme) {
+    const data: any = env.config.playground.theme;
     for (const key in data) {
       if (data[key].length !== 0) {
         handleStaticFile(path.join(srcPath, data[key]), path.join(destinationPath), key);
       }
     }
+  }
+  if (env.config.playground?.logoDark) {
+    handleStaticFile(path.join(srcPath, env.config.playground.logoDark), path.join(destinationPath), "logoDark");
+  }
+  if (env.config.playground?.logoLight) {
+    handleStaticFile(path.join(srcPath, env.config.playground.logoLight), path.join(destinationPath), "logoLight");
+  }
+  if (env.config.playground?.favicon) {
+    handleStaticFile(path.join(srcPath, env.config.playground.favicon), path.join(destinationPath), "favicon");
   }
 }
 
@@ -178,6 +188,26 @@ function handleStaticFile (srcPath: string, destinationPath: string, name: strin
   const Img = fs.readFileSync(srcPath);
   const Dest = path.join(destinationPath, `${name}${fileExtension}`);
   fs.writeFileSync(Dest, Img);
+}
+function handleSocials (
+  destinationPath: string,
+  env: WasmkitRuntimeEnvironment): void {
+  const jsonData: Record<string, string> = {};
+  if (env.config.playground?.title) {
+    jsonData.title = env.config.playground.title;
+  }
+  if (env.config.playground?.tagline) {
+    jsonData.tagline = env.config.playground.tagline;
+  }
+  if (env.config.playground?.socials) {
+    const data: any = env.config.playground.socials;
+    for (const key in data) {
+      if (data[key].length !== 0) {
+        jsonData[key] = data[key];
+      }
+    }
+  }
+  fs.writeFileSync(path.join(destinationPath, "social.json"), JSON.stringify(jsonData, null, 2));
 }
 export async function createPlayground (
   projectName: string,
@@ -189,6 +219,7 @@ export async function createPlayground (
   if (templateName !== undefined) {
     const currDir = process.cwd();
     const artifacts = path.join(currDir, "artifacts");
+    const contractsSchema = path.join(artifacts, "typescript_schema");
     const checkpointsDir = path.join(artifacts, "checkpoints");
     // check existence of artifact directory
     if (!fs.existsSync(artifacts)) {
@@ -196,6 +227,8 @@ export async function createPlayground (
     } else if (!fs.existsSync(checkpointsDir)) {
       // check existence of checkpoint directory
       throw new WasmkitError(ERRORS.GENERAL.CHECKPOINTS_NOT_FOUND, {});
+    } else if (!fs.existsSync(contractsSchema)) {
+      throw new WasmkitError(ERRORS.GENERAL.SCHEMA_NOT_FOUND);
     }
 
     const projectPath = path.join(currDir, projectName);
@@ -213,14 +246,16 @@ export async function createPlayground (
     const schemaDest = path.join(ContractDir, "schema");
     const instantiateDir = path.join(ContractDir, "instantiateInfo");
     createDir(instantiateDir);
+    const socialDir = path.join(ContractDir, "socials");
+    createDir(socialDir);
     createContractListJson(checkpointsDir, instantiateDir, env);
-    const contractsSchema = path.join(artifacts, "typescript_schema");
     createDir(schemaDest);
     processFilesInFolder(contractsSchema, schemaDest);
     if (env.config.playground) {
       const staticFilesDest = path.join(playgroundDest, "assets", "img");
       const staticFilesSrc = path.join(currDir);
       copyStaticFiles(staticFilesSrc, staticFilesDest, env);
+      handleSocials(socialDir, env);
     }
     return;
   }
