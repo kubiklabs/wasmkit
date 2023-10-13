@@ -9,8 +9,9 @@ import { ERRORS } from "../internal/core/errors-list";
 import { Account, ChainType, Network, TxnStdFee } from "../types";
 import { defaultFees } from "./constants";
 
-export async function getClient (
-  network: Network): Promise<SecretNetworkClient | CosmWasmClient | ArchwayClient> {
+export async function getClient(
+  network: Network,
+): Promise<SecretNetworkClient | CosmWasmClient | ArchwayClient> {
   const chain = getChainFromAccount(network);
   switch (chain) {
     case ChainType.Secret: {
@@ -23,6 +24,8 @@ export async function getClient (
     case ChainType.Osmosis:
     case ChainType.Terra:
     case ChainType.Atom:
+    case ChainType.Umee:
+    case ChainType.Nibiru:
     case ChainType.Neutron: {
       return await CosmWasmClient.connect(network.config.endpoint);
     }
@@ -41,7 +44,7 @@ export async function getClient (
   }
 }
 
-export async function getSigningClient (
+export async function getSigningClient(
   network: Network,
   account: Account
 ): Promise<SecretNetworkClient | SigningCosmWasmClient | SigningArchwayClient> {
@@ -80,6 +83,26 @@ export async function getSigningClient (
       const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
         hdPaths: [makeCosmoshubPath(0)],
         prefix: "cosmos"
+      });
+      return await SigningCosmWasmClient.connectWithSigner(
+        network.config.endpoint,
+        wallet
+      );
+    }
+    case ChainType.Umee: {
+      const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+        hdPaths: [makeCosmoshubPath(0)],
+        prefix: "umee"
+      });
+      return await SigningCosmWasmClient.connectWithSigner(
+        network.config.endpoint,
+        wallet
+      );
+    }
+    case ChainType.Nibiru: {
+      const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+        hdPaths: [makeCosmoshubPath(0)],
+        prefix: "nibi"
       });
       return await SigningCosmWasmClient.connectWithSigner(
         network.config.endpoint,
@@ -140,6 +163,10 @@ export function getChainFromAccount (network: Network): ChainType {
     return ChainType.Neutron;
   } else if (network.config.accounts[0].address.startsWith("cosmos")) {
     return ChainType.Atom;
+  } else if (network.config.accounts[0].address.startsWith("umee")) {
+    return ChainType.Umee;
+  } else if (network.config.accounts[0].address.startsWith("nibi")) {
+    return ChainType.Nibiru;
   } else if (network.config.accounts[0].address.startsWith("terra")) {
     return ChainType.Terra;
   } else {
@@ -148,7 +175,7 @@ export function getChainFromAccount (network: Network): ChainType {
   }
 }
 
-export async function storeCode (
+export async function storeCode(
   network: Network,
   signingClient: any,
   sender: string,
@@ -199,6 +226,8 @@ export async function storeCode (
     case ChainType.Archway:
     case ChainType.Neutron:
     case ChainType.Atom:
+    case ChainType.Umee:
+    case ChainType.Nibiru:
     case ChainType.Terra: {
       const uploadReceipt = await signingClient.upload(
         sender,
@@ -216,7 +245,7 @@ export async function storeCode (
   }
 }
 
-export async function instantiateContract (
+export async function instantiateContract(
   network: Network,
   signingClient: any,
   codeId: number,
@@ -274,6 +303,8 @@ export async function instantiateContract (
     case ChainType.Atom:
     case ChainType.Osmosis:
     case ChainType.Archway:
+    case ChainType.Umee:
+    case ChainType.Nibiru:
     case ChainType.Terra: {
       const contract = await signingClient.instantiate(
         sender,
@@ -297,7 +328,7 @@ export async function instantiateContract (
     }
   }
 }
-export async function executeTransaction (
+export async function executeTransaction(
   network: Network,
   signingClient: any,
   sender: string,
@@ -337,6 +368,8 @@ export async function executeTransaction (
     case ChainType.Atom:
     case ChainType.Osmosis:
     case ChainType.Archway:
+    case ChainType.Umee:
+    case ChainType.Nibiru:
     case ChainType.Terra: {
       const customFeesVal: TxnStdFee | undefined = customFees !== undefined
         ? customFees : network.config.fees?.exec;
@@ -360,7 +393,7 @@ export async function executeTransaction (
   }
 }
 
-export async function sendQuery (
+export async function sendQuery(
   client: any,
   network: Network,
   msgData: any,
@@ -382,6 +415,8 @@ export async function sendQuery (
     case ChainType.Atom:
     case ChainType.Osmosis:
     case ChainType.Archway:
+    case ChainType.Umee:
+    case ChainType.Nibiru:
     case ChainType.Terra: {
       // eslint-disable-next-line
       return await client.queryContractSmart(contractAddress, msgData);
@@ -396,8 +431,11 @@ export async function sendQuery (
   }
 }
 
-export async function getBalance (client: any, accountAddress: string, network: Network):
-Promise<Coin[]> {
+export async function getBalance(
+  client: any,
+  accountAddress: string,
+  network: Network,
+): Promise<Coin[]> {
   if (client === undefined) {
     throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
   }
@@ -435,6 +473,20 @@ Promise<Coin[]> {
     }
     case ChainType.Atom: {
       const info = await client?.getBalance(accountAddress, "uatom");
+      if (info === undefined) {
+        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
+      }
+      return info;
+    }
+    case ChainType.Umee: {
+      const info = await client?.getBalance(accountAddress, "uumee");
+      if (info === undefined) {
+        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
+      }
+      return info;
+    }
+    case ChainType.Nibiru: {
+      const info = await client?.getBalance(accountAddress, "unibi");
       if (info === undefined) {
         throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
       }

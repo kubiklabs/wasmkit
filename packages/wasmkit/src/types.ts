@@ -25,6 +25,8 @@ export enum ChainType {
   Atom,
   Terra,
   Injective,
+  Umee,
+  Nibiru,
 }
 
 export interface Account {

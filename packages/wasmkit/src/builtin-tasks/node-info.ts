@@ -1,9 +1,11 @@
 import { task } from "../internal/core/config/config-env";
 import { WasmkitError } from "../internal/core/errors";
+import { SecretNetworkClient } from "secretjs";
 import { ERRORS } from "../internal/core/errors-list";
 import { getChainFromAccount, getClient } from "../lib/client";
 import { ChainType, TaskArguments, WasmkitRuntimeEnvironment } from "../types";
 import { TASK_NODE_INFO } from "./task-names";
+import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 
 export default function (): void {
   task(TASK_NODE_INFO, "Prints node info and status")
@@ -11,16 +13,16 @@ export default function (): void {
 }
 
 async function nodeInfo (_taskArgs: TaskArguments, env: WasmkitRuntimeEnvironment): Promise<void> {
-  const client = await getClient(env.network) as any;
+  const client = await getClient(env.network);
   console.log("Network: ", env.network.name);
   const chain = getChainFromAccount(env.network);
 
   switch (chain) {
     case ChainType.Secret: {
-      const tendermintClient = client.query.tendermint;
+      const tendermintClient = (client as SecretNetworkClient).query.tendermint;
       const blockInfo = await tendermintClient.getLatestBlock({});
       console.log("Block height: ", blockInfo);
-      console.log("ChainId: ", await tendermintClient.getChainId());
+      // console.log("ChainId: ", await tendermintClient.getChainId()); // TODO: replace this
 
       const nodeInfo = await tendermintClient.getNodeInfo({})
         // eslint-disable-next-line
@@ -33,9 +35,11 @@ async function nodeInfo (_taskArgs: TaskArguments, env: WasmkitRuntimeEnvironmen
     case ChainType.Archway:
     case ChainType.Neutron:
     case ChainType.Atom:
+    case ChainType.Umee:
+    case ChainType.Nibiru:
     case ChainType.Terra: {
-      console.log("ChainId: ", await client.getChainId());
-      console.log("Block height: ", await client.getHeight());
+      console.log("ChainId: ", await (client as CosmWasmClient).getChainId());
+      console.log("Block height: ", await (client as CosmWasmClient).getHeight());
       break;
     }
     // case ChainType.Injective: {
