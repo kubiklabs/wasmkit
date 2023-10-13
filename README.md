@@ -23,8 +23,8 @@ wasmkit install
 ### Installation from released version
 
 To install wasmKit globally in your system you can use:
-  - Using Yarn: `yarn global add @arufa/wasmkit`
-  - Using NPM: `npm install -g @arufa/wasmkit`
+  - Using Yarn: `yarn global add @kubiklabs/wasmkit`
+  - Using NPM: `npm install -g @kubiklabs/wasmkit`
 
 ### Installation from master.
 

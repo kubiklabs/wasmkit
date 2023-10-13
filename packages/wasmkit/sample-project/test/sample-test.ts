@@ -1,5 +1,5 @@
 import { use } from "chai";
-import { getAccountByName, wasmKitChai } from "@arufa/wasmkit";
+import { getAccountByName, wasmKitChai } from "@kubiklabs/wasmkit";
 
 import { SampleProjectContract } from "../artifacts/typescript_schema/SampleProjectContract";
 

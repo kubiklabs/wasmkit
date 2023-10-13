@@ -1,5 +1,5 @@
 {
-  "name": "@arufa/wasmkit",
+  "name": "@kubiklabs/wasmkit",
   "version": "0.2.6",
   "main": "dist/index.js",
   "repository": "https://github.com/arufa-research/wasmkit.git",

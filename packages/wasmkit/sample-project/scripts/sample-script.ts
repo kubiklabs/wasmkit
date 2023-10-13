@@ -1,4 +1,4 @@
-import { getAccountByName } from "@arufa/wasmkit";
+import { getAccountByName } from "@kubiklabs/wasmkit";
 
 import { SampleProjectContract } from "../artifacts/typescript_schema/SampleProjectContract";
 

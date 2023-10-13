@@ -14,8 +14,8 @@ The minimum packages/requirements are as follows:
 
 ### Installation from released version
 To install wasmkit globally in your system you can use:
-  - Using Yarn: `yarn global add @arufa/wasmkit`
-  - Using NPM: `npm install -g @arufa/wasmkit`
+  - Using Yarn: `yarn global add @kubiklabs/wasmkit`
+  - Using NPM: `npm install -g @kubiklabs/wasmkit`
 
 ## Usage
 
