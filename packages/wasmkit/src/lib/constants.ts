@@ -25,25 +25,26 @@ export const defaultFees = {
 // mainnet => juno-1 => defaultFeesMainnet
 // else => defaultFees
 
-export const defaultFeesTerra = {
-  upload: {
-    amount: [{ amount: "350000", denom: "uluna" }],
-    gas: "2000000"
-  },
-  init: {
-    amount: [{ amount: "250000", denom: "uluna" }],
-    gas: "1250000"
-  },
-  exec: {
-    amount: [{ amount: "250000", denom: "uluna" }],
-    gas: "1250000"
-  }
-};
+// export const defaultFeesTerra = {
+//   upload: {
+//     amount: [{ amount: "350000", denom: "uluna" }],
+//     gas: "2000000"
+//   },
+//   init: {
+//     amount: [{ amount: "250000", denom: "uluna" }],
+//     gas: "1250000"
+//   },
+//   exec: {
+//     amount: [{ amount: "250000", denom: "uluna" }],
+//     gas: "1250000"
+//   }
+// };
+
 // initialize template
-export const TEMPLATES_GIT_REMOTE = 'arufa-research/wasmkit-templates';
-export const DEFAULT_TEMPLATE = 'counter';
+export const TEMPLATES_GIT_REMOTE = "kubiklabs/wasmkit-templates";
+export const DEFAULT_TEMPLATE = "counter";
 
 // playground related constants
 
-export const TEMPLATES_GIT_REMOTE_PLAYGROUND = "arufa-research/wasmkit-react-playground";
+export const TEMPLATES_GIT_REMOTE_PLAYGROUND = "kubiklabs/wasmkit-playground";
 export const DEFAULT_TEMPLATE_PLAYGROUND = "playground";

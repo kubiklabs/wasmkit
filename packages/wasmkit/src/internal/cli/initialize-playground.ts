@@ -80,7 +80,7 @@ async function checkDir (destination: string, force: boolean): Promise<void> {
 }
 
 /**
- * Ensures that the template passed by user exists in arufa-research/junokit-templates,
+ * Ensures that the template passed by user exists in kubiklabs/wasmkit-templates,
  * otherwise user can select a template from the existing templates or exit initialization
  * @param basePath path to temporary directory (contains all templates)
  * @param templateName template name passed by user (bare if no template name is passed)
@@ -141,10 +141,10 @@ function _normalizeDestination (destination?: string): string {
 }
 
 /**
- * Initialize a template from 'arufa-research/junokit-templates' with given name
+ * Initialize a template from 'kubiklabs/wasmkit-templates' with given name
  * and destination
  * @param force --force flag. If true then contents in destination directory are overwritten
- * @param templateName templateName to initialize from arufa-research/junokit-templates.
+ * @param templateName templateName to initialize from kubiklabs/wasmkit-templates.
  * @param destination destination directory to initialize template to.
  * Defaults to current working directory
  *  - If template name is not passed, the default template is initialized.

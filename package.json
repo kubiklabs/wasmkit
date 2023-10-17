@@ -1,7 +1,7 @@
 {
   "name": "wasmkit",
   "description": "Wasmkit is a development environment to compile, deploy, test, run cosmwasm contracts on different networks.",
-  "repository": "https://github.com/arufa-research/wasmkit.git",
+  "repository": "https://github.com/kubiklabs/wasmkit.git",
   "author": "https://github.com/coco-sha",
   "license": "MIT",
   "private": true,

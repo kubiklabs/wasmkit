@@ -43,7 +43,7 @@ Please upgrade your version of Node.js and try again.`,
 
 Unless you are creating a task or plugin, this is probably a bug.
 
-Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help us improve WasmKit.`,
+Please [report it](https://github.com/kubiklabs/wasmkit/issues/new) to help us improve WasmKit.`,
       shouldBeReported: true
     },
     CONTEXT_ALREADY_CREATED: {
@@ -52,7 +52,7 @@ Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help
       title: 'WasmKit was already initialized',
       description: `WasmKit initialization was executed twice. This is a bug.
 
-Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help us improve WasmKit.`,
+Please [report it](https://github.com/kubiklabs/wasmkit/issues/new) to help us improve WasmKit.`,
       shouldBeReported: true
     },
     CONTEXT_NOT_CREATED: {
@@ -61,7 +61,7 @@ Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help
       title: "WasmKit wasn't initialized",
       description: `WasmKit initialization failed. This is a bug.
 
-Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help us improve WasmKit.`,
+Please [report it](https://github.com/kubiklabs/wasmkit/issues/new) to help us improve WasmKit.`,
       shouldBeReported: true
     },
     CONTEXT_PRE_NOT_DEFINED: {
@@ -71,7 +71,7 @@ Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help
       title: 'WasmKit Runtime Environment not created',
       description: `WasmKit initialization failed. This is a bug.
 
-Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help us improve WasmKit.`,
+Please [report it](https://github.com/kubiklabs/wasmkit/issues/new) to help us improve WasmKit.`,
       shouldBeReported: true
     },
     CONTEXT_PRE_ALREADY_DEFINED: {
@@ -81,7 +81,7 @@ Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help
       title: 'Tried to create the WasmKit Runtime Environment twice',
       description: `The WasmKit initialization process was executed twice. This is a bug.
 
-Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help us improve WasmKit.`,
+Please [report it](https://github.com/kubiklabs/wasmkit/issues/new) to help us improve WasmKit.`,
       shouldBeReported: true
     },
     INVALID_CONFIG: {
@@ -118,7 +118,7 @@ You or one of your plugins is trying to modify the userConfig.%path% value from 
 
 This is probably a bug in one of your plugins.
 
-Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help us improve WasmKit.`,
+Please [report it](https://github.com/kubiklabs/wasmkit/issues/new) to help us improve WasmKit.`,
       shouldBeReported: true
     },
     ASSERTION_ERROR: {
@@ -128,7 +128,7 @@ Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help
       description: `An internal invariant was violated.
 This is probably caused by a programming error in WasmKit or in one of the used plugins.
 
-Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help us improve WasmKit.`,
+Please [report it](https://github.com/kubiklabs/wasmkit/issues/new) to help us improve WasmKit.`,
       shouldBeReported: true
     },
     NON_LOCAL_INSTALLATION: {
@@ -875,7 +875,7 @@ Please check your Internet connection.`,
       title: "The solc compiler couldn't be obtained",
       description: `WasmKit couldn't obtain a valid solc compiler.
 
-Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help us improve WasmKit.`,
+Please [report it](https://github.com/kubiklabs/wasmkit/issues/new) to help us improve WasmKit.`,
       shouldBeReported: true
     }
   },
@@ -1105,7 +1105,7 @@ Please follow WasmKit's instructions to resolve this.`,
       title: 'Invalid error message template',
       description: `An error message template contains an invalid variable name. This is a bug.
 
-Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help us improve WasmKit.`,
+Please [report it](https://github.com/kubiklabs/wasmkit/issues/new) to help us improve WasmKit.`,
       shouldBeReported: true
     },
     TEMPLATE_VALUE_CONTAINS_VARIABLE_TAG: {
@@ -1115,7 +1115,7 @@ Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help
       title: 'Invalid error message replacement',
       description: `Tried to replace an error message variable with a value that contains another variable name. This is a bug.
 
-Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help us improve WasmKit.`,
+Please [report it](https://github.com/kubiklabs/wasmkit/issues/new) to help us improve WasmKit.`,
       shouldBeReported: true
     },
     TEMPLATE_VARIABLE_TAG_MISSING: {
@@ -1124,7 +1124,7 @@ Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help
       title: 'Missing replacement value from error message template',
       description: `An error message template is missing a replacement value. This is a bug.
 
-Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help us improve WasmKit.`,
+Please [report it](https://github.com/kubiklabs/wasmkit/issues/new) to help us improve WasmKit.`,
       shouldBeReported: true
     },
     WRONG_ARTIFACT_PATH: {
@@ -1134,7 +1134,7 @@ Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help
       title: "Inferred artifact path doesn't exist",
       description: `The inferred artifact path doesn't exist.
 
-Please [report it](https://github.com/arufa-research/wasmkit/issues/new) to help us improve WasmKit.`,
+Please [report it](https://github.com/kubiklabs/wasmkit/issues/new) to help us improve WasmKit.`,
       shouldBeReported: true
     }
   },

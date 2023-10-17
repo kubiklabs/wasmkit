@@ -1,5 +1,5 @@
-import { parse, ParserPlugin } from '@babel/parser';
 import babelTraverse from '@babel/traverse';
+import { parse, ParserPlugin } from '@babel/parser';
 
 export const parser = (codes: string[]): Record<string, unknown> => {
   const hash: { [key: string]: any } = {}; // eslint-disable-line  @typescript-eslint/no-explicit-any
@@ -24,7 +24,7 @@ export const parser = (codes: string[]): Record<string, unknown> => {
   return hash;
 };
 
-const visitorFn = (parser: { addType: any }): Record<string, unknown> => ({ // eslint-disable-line  @typescript-eslint/no-explicit-any
+const visitorFn = (parser: { addType: any }): Record<string, any> => ({ // eslint-disable-line  @typescript-eslint/no-explicit-any
   TSTypeAliasDeclaration (path: { node: { id: { name: any } }, parentPath: { node: any } }) { // eslint-disable-line  @typescript-eslint/no-explicit-any
     parser.addType(path.node.id.name, path.parentPath.node);
     // if (path.node.id.name.endsWith('For_Empty')) {

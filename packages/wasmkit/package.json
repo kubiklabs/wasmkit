@@ -2,7 +2,7 @@
   "name": "@kubiklabs/wasmkit",
   "version": "0.2.6",
   "main": "dist/index.js",
-  "repository": "https://github.com/arufa-research/wasmkit.git",
+  "repository": "https://github.com/kubiklabs/wasmkit.git",
   "description": "Wasmkit is a development environment to compile, deploy, test, run cosmwasm contracts on different networks.",
   "authors": [
     {
@@ -104,7 +104,7 @@
     "typescript": "^4.3.2",
     "vm": "^0.1.0",
     "wasm-opt": "^1.2.1",
-    "wasmkit-ast-types": "^0.4.1",
+    "@kubiklabs/wasmkit-ast-types": "^0.2.6",
     "yaml": "^1.10.2",
     "zlib": "^1.0.5",
     "zod": "^1.10.2"

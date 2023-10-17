@@ -33,7 +33,7 @@ The master branch corresponds to the latest version.
 To use `wasmkit` on your system, follow the steps below:
 
 ```bash
-git clone https://github.com/arufa-research/wasmkit.git
+git clone https://github.com/kubiklabs/wasmkit.git
 cd wasmkit
 yarn install
 yarn build

@@ -13,6 +13,7 @@ export interface TaskArgs {
   templateName: string
   destination: string
 }
+
 async function playgroundTask (
   { projectName, templateName, destination }: TaskArgs,
   env: WasmkitRuntimeEnvironment
