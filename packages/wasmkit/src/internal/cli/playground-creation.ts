@@ -8,14 +8,17 @@ import path from "path";
 import * as ts from "typescript";
 
 import { loadCheckpoint } from "../../lib/checkpoints";
-import { CheckpointInfo, ContractListInfo, Property, Structure, WasmkitRuntimeEnvironment } from "../../types";
 import { WasmkitError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 import { initialize } from "./initialize-playground";
+import {
+  CheckpointInfo, ContractListInfo, Property, Structure, WasmkitRuntimeEnvironment,
+} from "../../types";
+
 export function printSuggestedCommands (
   projectName: string,
   packageManager: string,
-  shouldShowInstallationInstructions: boolean
+  shouldShowInstallationInstructions: boolean,
 ): void {
   const currDir = process.cwd();
   const projectPath = path.join(currDir, projectName);
@@ -60,13 +63,13 @@ export function createContractListJson (
         jsonData[fileName] = data;
       }
     });
-    let existingData: Record<string, unknown> = {};
-    if (fs.existsSync(dest)) {
-      const existingContent = fs.readFileSync(dest, "utf8");
-      existingData = JSON.parse(existingContent);
-    }
-    const mergedData = { ...existingData, ...jsonData };
-    fs.writeFileSync(dest, JSON.stringify(mergedData, null, 2));
+    // let existingData: Record<string, unknown> = {};  NOTE: need not merge, simply overwrite
+    // if (fs.existsSync(dest)) {
+    //   const existingContent = fs.readFileSync(dest, "utf8");
+    //   existingData = JSON.parse(existingContent);
+    // }
+    // const mergedData = { ...existingData, ...jsonData };
+    fs.writeFileSync(dest, JSON.stringify(jsonData, null, 2));
   }
 }
 
@@ -132,14 +135,15 @@ export function convertTypescriptFileToJson (
       schemaData
     }
   };
-  let existingData: Record<string, unknown> = {};
-  if (fs.existsSync(outputFilePath)) {
-    const existingContent = fs.readFileSync(outputFilePath, "utf8");
-    existingData = JSON.parse(existingContent);
-  }
-  const mergedData = { ...existingData, ...jsonData };
-  fs.writeFileSync(outputFilePath, JSON.stringify(mergedData, null, 2));
+  // let existingData: Record<string, unknown> = {};  NOTE: need not merge, simply overwrite
+  // if (fs.existsSync(outputFilePath)) {
+  //   const existingContent = fs.readFileSync(outputFilePath, "utf8");
+  //   existingData = JSON.parse(existingContent);
+  // }
+  // const mergedData = { ...existingData, ...jsonData };
+  fs.writeFileSync(outputFilePath, JSON.stringify(jsonData, null, 2));
 }
+
 export function processFilesInFolder (folderPath: string, destPath: string): void {
   const files = fs.readdirSync(folderPath);
   const fileName = "contractSchema";
