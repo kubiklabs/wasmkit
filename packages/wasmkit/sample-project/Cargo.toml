@@ -1,5 +1,7 @@
 [workspace]
-members = ["contracts/"]
+members = [
+    "contracts/counter",
+]
 
 [profile.release]
 opt-level = 3

@@ -259,7 +259,7 @@ export async function createPlayground (
     }
     return;
   }
-  console.log(chalk.cyan(`★ Welcome to Junokit Playground v1.0 ★`));
+  console.log(chalk.cyan(`★ Welcome to Wasmkit Playground v1.0 ★`));
   console.log("\n★", chalk.cyan("Project created"), "★\n");
 }
 

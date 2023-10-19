@@ -11,11 +11,11 @@ The contract is created with a parameter for the initial count and allows subseq
 # Compiling contracts
 
 Use this command to compile your contracts: 
-`junokit compile`
+`wasmkit compile`
 
 # Run script
 
-`junokit run scripts/sample-script.js`
+`wasmkit run scripts/sample-script.ts`
 
 # Deploying contracts
 
@@ -36,9 +36,11 @@ Note: You can check out your contract information in `deploy_response`.
 
 # Interact with contracts
 
-`junokit` will load functions using schema, you can call contract functions using `contract.tx`(to execute transactions) and `contract.query`(to query from contract)
+`wasmkit` will load functions using schema, you can call contract functions using `contract.tx`(to execute transactions) and `contract.query`(to query from contract)
+
 ```js
 // To interact with your contract
+
 // Execute contract function
 await contract.increment(account);
 

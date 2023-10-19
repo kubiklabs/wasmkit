@@ -1,7 +1,7 @@
 import { use } from "chai";
 import { getAccountByName, wasmKitChai } from "@kubiklabs/wasmkit";
 
-import { SampleProjectContract } from "../artifacts/typescript_schema/SampleProjectContract";
+import { CounterContract } from "../artifacts/typescript_schema/CounterContract";
 
 use(wasmKitChai);
 
@@ -9,7 +9,7 @@ describe("counter", () => {
 
   async function setup() {
     const contract_owner = await getAccountByName("account_0");
-    const contract = new SampleProjectContract();
+    const contract = new CounterContract();
     await contract.setupClient();
 
     return { contract_owner, contract };
@@ -33,12 +33,12 @@ describe("counter", () => {
     // };
     const contract_info = await contract.instantiate(
       {
-        "count": 102
+        "count": 102,
       },
       `deploy test ${runTs}`,
       contract_owner,
       undefined, // tokens to tranfer
-      // customFees,
+      // customFees, // custom fess here
     );
     console.log(contract_info);
   });

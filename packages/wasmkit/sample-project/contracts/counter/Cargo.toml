@@ -1,5 +1,5 @@
 [package]
-name = "sample-project"
+name = "counter"
 version = "1.0.0"
 authors = ["Udit Gulati"]
 edition = "2018"
