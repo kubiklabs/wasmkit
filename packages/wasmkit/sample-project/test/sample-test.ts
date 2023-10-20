@@ -6,7 +6,6 @@ import { CounterContract } from "../artifacts/typescript_schema/CounterContract"
 use(wasmKitChai);
 
 describe("counter", () => {
-
   async function setup() {
     const contract_owner = await getAccountByName("account_0");
     const contract = new CounterContract();

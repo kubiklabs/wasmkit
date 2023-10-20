@@ -1,14 +1,19 @@
 # WasmKit
 
-WasmKit is a development framework for building the cosmwasm contracts. The aim of the project is to make cosmwasm contracts development process simple, efficient and scalable. Users can focus on the logic of cosmwasm contracts and not much about further steps in development. It facilitates features such as initiating project repo from contract templates, easy compilation of contracts, deployment, Interacting with contracts using schema and contract testing framework.
+<p align="center" width="100%">
+  <img src="./assets/wasm_kit_logo_light.png" width=25% height=25%>
+</p>
+
+WasmKit is a development framework for building the cosmwasm contracts. The aim of the project is to make cosmwasm contracts development process simple, efficient and scalable. Users can focus on the logic of cosmwasm contracts and not much about further steps in development.
+
+It facilitates features such as initiating project repo from contract templates, easy compilation of contracts, deployment, Interacting with contracts using schema and contract testing framework.
 
 ## Requirements
 
 The minimum packages/requirements are as follows:
- 
+
 - Node 14+
 - Yarn v1.22+ or NPM `v6.0+**
-- Connection to a Secret node. 
 
 ## Setup rust environment
 
@@ -23,14 +28,18 @@ wasmkit install
 ### Installation from released version
 
 To install wasmKit globally in your system you can use:
-  - Using Yarn: `yarn global add @kubiklabs/wasmkit`
-  - Using NPM: `npm install -g @kubiklabs/wasmkit`
 
-### Installation from master.
+```bash
+yarn global add @kubiklabs/wasmkit
+```
 
-The master branch corresponds to the latest version.
+or
 
-To use `wasmkit` on your system, follow the steps below:
+```bash
+npm install -g @kubiklabs/wasmkit
+```
+
+### Installation from source
 
 ```bash
 git clone https://github.com/kubiklabs/wasmkit.git
@@ -44,11 +53,11 @@ chmod +x $HOME/.yarn/bin/wasmkit
 
 ### Install dependencies
 
-Setup Rust compiler
+Setup Rust compiler:
 
 ```bash
-$ cd infrastructure
-$ make setup-rust
+cd infrastructure
+make setup-rust
 ```
 
 Follow our infrastructure README for instructions on how to set up a private network.
@@ -82,7 +91,7 @@ cd <project-name>
 wasmkit compile
 ```
 
-This command will generate compiled .wasm files in artifacts/contracts/ dir and schema .json files in artifacts/schema/ dir.
+This command will generate compiled `.wasm` files in `artifacts/contracts/` directory and schema `.json` files in `artifacts/schema/` directory.
 
 ### Cleanup Artifacts
 
@@ -91,18 +100,19 @@ To clear artifacts data, use
 ```bash
 wasmkit clean
 ``` 
-This will remove the artifacts directory completely. To clean artifacts for only one contract, use
+This will remove the `artifacts/` directory completely. To clean artifacts for only one contract, use:
 
 ```bash
 wasmkit clean <contract-name>
 ``` 
-This will remove specific files related to that contract.
-
 
 ### Running user scripts
 
-User scripts are a way to define the flow of interacting with contracts on some network in the form of a script. These scripts can be used to deploy a contract, query/transact with the contract.A sample script scripts/sample-script.js is available in the boilerplate.
+User scripts are a way to define the flow of interacting with contracts on some network in the form of a script. These scripts can be used to deploy a contract, query/transact with the contract. A sample script `scripts/sample-script.ts` is available in the boilerplate.
 
+```bash
+wasmkit run scripts/sample-script.ts
+```
 
 ## Run tests
 
@@ -116,4 +126,4 @@ This project is forked from hardhat, and just base on the hardhat-core part then
 
 ## Thanks
 
-hardhat - Hardhat is a development environment to compile, deploy, test, and debug your Ethereum software. Get Solidity stack traces & console.log.
+[Hardhat](https://github.com/NomicFoundation/hardhat) - Hardhat is a development environment to compile, deploy, test, and debug your Ethereum software. Get Solidity stack traces & console.log.

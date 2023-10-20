@@ -8,7 +8,7 @@ export default async function run () {
   const counter_contract = new CounterContract();
   await counter_contract.setupClient();
 
- const deploy_response = await counter_contract.deploy(
+  const deploy_response = await counter_contract.deploy(
     contract_owner,
   );
   console.log(deploy_response);
