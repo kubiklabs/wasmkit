@@ -10,10 +10,8 @@ It facilitates features such as initiating project repo from contract templates,
 
 ## Requirements
 
-The minimum packages/requirements are as follows:
-
-- Node 14+
-- Yarn v1.22+ or NPM `v6.0+**
+- Node `v14+`
+- Yarn `v1.22+` or NPM `v6.0+`
 
 ## Setup rust environment
 
@@ -72,7 +70,7 @@ wasmkit init <project-name>
 
 This will create a directory <project-name> inside the current directory with boiler-plate code. The `contracts/` directory has all the rust files for the contract logic. `scripts/` directory contains  `.js` scripts that users can write according to the use case, a sample script has been added to give some understanding of how a user script should look like. `test/` directory contains `.js` scripts to run tests for the deployed contracts.
 
-### Listing Tasks
+### Listing tasks
 
 To see the possible tasks (commands) that are available, go to the project's folder. 
 
@@ -93,7 +91,7 @@ wasmkit compile
 
 This command will generate compiled `.wasm` files in `artifacts/contracts/` directory and schema `.json` files in `artifacts/schema/` directory.
 
-### Cleanup Artifacts
+### Cleanup artifacts
 
 To clear artifacts data, use
 

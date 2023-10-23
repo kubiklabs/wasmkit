@@ -9,6 +9,8 @@ export const TASK_REPL = "repl";
 export const TASK_INSTALL = "install";
 export const TASK_TEST = "test";
 export const TASK_CREATE_PLAYGROUND = "playground";
-export const TASK_LOCALNET = "localnet-start";
+export const TASK_LOCALNET_START = "localnet-start";
+export const TASK_LOCALNET_STOP = "localnet-stop";
+export const TASK_LOCALNET_LIST = "localnet-list";
 
 // export const TASK_CHECK = "check";
