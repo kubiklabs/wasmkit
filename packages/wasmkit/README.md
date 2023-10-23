@@ -6,9 +6,8 @@ WasmKit is a development environment to compile, deploy, test, run scrt contract
 
 The minimum packages/requirements are as follows:
  
-- Node 14+
-- Yarn v1.22+ or NPM `v6.0+**
-- Connection to an Secret node. 
+- Node `14+`
+- Yarn `v1.22+` or NPM `v6.0+`
 
 ## Install wasmkit
 
