@@ -1,5 +1,5 @@
 import { ArchwayClient, SigningArchwayClient } from '@archwayhq/arch3.js';
-import { CosmWasmClient, ExecuteResult, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet, makeCosmoshubPath } from "@cosmjs/proto-signing";
 import { SecretNetworkClient, Wallet } from "secretjs";
 import { Coin } from "secretjs/dist/protobuf/cosmos/base/v1beta1/coin";
@@ -9,8 +9,8 @@ import { ERRORS } from "../internal/core/errors-list";
 import { Account, ChainType, Network, TxnStdFee } from "../types";
 import { defaultFees } from "./constants";
 
-export async function getClient(
-  network: Network,
+export async function getClient (
+  network: Network
 ): Promise<SecretNetworkClient | CosmWasmClient | ArchwayClient> {
   const chain = getChainFromAccount(network);
   switch (chain) {
@@ -44,7 +44,7 @@ export async function getClient(
   }
 }
 
-export async function getSigningClient(
+export async function getSigningClient (
   network: Network,
   account: Account
 ): Promise<SecretNetworkClient | SigningCosmWasmClient | SigningArchwayClient> {
@@ -133,9 +133,16 @@ export async function getSigningClient(
       const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
         prefix: 'archway'
       });
-      return await SigningArchwayClient.connectWithSigner(network.config.endpoint, wallet, {
-        prefix: 'archway'
-      });
+      return await SigningCosmWasmClient.connectWithSigner(
+        network.config.endpoint,
+        wallet
+      );
+      // TODO: there is issue with cosmjs-types in this version,
+      // Types of property 'accountNumber' are incompatible.
+      // Type 'Long' is not assignable to type 'bigint'.
+      // return await SigningArchwayClient.connectWithSigner(network.config.endpoint, wallet, {
+      //   prefix: 'archway'
+      // });
     }
     // case ChainType.Injective: {
 
@@ -175,7 +182,7 @@ export function getChainFromAccount (network: Network): ChainType {
   }
 }
 
-export async function storeCode(
+export async function storeCode (
   network: Network,
   signingClient: any,
   sender: string,
@@ -245,7 +252,7 @@ export async function storeCode(
   }
 }
 
-export async function instantiateContract(
+export async function instantiateContract (
   network: Network,
   signingClient: any,
   codeId: number,
@@ -328,7 +335,7 @@ export async function instantiateContract(
     }
   }
 }
-export async function executeTransaction(
+export async function executeTransaction (
   network: Network,
   signingClient: any,
   sender: string,
@@ -393,7 +400,7 @@ export async function executeTransaction(
   }
 }
 
-export async function sendQuery(
+export async function sendQuery (
   client: any,
   network: Network,
   msgData: any,
@@ -431,10 +438,10 @@ export async function sendQuery(
   }
 }
 
-export async function getBalance(
+export async function getBalance (
   client: any,
   accountAddress: string,
-  network: Network,
+  network: Network
 ): Promise<Coin[]> {
   if (client === undefined) {
     throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
@@ -510,7 +517,7 @@ export async function getBalance(
 
     // }
     default: {
-      console.log("Error ftom balance");
+      console.log("Error fetching balance");
       throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }

@@ -1,24 +1,24 @@
-import { RecordExpression } from "@babel/types";
+// import * as yaml from "js-yaml";
+// import { error } from "console";
+// import { RecordExpression } from "@babel/types";
 import chalk from "chalk";
 import { ExecException } from "child_process";
-import { error } from "console";
 import * as fs from "fs";
-import * as yaml from "js-yaml";
 import path from "path";
 import * as ts from "typescript";
 
 import { loadCheckpoint } from "../../lib/checkpoints";
+import {
+  CheckpointInfo, ContractListInfo, Property, Structure, WasmkitRuntimeEnvironment
+} from "../../types";
 import { WasmkitError } from "../core/errors";
 import { ERRORS } from "../core/errors-list";
 import { initialize } from "./initialize-playground";
-import {
-  CheckpointInfo, ContractListInfo, Property, Structure, WasmkitRuntimeEnvironment,
-} from "../../types";
 
 export function printSuggestedCommands (
   projectName: string,
   packageManager: string,
-  shouldShowInstallationInstructions: boolean,
+  shouldShowInstallationInstructions: boolean
 ): void {
   const currDir = process.cwd();
   const projectPath = path.join(currDir, projectName);
@@ -169,7 +169,7 @@ function copyStaticFiles (
   env: WasmkitRuntimeEnvironment
 ): void {
   if (env.config.playground?.theme) {
-    const data: any = env.config.playground.theme;
+    const data: Record<string, string> = env.config.playground.theme;
     for (const key in data) {
       if (data[key].length !== 0) {
         handleStaticFile(path.join(srcPath, data[key]), path.join(destinationPath), key);
@@ -204,7 +204,7 @@ function handleSocials (
     jsonData.tagline = env.config.playground.tagline;
   }
   if (env.config.playground?.socials) {
-    const data: any = env.config.playground.socials;
+    const data: Record<string, string> = env.config.playground.socials;
     for (const key in data) {
       if (data[key].length !== 0) {
         jsonData[key] = data[key];

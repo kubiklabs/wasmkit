@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import enquirer, { prompt } from "enquirer";
+import enquirer from "enquirer";
 import fse from "fs-extra";
 import path from "path";
 
@@ -98,8 +98,8 @@ async function checkTemplateExists (
         `Error occurred: template "${templateName}" does not exist in ${TEMPLATES_GIT_REMOTE_PLAYGROUND}`
       )
     );
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     const prompt = new (enquirer as any).Select({
-      // eslint-disable-line  @typescript-eslint/no-explicit-any
       name: "Select an option",
       message: "Do you want to pick an existing template or exit?",
       choices: ["Pick an existing template", "exit"]
@@ -114,8 +114,8 @@ async function checkTemplateExists (
         .filter((dirent) => dirent.isDirectory())
         .map((dirent) => dirent.name);
 
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       const dappsPrompt = new (enquirer as any).Select({
-        // eslint-disable-line  @typescript-eslint/no-explicit-any
         name: "dapps",
         message: "Pick a template",
         choices: dApps

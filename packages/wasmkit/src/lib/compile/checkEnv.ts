@@ -1,6 +1,6 @@
 import chalk from "chalk";
-import semver from "semver";
 import { execSync } from "child_process";
+import semver from "semver";
 
 import { setupRust } from "../../builtin-tasks/install";
 import { WasmkitRuntimeEnvironment } from "../../types";

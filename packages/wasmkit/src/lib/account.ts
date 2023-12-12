@@ -1,6 +1,7 @@
 import { ArchwayClient } from "@archwayhq/arch3.js/build";
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { Account as WasmAccount, SecretNetworkClient } from "secretjs";
+// import { Account as WasmAccount, SecretNetworkClient } from "secretjs";
+import { SecretNetworkClient } from "secretjs";
 
 import { WasmkitContext } from "../internal/context";
 import { WasmkitError } from "../internal/core/errors";

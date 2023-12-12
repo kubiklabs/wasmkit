@@ -1,11 +1,12 @@
+import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { SecretNetworkClient } from "secretjs";
+
 import { task } from "../internal/core/config/config-env";
 import { WasmkitError } from "../internal/core/errors";
-import { SecretNetworkClient } from "secretjs";
 import { ERRORS } from "../internal/core/errors-list";
 import { getChainFromAccount, getClient } from "../lib/client";
 import { ChainType, TaskArguments, WasmkitRuntimeEnvironment } from "../types";
 import { TASK_NODE_INFO } from "./task-names";
-import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 
 export default function (): void {
   task(TASK_NODE_INFO, "Prints node info and status")

@@ -33,18 +33,18 @@ export const findExecuteMsg = (schemas: any[]): Record<string, unknown> => { // 
 };
 
 export const findAndParseTypes = async (
-  schemas: any // eslint-disable-line  @typescript-eslint/no-explicit-any
+  schemas: any[] // eslint-disable-line  @typescript-eslint/no-explicit-any
 ): Promise<any> => { // eslint-disable-line  @typescript-eslint/no-explicit-any
   const Types = schemas;
   const allTypes = [];
-  for (const typ in Types) {
-    if (Types[typ].definitions) {
-      for (const key of Object.keys(Types[typ].definitions)) {
+  for (const typ of Types) {
+    if (typ.definitions) {
+      for (const key of Object.keys(typ.definitions)) {
         // set title
-        Types[typ].definitions[key].title = key;
+        typ.definitions[key].title = key;
       }
     }
-    const result = await compile(Types[typ], Types[typ].title);
+    const result = await compile(typ, typ.title);
     allTypes.push(result);
   }
   return parser(allTypes);

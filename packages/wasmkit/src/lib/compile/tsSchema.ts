@@ -1,11 +1,11 @@
 import generate from "@babel/generator";
 import * as t from '@babel/types';
+import * as w from "@kubiklabs/wasmkit-ast-types";
+import { getMessageProperties } from "@kubiklabs/wasmkit-ast-types";
 import { pascal } from "case";
 import { writeFileSync } from 'fs';
 import { sync as mkdirp } from "mkdirp";
 import { join } from "path";
-import * as w from "@kubiklabs/wasmkit-ast-types";
-import { getMessageProperties } from "@kubiklabs/wasmkit-ast-types";
 
 import { findAndParseTypes, findExecuteMsg, findQueryMsg } from "./utils";
 
@@ -52,18 +52,18 @@ export async function generateTsSchema (
 
     const queryInterface = await w.createQueryInterface(
       ReadOnlyInstance,
-      QueryMsg as any,
+      QueryMsg as any, // eslint-disable-line  @typescript-eslint/no-explicit-any
       skipSchemaErrors
-    ); // eslint-disable-line  @typescript-eslint/no-explicit-any
+    );
     body.push(queryInterface);
 
     const queryClass = await w.createQueryClass(
       QueryClient,
       ReadOnlyInstance,
       "Contract",
-      QueryMsg as any,
+      QueryMsg as any, // eslint-disable-line  @typescript-eslint/no-explicit-any
       skipSchemaErrors
-    ); // eslint-disable-line  @typescript-eslint/no-explicit-any
+    );
     body.push(queryClass);
   }
 
