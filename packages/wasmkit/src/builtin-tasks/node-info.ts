@@ -13,7 +13,10 @@ export default function (): void {
     .setAction(nodeInfo);
 }
 
-async function nodeInfo (_taskArgs: TaskArguments, env: WasmkitRuntimeEnvironment): Promise<void> {
+async function nodeInfo (
+  _taskArgs: TaskArguments,
+  env: WasmkitRuntimeEnvironment
+): Promise<void> {
   const client = await getClient(env.network);
   console.log("Network: ", env.network.name);
   const chain = getChainFromAccount(env.network);
