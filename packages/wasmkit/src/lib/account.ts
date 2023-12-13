@@ -1,6 +1,7 @@
 import { ArchwayClient } from "@archwayhq/arch3.js/build";
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { Account as WasmAccount, SecretNetworkClient } from "secretjs";
+// import { Account as WasmAccount, SecretNetworkClient } from "secretjs";
+import { SecretNetworkClient } from "secretjs";
 
 import { WasmkitContext } from "../internal/context";
 import { WasmkitError } from "../internal/core/errors";
@@ -29,6 +30,9 @@ export class UserAccountI implements UserAccount {
 
   async getBalance (): Promise<Coin[]> {
     const env: WasmkitRuntimeEnvironment = WasmkitContext.getWasmkitContext().getRuntimeEnv();
+    if (this.client === undefined) {
+      throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
+    }
     return await getBalance(this.client, this.account.address, env.network);
   }
 }

@@ -2,7 +2,7 @@
 // Parses the response from contract query, init, deploy or execute
 // and returns logs as a {key: value} object
 export function getLogs (
-  response: any // eslint-disable-line  @typescript-eslint/no-explicit-any
+  response: Record<string, any> // eslint-disable-line  @typescript-eslint/no-explicit-any
 ): Record<string, string|string[]> {
   const logs: Record<string, string|string[]> = {};
   for (const log of response.logs[0].events[1].attributes) {

@@ -118,7 +118,7 @@ export class Contract {
     this.codeId = codeId;
     const deployInfo: DeployInfo = {
       codeId: codeId,
-      contractCodeHash: contractCodeHash.code_hash as string,
+      contractCodeHash: contractCodeHash.code_hash,
       deployTimestamp: String(new Date())
     };
 
@@ -129,7 +129,7 @@ export class Contract {
       };
       persistCheckpoint(this.checkpointPath, this.checkpointData);
     }
-    this.contractCodeHash = contractCodeHash.code_hash as string;
+    this.contractCodeHash = contractCodeHash.code_hash;
 
     return deployInfo;
   }

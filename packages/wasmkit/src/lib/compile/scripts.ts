@@ -20,7 +20,7 @@ export async function buildTsScripts (
     if (diagnostic.file) {
       const { line, character } = ts.getLineAndCharacterOfPosition(
         diagnostic.file,
-        diagnostic.start!
+        diagnostic.start! // eslint-disable-line @typescript-eslint/no-non-null-assertion
       );
       const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
       console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);

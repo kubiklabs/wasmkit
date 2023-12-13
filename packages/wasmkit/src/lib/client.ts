@@ -1,5 +1,5 @@
 import { ArchwayClient, SigningArchwayClient } from '@archwayhq/arch3.js';
-import { CosmWasmClient, ExecuteResult, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet, makeCosmoshubPath } from "@cosmjs/proto-signing";
 import { SecretNetworkClient, Wallet } from "secretjs";
 import { Coin } from "secretjs/dist/protobuf/cosmos/base/v1beta1/coin";
@@ -9,8 +9,8 @@ import { ERRORS } from "../internal/core/errors-list";
 import { Account, ChainType, Network, TxnStdFee } from "../types";
 import { defaultFees } from "./constants";
 
-export async function getClient(
-  network: Network,
+export async function getClient (
+  network: Network
 ): Promise<SecretNetworkClient | CosmWasmClient | ArchwayClient> {
   const chain = getChainFromAccount(network);
   switch (chain) {
@@ -44,7 +44,7 @@ export async function getClient(
   }
 }
 
-export async function getSigningClient(
+export async function getSigningClient (
   network: Network,
   account: Account
 ): Promise<SecretNetworkClient | SigningCosmWasmClient | SigningArchwayClient> {
@@ -133,9 +133,16 @@ export async function getSigningClient(
       const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
         prefix: 'archway'
       });
-      return await SigningArchwayClient.connectWithSigner(network.config.endpoint, wallet, {
-        prefix: 'archway'
-      });
+      return await SigningCosmWasmClient.connectWithSigner(
+        network.config.endpoint,
+        wallet
+      );
+      // TODO: there is issue with cosmjs-types in this version,
+      // Types of property 'accountNumber' are incompatible.
+      // Type 'Long' is not assignable to type 'bigint'.
+      // return await SigningArchwayClient.connectWithSigner(network.config.endpoint, wallet, {
+      //   prefix: 'archway'
+      // });
     }
     // case ChainType.Injective: {
 
@@ -175,16 +182,16 @@ export function getChainFromAccount (network: Network): ChainType {
   }
 }
 
-export async function storeCode(
+export async function storeCode (
   network: Network,
-  signingClient: any,
+  signingClient: SecretNetworkClient | SigningCosmWasmClient | SigningArchwayClient,
   sender: string,
   contractName: string,
   wasmFileContent: Buffer,
   customFees?: TxnStdFee,
   source?: string,
   builder?: string
-): Promise<{codeId: number, contractCodeHash: any}> {
+): Promise<{codeId: number, contractCodeHash: {code_hash: string}}> {
   const networkName = getChainFromAccount(network);
   switch (networkName) {
     case ChainType.Secret: {
@@ -205,8 +212,9 @@ export async function storeCode(
           gasPriceInFeeDenom: Number.isNaN(inGasPrice) ? undefined : inGasPrice
         }
       );
-      console.log(uploadReceipt, "sds");
+      // console.log(uploadReceipt, "sds");
       const res = uploadReceipt?.arrayLog?.find(
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         (log: any) => log.type === "message" && log.key === "code_id"
       );
       if (res === undefined) {
@@ -219,7 +227,9 @@ export async function storeCode(
       const contractCodeHash = await signingClient.query.compute.codeHashByCodeId({
         code_id: codeId.toString()
       });
-      return { contractCodeHash: contractCodeHash, codeId: codeId };
+      const parsedContractCodeHash: {code_hash: string} =
+        { code_hash: (contractCodeHash.code_hash === undefined) ? "" : contractCodeHash.code_hash };
+      return { contractCodeHash: parsedContractCodeHash, codeId: codeId };
     }
     case ChainType.Juno:
     case ChainType.Osmosis:
@@ -229,7 +239,7 @@ export async function storeCode(
     case ChainType.Umee:
     case ChainType.Nibiru:
     case ChainType.Terra: {
-      const uploadReceipt = await signingClient.upload(
+      const uploadReceipt = await (signingClient as SigningCosmWasmClient).upload(
         sender,
         wasmFileContent,
         customFees ?? network.config.fees?.upload ?? defaultFees.upload,
@@ -245,9 +255,9 @@ export async function storeCode(
   }
 }
 
-export async function instantiateContract(
+export async function instantiateContract (
   network: Network,
-  signingClient: any,
+  signingClient: SecretNetworkClient | SigningCosmWasmClient | SigningArchwayClient,
   codeId: number,
   sender: string,
   contractName: string,
@@ -271,7 +281,7 @@ export async function instantiateContract(
         parseFloat(customFees?.amount[0].amount as string) /
         parseFloat(customFees?.gas as string);
 
-      const tx = await signingClient.tx.compute.instantiateContract(
+      const tx = await (signingClient as SecretNetworkClient).tx.compute.instantiateContract(
         {
           code_id: codeId,
           sender: sender,
@@ -288,6 +298,7 @@ export async function instantiateContract(
 
       // Find the contract_address in the logs
       const res = tx?.arrayLog?.find(
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         (log: any) => log.type === "message" && log.key === "contract_address"
       );
       if (res === undefined) {
@@ -306,7 +317,7 @@ export async function instantiateContract(
     case ChainType.Umee:
     case ChainType.Nibiru:
     case ChainType.Terra: {
-      const contract = await signingClient.instantiate(
+      const contract = await (signingClient as SigningCosmWasmClient).instantiate(
         sender,
         codeId,
         initArgs,
@@ -328,9 +339,9 @@ export async function instantiateContract(
     }
   }
 }
-export async function executeTransaction(
+export async function executeTransaction (
   network: Network,
-  signingClient: any,
+  signingClient: SecretNetworkClient | SigningCosmWasmClient | SigningArchwayClient,
   sender: string,
   contractAddress: string,
   contractCodeHash: string,
@@ -338,7 +349,7 @@ export async function executeTransaction(
   transferAmount?: readonly Coin[],
   customFees?: TxnStdFee,
   memo?: string
-): Promise<any> {
+): Promise<any> { // eslint-disable-line  @typescript-eslint/no-explicit-any
   const chain = getChainFromAccount(network);
 
   switch (chain) {
@@ -348,7 +359,7 @@ export async function executeTransaction(
         parseFloat(customFees?.amount[0].amount as string) /
         parseFloat(customFees?.gas as string);
       // eslint-disable-next-line
-      return await signingClient.tx.compute.executeContract(
+      return await (signingClient as SecretNetworkClient).tx.compute.executeContract(
         {
           sender: sender,
           contract_address: contractAddress,
@@ -374,7 +385,7 @@ export async function executeTransaction(
       const customFeesVal: TxnStdFee | undefined = customFees !== undefined
         ? customFees : network.config.fees?.exec;
       // eslint-disable-next-line
-      return await signingClient.execute(
+      return await (signingClient as SigningCosmWasmClient).execute(
         sender,
         contractAddress,
         msgData,
@@ -393,18 +404,18 @@ export async function executeTransaction(
   }
 }
 
-export async function sendQuery(
-  client: any,
+export async function sendQuery (
+  client: SecretNetworkClient | CosmWasmClient | ArchwayClient,
   network: Network,
-  msgData: any,
+  msgData: Record<string, unknown>,
   contractAddress: string,
   contractHash: string
-): Promise<any> {
+): Promise<any> { // eslint-disable-line  @typescript-eslint/no-explicit-any
   const chain = getChainFromAccount(network);
 
   switch (chain) {
     case ChainType.Secret: {
-      return client.query.compute.queryContract({
+      return await (client as SecretNetworkClient).query.compute.queryContract({
         contract_address: contractAddress,
         query: msgData,
         code_hash: contractHash
@@ -419,7 +430,7 @@ export async function sendQuery(
     case ChainType.Nibiru:
     case ChainType.Terra: {
       // eslint-disable-next-line
-      return await client.queryContractSmart(contractAddress, msgData);
+      return await (client as SigningCosmWasmClient).queryContractSmart(contractAddress, msgData);
     }
     // case ChainType.Injective: {
 
@@ -431,86 +442,91 @@ export async function sendQuery(
   }
 }
 
-export async function getBalance(
-  client: any,
+export async function getBalance (
+  client: SecretNetworkClient | CosmWasmClient | ArchwayClient,
   accountAddress: string,
-  network: Network,
+  network: Network
 ): Promise<Coin[]> {
   if (client === undefined) {
     throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
   }
   const chain = getChainFromAccount(network);
 
+  let balanceDenom = "";
   switch (chain) {
     case ChainType.Secret: {
-      const info = await client.query.bank.balance({
+      balanceDenom = "uscrt";
+      break;
+    }
+    case ChainType.Juno: {
+      balanceDenom = "ujuno";
+      break;
+    }
+    case ChainType.Archway: {
+      balanceDenom = "aarch";
+      break;
+    }
+    case ChainType.Neutron: {
+      balanceDenom = "untrn";
+      break;
+    }
+    case ChainType.Atom: {
+      balanceDenom = "uatom";
+      break;
+    }
+    case ChainType.Umee: {
+      balanceDenom = "uumee";
+      break;
+    }
+    case ChainType.Nibiru: {
+      balanceDenom = "unibi";
+      break;
+    }
+    case ChainType.Osmosis: {
+      balanceDenom = "uosmo";
+      break;
+    }
+    case ChainType.Terra: {
+      balanceDenom = "uluna";
+      break;
+    }
+  }
+
+  switch (chain) {
+    case ChainType.Secret: {
+      const info = await (client as SecretNetworkClient).query.bank.balance({
         address: accountAddress,
-        denom: "uscrt"
+        denom: balanceDenom
       });
       if (info === undefined) {
         throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
       }
 
-      const infoBalance = info.balance ?? { amount: "0", denom: "uscrt" };
+      const infoBalance = info.balance ?? { amount: "0", denom: balanceDenom };
       const normalisedBalance: Coin = (infoBalance.amount === undefined ||
-        infoBalance.denom === undefined) ? { amount: "0", denom: "uscrt" }
+        infoBalance.denom === undefined) ? { amount: "0", denom: balanceDenom }
         : { amount: infoBalance.amount, denom: infoBalance.denom };
       return [normalisedBalance];
     }
-    case ChainType.Juno: {
-      const info = await client?.getBalance(accountAddress, "ujuno");
-      if (info === undefined) {
-        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
-      }
-      return info;
-    }
-    case ChainType.Neutron: {
-      const info = await client?.getBalance(accountAddress, "untrn");
-      if (info === undefined) {
-        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
-      }
-      return info;
-    }
-    case ChainType.Atom: {
-      const info = await client?.getBalance(accountAddress, "uatom");
-      if (info === undefined) {
-        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
-      }
-      return info;
-    }
-    case ChainType.Umee: {
-      const info = await client?.getBalance(accountAddress, "uumee");
-      if (info === undefined) {
-        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
-      }
-      return info;
-    }
-    case ChainType.Nibiru: {
-      const info = await client?.getBalance(accountAddress, "unibi");
-      if (info === undefined) {
-        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
-      }
-      return info;
-    }
-    case ChainType.Osmosis: {
-      const info = await client?.getBalance(accountAddress, "uosmo");
-      if (info === undefined) {
-        throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
-      }
-      return info;
-    }
+    case ChainType.Juno:
+    case ChainType.Archway:
+    case ChainType.Neutron:
+    case ChainType.Atom:
+    case ChainType.Umee:
+    case ChainType.Nibiru:
+    case ChainType.Osmosis:
     case ChainType.Terra: {
-      const info = await client?.getBalance(accountAddress, "uluna");
+      const info = await (client as CosmWasmClient)?.getBalance(accountAddress, balanceDenom);
       if (info === undefined) {
         throw new WasmkitError(ERRORS.GENERAL.BALANCE_UNDEFINED);
       }
-      return info;
+      return [info];
     }
     // case ChainType.Injective: {
 
     // }
     default: {
-      console.log("Error ftom balance");
+      console.log("Error fetching balance");
       throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }

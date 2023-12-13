@@ -1,5 +1,5 @@
-import babelTraverse from '@babel/traverse';
 import { parse, ParserPlugin } from '@babel/parser';
+import babelTraverse from '@babel/traverse';
 
 export const parser = (codes: string[]): Record<string, unknown> => {
   const hash: { [key: string]: any } = {}; // eslint-disable-line  @typescript-eslint/no-explicit-any

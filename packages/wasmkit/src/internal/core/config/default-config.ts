@@ -1,4 +1,4 @@
-import type { Config, WasmKitNetworkUserConfig } from "../../../types";
+import type { Config } from "../../../types";
 const CARGO_COMPILE = "RUSTFLAGS='-C link-arg=-s' cargo build --release --target wasm32-unknown-unknown";
 const CARGO_SCHEMA = "cargo run --example schema";
 

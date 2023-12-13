@@ -8,11 +8,8 @@ export default function (): void {
     .setAction(localnetTask);
 }
 
-export interface TaskArgs {
-}
-
 async function localnetTask (
-  {}: TaskArgs,
+  _: Record<string, never>, // taskArgs
   env: WasmkitRuntimeEnvironment
 ): Promise<void> {
   return await listLocalnet(env);

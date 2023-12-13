@@ -1,12 +1,10 @@
 import chalk from "chalk";
 import { execSync } from "child_process";
 
-import { WasmkitError } from "../../internal/core/errors";
-import { ERRORS } from "../../internal/core/errors-list";
 import { WasmkitRuntimeEnvironment } from "../../types";
 
 export async function listLocalnet (
-  env: WasmkitRuntimeEnvironment,
+  env: WasmkitRuntimeEnvironment
 ): Promise<void> {
   // read all available localnetworks in cfg
   for (const networkName in env.config.localnetworks) {
