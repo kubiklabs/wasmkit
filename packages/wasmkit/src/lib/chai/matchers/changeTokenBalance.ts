@@ -69,7 +69,10 @@ export async function getBalanceChange (
     });
   }
 
-  const client = getClient(WasmkitContext.getWasmkitContext().getRuntimeEnv().network);
+  const client = await getClient(WasmkitContext.getWasmkitContext().getRuntimeEnv().network);
+  if (client === undefined) {
+    throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
+  }
   const env: WasmkitRuntimeEnvironment = WasmkitContext.getWasmkitContext().getRuntimeEnv();
 
   const balanceBefore = extractTokenBalance(

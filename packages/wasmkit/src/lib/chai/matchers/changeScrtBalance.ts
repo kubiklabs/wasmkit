@@ -70,7 +70,10 @@ export async function getBalanceChange ( // eslint-disable-line sonarjs/cognitiv
     });
   }
 
-  const client = getClient(WasmkitContext.getWasmkitContext().getRuntimeEnv().network);
+  const client = await getClient(WasmkitContext.getWasmkitContext().getRuntimeEnv().network);
+  if (client === undefined) {
+    throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
+  }
   const env: WasmkitRuntimeEnvironment = WasmkitContext.getWasmkitContext().getRuntimeEnv();
   const balanceBefore = extractScrtBalance(
     await getBalance(client, accountAddr, env.network)

@@ -66,7 +66,10 @@ async function getBalances (
   accountAddresses: string[],
   token: string
 ): Promise<number[]> {
-  const client = getClient(WasmkitContext.getWasmkitContext().getRuntimeEnv().network);
+  const client = await getClient(WasmkitContext.getWasmkitContext().getRuntimeEnv().network);
+  if (client === undefined) {
+    throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
+  }
 
   return await Promise.all(
     accountAddresses.map(async (accountAddr) => {

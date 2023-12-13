@@ -30,6 +30,9 @@ export class UserAccountI implements UserAccount {
 
   async getBalance (): Promise<Coin[]> {
     const env: WasmkitRuntimeEnvironment = WasmkitContext.getWasmkitContext().getRuntimeEnv();
+    if (this.client === undefined) {
+      throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
+    }
     return await getBalance(this.client, this.account.address, env.network);
   }
 }
