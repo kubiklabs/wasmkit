@@ -156,8 +156,8 @@ export async function getSigningClient (
 }
 
 export function getChainFromAccount (network: Network): ChainType {
-  if (network.config.accounts[0].address.startsWith("secret")) {
-    return ChainType.Secret;
+  if (network.config.accounts.length === 0) { // no account prefix, use neutron
+    return ChainType.Neutron;
   } else if (network.config.accounts[0].address.startsWith("juno")) {
     return ChainType.Juno;
   } else if (network.config.accounts[0].address.startsWith("osmo")) {
@@ -176,6 +176,8 @@ export function getChainFromAccount (network: Network): ChainType {
     return ChainType.Nibiru;
   } else if (network.config.accounts[0].address.startsWith("terra")) {
     return ChainType.Terra;
+  } else if (network.config.accounts[0].address.startsWith("secret")) {
+    return ChainType.Secret;
   } else {
     throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
       { account: network.config.accounts[0].address });
