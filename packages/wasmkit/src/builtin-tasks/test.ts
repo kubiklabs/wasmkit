@@ -28,6 +28,13 @@ async function runTests (
   const { default: Mocha } = await import('mocha');
   const mocha = new Mocha(runtimeEnv.config.mocha);
 
+  // log the details of network the test is running on
+  console.log(
+    `Network: { RpcUrl: '${chalk.green(runtimeEnv.network.config.endpoint)}'` +
+    `, ChainId: '${chalk.green(runtimeEnv.network.config.chainId)}' }`
+  );
+  console.log("===========================================");
+
   for (const file of scriptNames) {
     let relativeFilePath = file;
     if (file.endsWith('.ts')) {

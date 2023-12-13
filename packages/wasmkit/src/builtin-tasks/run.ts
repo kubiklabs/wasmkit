@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import debug from "debug";
 import fsExtra from "fs-extra";
 import path from "path";
@@ -34,6 +35,13 @@ async function runScripts (
   allowWrite: boolean
 ): Promise<void> {
   const log = debug(logDebugTag);
+
+  // log the details of network the script is running on
+  console.log(
+    `Network: { RpcUrl: '${chalk.green(runtimeEnv.network.config.endpoint)}'` +
+    `, ChainId: '${chalk.green(runtimeEnv.network.config.chainId)}' }`
+  );
+  console.log("===========================================");
 
   // force boolean will be used when we have checkpoint support
 
