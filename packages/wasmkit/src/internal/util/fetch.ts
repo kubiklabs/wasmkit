@@ -113,7 +113,7 @@ export async function copyTemplatetoDestination (
 export async function fetchRepository (url: string, destination: string): Promise<void> {
   try {
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    await promisify(download)(url, destination);
+    await promisify(download)(`direct:${url}`, destination, { clone: true });
   } catch (error) {
     console.error(`Failed to initialize ${url}`);
     throw error;

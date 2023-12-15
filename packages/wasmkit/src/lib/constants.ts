@@ -41,7 +41,7 @@ export const defaultFees = {
 // };
 
 // initialize template
-export const TEMPLATES_GIT_REMOTE = "kubiklabs/wasmkit-templates";
+export const TEMPLATES_GIT_REMOTE = "https://github.com/kubiklabs/wasmkit-templates";
 export const DEFAULT_TEMPLATE = "counter";
 
 // playground related constants

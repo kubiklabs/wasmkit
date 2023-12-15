@@ -22,7 +22,7 @@ async function playgroundTask (
   { templatePath }: TaskArgs,
   env: WasmkitRuntimeEnvironment
 ): Promise<void> {
-  const projectName = "playground";
+  const templateName = "playground";
   const destination = process.cwd();
-  return await createPlayground(projectName, templatePath, destination, env);
+  return await createPlayground(templatePath, templateName, destination, env);
 }

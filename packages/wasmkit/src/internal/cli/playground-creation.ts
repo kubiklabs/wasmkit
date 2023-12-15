@@ -135,20 +135,20 @@ export function convertTypescriptFileToJson (
       schemaData
     }
   };
-  // let existingData: Record<string, unknown> = {};  NOTE: need not merge, simply overwrite
-  // if (fs.existsSync(outputFilePath)) {
-  //   const existingContent = fs.readFileSync(outputFilePath, "utf8");
-  //   existingData = JSON.parse(existingContent);
-  // }
-  // const mergedData = { ...existingData, ...jsonData };
-  fs.writeFileSync(outputFilePath, JSON.stringify(jsonData, null, 2));
+  let existingData: Record<string, unknown> = {}; // NOTE: need not merge, simply overwrite
+  if (fs.existsSync(outputFilePath)) {
+    const existingContent = fs.readFileSync(outputFilePath, "utf8");
+    existingData = JSON.parse(existingContent);
+  }
+  const mergedData = { ...existingData, ...jsonData };
+  fs.writeFileSync(outputFilePath, JSON.stringify(mergedData, null, 2));
 }
 
 export function processFilesInFolder (folderPath: string, destPath: string): void {
   const files = fs.readdirSync(folderPath);
   files.forEach((file) => {
     const contractName = path.parse(file).name;
-    const fileName = contractName + ".json";
+    const fileName = "contractSchema.json";
     const schemaDest = path.join(destPath, fileName);
     const filePath = path.join(folderPath, file);
     convertTypescriptFileToJson(filePath, schemaDest, contractName);
