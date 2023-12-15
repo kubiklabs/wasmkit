@@ -86,6 +86,7 @@ async function checkDir (destination: string, force: boolean): Promise<void> {
  * @param templateName template name passed by user (bare if no template name is passed)
  */
 async function checkTemplateExists (
+  projectPath: string,
   basePath: string,
   templateName: string
 ): Promise<[string, string]> {
@@ -95,7 +96,7 @@ async function checkTemplateExists (
   } else {
     console.log(
       chalk.red(
-        `Error occurred: template "${templateName}" does not exist in ${TEMPLATES_GIT_REMOTE_PLAYGROUND}`
+        `Error occurred: template "${templateName}" does not exist in ${projectPath}`
       )
     );
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -158,12 +159,12 @@ function _normalizeDestination (destination?: string): string {
  */
 export async function initialize ({
   force,
-  projectName,
+  projectPath,
   templateName,
   destination
 }: {
   force: boolean
-  projectName: string
+  projectPath: string
   templateName?: string
   destination?: string
 }): Promise<void> {
@@ -177,9 +178,9 @@ export async function initialize ({
 
   console.info(
     `\nFetching templates from:`,
-    chalk.gray(`https://github.com/${TEMPLATES_GIT_REMOTE_PLAYGROUND}`)
+    chalk.gray(projectPath)
   );
-  await fetchRepository(TEMPLATES_GIT_REMOTE_PLAYGROUND, tempDirPath);
+  await fetchRepository(projectPath, tempDirPath);
   if (templateName === undefined) {
     console.log(
       `Template name not passed: using default template ${chalk.green(DEFAULT_TEMPLATE_PLAYGROUND)}`
@@ -187,7 +188,7 @@ export async function initialize ({
     templateName = DEFAULT_TEMPLATE_PLAYGROUND;
   }
   let templatePath;
-  [templatePath, templateName] = await checkTemplateExists(tempDirPath, templateName);
+  [templatePath, templateName] = await checkTemplateExists(projectPath, tempDirPath, templateName);
 
   await copyTemplatetoDestination(templatePath, normalizedDestination, true);
   tempDirCleanup(); // clean temporary directory
@@ -218,5 +219,5 @@ export async function initialize ({
   } else {
     shouldShowInstallationInstructions = true;
   }
-  printSuggestedCommands(projectName, packageManager, shouldShowInstallationInstructions);
+  printSuggestedCommands(packageManager, shouldShowInstallationInstructions);
 }
