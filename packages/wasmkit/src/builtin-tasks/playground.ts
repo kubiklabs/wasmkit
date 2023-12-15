@@ -1,25 +1,28 @@
 import { createPlayground } from "../internal/cli/playground-creation";
 import { task } from "../internal/core/config/config-env";
+import { TEMPLATES_GIT_REMOTE_PLAYGROUND } from "../lib/constants";
 import type { WasmkitRuntimeEnvironment } from "../types";
 import { TASK_CREATE_PLAYGROUND } from "./task-names";
+
 export default function (): void {
-  task(TASK_CREATE_PLAYGROUND, "Initialize the playground in the project directory").setAction(
-    playgroundTask
-  );
+  task(TASK_CREATE_PLAYGROUND, "Initialize the playground in the project directory")
+    .addOptionalParam(
+      "templatePath",
+      "Repository path of custom playground template",
+      TEMPLATES_GIT_REMOTE_PLAYGROUND
+    ) // add optional type of value here (example, string) for validation
+    .setAction(playgroundTask);
 }
 
 export interface TaskArgs {
-  projectName: string
-  templateName: string
-  destination: string
+  templatePath: string
 }
 
 async function playgroundTask (
-  { projectName, templateName, destination }: TaskArgs,
+  { templatePath }: TaskArgs,
   env: WasmkitRuntimeEnvironment
 ): Promise<void> {
-  projectName = "playground";
-  templateName = "playground";
-  destination = process.cwd();
-  return await createPlayground(projectName, templateName, destination, env);
+  const templateName = "playground";
+  const destination = process.cwd();
+  return await createPlayground(templatePath, templateName, destination, env);
 }

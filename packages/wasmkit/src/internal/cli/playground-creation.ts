@@ -16,16 +16,15 @@ import { ERRORS } from "../core/errors-list";
 import { initialize } from "./initialize-playground";
 
 export function printSuggestedCommands (
-  projectName: string,
   packageManager: string,
   shouldShowInstallationInstructions: boolean
 ): void {
   const currDir = process.cwd();
-  const projectPath = path.join(currDir, projectName);
-  console.log(`Success! Created project at ${chalk.greenBright(projectPath)}.`);
+  const destinationPath = path.join(currDir, 'playground');
+  console.log(`Success! Created project at ${chalk.greenBright(destinationPath)}.`);
 
   console.log(`Begin by typing:`);
-  console.log(chalk.yellow(`  cd ${projectName}`));
+  console.log(chalk.yellow(`  cd playground`));
   if (shouldShowInstallationInstructions) {
     console.log(chalk.yellow(`  ${packageManager} install`));
   }
@@ -39,12 +38,12 @@ export function createContractListJson (
 ): void {
   const files = fs.readdirSync(contractDir); // Get an array of all files in the directory
   const dest = path.join(destinationDir, "contractList.json");
+  const jsonData: Record<string, Record<string, ContractListInfo>> = {};
   for (const file of files) {
     const fileName = path.parse(file).name;
     const filePath = path.join(contractDir, file);
     const yamlData = loadCheckpoint(filePath);
     const temp = Object.keys(yamlData);
-    const jsonData: Record<string, Record<string, ContractListInfo>> = {};
     temp.forEach((keys) => {
       const info: CheckpointInfo = yamlData[keys];
       const checkpointInf: ContractListInfo = {
@@ -69,8 +68,9 @@ export function createContractListJson (
     //   existingData = JSON.parse(existingContent);
     // }
     // const mergedData = { ...existingData, ...jsonData };
-    fs.writeFileSync(dest, JSON.stringify(jsonData, null, 2));
   }
+  // write json schema of all contracts
+  fs.writeFileSync(dest, JSON.stringify(jsonData, null, 2));
 }
 
 export function convertTypescriptFileToJson (
@@ -135,29 +135,29 @@ export function convertTypescriptFileToJson (
       schemaData
     }
   };
-  // let existingData: Record<string, unknown> = {};  NOTE: need not merge, simply overwrite
-  // if (fs.existsSync(outputFilePath)) {
-  //   const existingContent = fs.readFileSync(outputFilePath, "utf8");
-  //   existingData = JSON.parse(existingContent);
-  // }
-  // const mergedData = { ...existingData, ...jsonData };
-  fs.writeFileSync(outputFilePath, JSON.stringify(jsonData, null, 2));
+  let existingData: Record<string, unknown> = {}; // NOTE: need not merge, simply overwrite
+  if (fs.existsSync(outputFilePath)) {
+    const existingContent = fs.readFileSync(outputFilePath, "utf8");
+    existingData = JSON.parse(existingContent);
+  }
+  const mergedData = { ...existingData, ...jsonData };
+  fs.writeFileSync(outputFilePath, JSON.stringify(mergedData, null, 2));
 }
 
 export function processFilesInFolder (folderPath: string, destPath: string): void {
   const files = fs.readdirSync(folderPath);
-  const fileName = "contractSchema";
-  const schemaDest = path.join(destPath, fileName + ".json");
   files.forEach((file) => {
+    const contractName = path.parse(file).name;
+    const fileName = "contractSchema.json";
+    const schemaDest = path.join(destPath, fileName);
     const filePath = path.join(folderPath, file);
-    const name = path.parse(file).name;
-    convertTypescriptFileToJson(filePath, schemaDest, name);
+    convertTypescriptFileToJson(filePath, schemaDest, contractName);
   });
 }
 
 export function createDir (dir: string): void {
   fs.mkdir(dir, { recursive: true }, (err) => {
-    if (err) {
+    if (err) { // TODO: expand this error msg to be more descriptive
       console.error("error", err);
     }
   });
@@ -214,57 +214,53 @@ function handleSocials (
   fs.writeFileSync(path.join(destinationPath, "social.json"), JSON.stringify(jsonData, null, 2));
 }
 export async function createPlayground (
-  projectName: string,
+  projectPath: string,
   templateName: string,
   destination: string,
   env: WasmkitRuntimeEnvironment
-  // eslint-disable-next-line
-): Promise<any> {
-  if (templateName !== undefined) {
-    const currDir = process.cwd();
-    const artifacts = path.join(currDir, "artifacts");
-    const contractsSchema = path.join(artifacts, "typescript_schema");
-    const checkpointsDir = path.join(artifacts, "checkpoints");
-    // check existence of artifact directory
-    if (!fs.existsSync(artifacts)) {
-      throw new WasmkitError(ERRORS.GENERAL.ARTIFACTS_NOT_FOUND, {});
-    } else if (!fs.existsSync(checkpointsDir)) {
-      // check existence of checkpoint directory
-      throw new WasmkitError(ERRORS.GENERAL.CHECKPOINTS_NOT_FOUND, {});
-    } else if (!fs.existsSync(contractsSchema)) {
-      throw new WasmkitError(ERRORS.GENERAL.SCHEMA_NOT_FOUND);
-    }
-
-    const projectPath = path.join(currDir, projectName);
-    await initialize({
-      force: false,
-      projectName: projectName,
-      templateName: templateName,
-      destination: projectPath
-    });
-
-    const playground = path.join(currDir, "playground");
-    const playgroundDest = path.join(playground, "src");
-    const ContractDir = path.join(playgroundDest, "contracts");
-    createDir(ContractDir);
-    const schemaDest = path.join(ContractDir, "schema");
-    const instantiateDir = path.join(ContractDir, "instantiateInfo");
-    createDir(instantiateDir);
-    const socialDir = path.join(ContractDir, "socials");
-    createDir(socialDir);
-    createContractListJson(checkpointsDir, instantiateDir, env);
-    createDir(schemaDest);
-    processFilesInFolder(contractsSchema, schemaDest);
-    if (env.config.playground) {
-      const staticFilesDest = path.join(playgroundDest, "assets", "img");
-      const staticFilesSrc = path.join(currDir);
-      copyStaticFiles(staticFilesSrc, staticFilesDest, env);
-      handleSocials(socialDir, env);
-    }
-    return;
+): Promise<void> {
+  const currDir = process.cwd();
+  const artifacts = path.join(currDir, "artifacts");
+  const contractsSchema = path.join(artifacts, "typescript_schema");
+  const checkpointsDir = path.join(artifacts, "checkpoints");
+  // check existence of artifact directory
+  if (!fs.existsSync(artifacts)) {
+    throw new WasmkitError(ERRORS.GENERAL.ARTIFACTS_NOT_FOUND, {});
+  } else if (!fs.existsSync(checkpointsDir)) {
+    // check existence of checkpoint directory
+    throw new WasmkitError(ERRORS.GENERAL.CHECKPOINTS_NOT_FOUND, {});
+  } else if (!fs.existsSync(contractsSchema)) {
+    throw new WasmkitError(ERRORS.GENERAL.SCHEMA_NOT_FOUND);
   }
-  console.log(chalk.cyan(`★ Welcome to Wasmkit Playground v1.0 ★`));
-  console.log("\n★", chalk.cyan("Project created"), "★\n");
+
+  const destinationPath = path.join(currDir, "playground");
+  await initialize({
+    force: false,
+    projectPath: projectPath,
+    templateName: templateName,
+    destination: destinationPath
+  });
+
+  const playground = path.join(currDir, "playground");
+  const playgroundDest = path.join(playground, "src");
+  const ContractDir = path.join(playgroundDest, "contracts");
+  createDir(ContractDir);
+  const schemaDest = path.join(ContractDir, "schema");
+  const instantiateDir = path.join(ContractDir, "instantiateInfo");
+  createDir(instantiateDir);
+  const socialDir = path.join(ContractDir, "socials");
+  createDir(socialDir);
+  createContractListJson(checkpointsDir, instantiateDir, env);
+  createDir(schemaDest);
+  processFilesInFolder(contractsSchema, schemaDest);
+  if (env.config.playground) {
+    const staticFilesDest = path.join(playgroundDest, "assets", "img");
+    const staticFilesSrc = path.join(currDir);
+    copyStaticFiles(staticFilesSrc, staticFilesDest, env);
+    handleSocials(socialDir, env);
+  }
+  // console.log(chalk.cyan(`★ Welcome to Wasmkit Playground v1.0 ★`));
+  // console.log("\n★", chalk.cyan("Project created"), "★\n");
 }
 
 export function createConfirmationPrompt (
