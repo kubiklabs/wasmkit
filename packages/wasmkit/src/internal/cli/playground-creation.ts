@@ -39,12 +39,12 @@ export function createContractListJson (
 ): void {
   const files = fs.readdirSync(contractDir); // Get an array of all files in the directory
   const dest = path.join(destinationDir, "contractList.json");
+  const jsonData: Record<string, Record<string, ContractListInfo>> = {};
   for (const file of files) {
     const fileName = path.parse(file).name;
     const filePath = path.join(contractDir, file);
     const yamlData = loadCheckpoint(filePath);
     const temp = Object.keys(yamlData);
-    const jsonData: Record<string, Record<string, ContractListInfo>> = {};
     temp.forEach((keys) => {
       const info: CheckpointInfo = yamlData[keys];
       const checkpointInf: ContractListInfo = {
@@ -69,8 +69,9 @@ export function createContractListJson (
     //   existingData = JSON.parse(existingContent);
     // }
     // const mergedData = { ...existingData, ...jsonData };
-    fs.writeFileSync(dest, JSON.stringify(jsonData, null, 2));
   }
+  // write json schema of all contracts
+  fs.writeFileSync(dest, JSON.stringify(jsonData, null, 2));
 }
 
 export function convertTypescriptFileToJson (
@@ -146,18 +147,18 @@ export function convertTypescriptFileToJson (
 
 export function processFilesInFolder (folderPath: string, destPath: string): void {
   const files = fs.readdirSync(folderPath);
-  const fileName = "contractSchema";
-  const schemaDest = path.join(destPath, fileName + ".json");
   files.forEach((file) => {
+    const contractName = path.parse(file).name;
+    const fileName = contractName + ".json";
+    const schemaDest = path.join(destPath, fileName);
     const filePath = path.join(folderPath, file);
-    const name = path.parse(file).name;
-    convertTypescriptFileToJson(filePath, schemaDest, name);
+    convertTypescriptFileToJson(filePath, schemaDest, contractName);
   });
 }
 
 export function createDir (dir: string): void {
   fs.mkdir(dir, { recursive: true }, (err) => {
-    if (err) {
+    if (err) { // TODO: expand this error msg to be more descriptive
       console.error("error", err);
     }
   });
