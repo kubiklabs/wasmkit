@@ -36,33 +36,31 @@ export function createContractListJson (
   destinationDir: string,
   env: WasmkitRuntimeEnvironment
 ): void {
-  const files = fs.readdirSync(contractDir); // Get an array of all files in the directory
+  const checkpointFiles = fs.readdirSync(contractDir); // Get an array of all files in the directory
   const dest = path.join(destinationDir, "contractList.json");
-  const jsonData: Record<string, Record<string, ContractListInfo>> = {};
-  for (const file of files) {
-    const fileName = path.parse(file).name;
-    const filePath = path.join(contractDir, file);
-    const yamlData = loadCheckpoint(filePath);
-    const temp = Object.keys(yamlData);
-    temp.forEach((keys) => {
-      const info: CheckpointInfo = yamlData[keys];
-      const checkpointInf: ContractListInfo = {
-        chainId: env.config.networks[keys].chainId,
-        codeId: info.deployInfo?.codeId,
-        contractAddress: info.instantiateInfo?.[0].contractAddress,
-        contractTag: (info.instantiateInfo?.[0].instantiateTag !== 'default_instantiate')
-          ? info.instantiateInfo?.[0].instantiateTag : undefined
-      };
-      const data: Record<string, ContractListInfo> = {
-        [keys]: checkpointInf
-      };
-      if (jsonData[fileName]) {
-        // Merge existing data with new data
-        jsonData[fileName] = { ...jsonData[fileName], ...data };
-      } else {
-        // Add new data
-        jsonData[fileName] = data;
-      }
+  const checkpointJsonData: Record<string, Record<string, ContractListInfo>> = {};
+  for (const checkpointFile of checkpointFiles) {
+    const checkpointFileName = path.parse(checkpointFile).name;
+    const checkpointFilePath = path.join(contractDir, checkpointFile);
+    const checkpointYamlData = loadCheckpoint(checkpointFilePath);
+    const networkNames = Object.keys(checkpointYamlData);
+
+    checkpointJsonData[checkpointFileName] = {};
+    networkNames.forEach((networkName) => {
+      const info: CheckpointInfo = checkpointYamlData[networkName];
+      const contractCodeId = info.deployInfo?.codeId;
+      const networkChainId = env.config.networks[networkName].chainId;
+      info.instantiateInfo?.forEach((instance) => {
+        const checkpointInf: ContractListInfo = {
+          chainId: networkChainId,
+          codeId: contractCodeId,
+          contractAddress: instance.contractAddress,
+          contractTag: (instance.instantiateTag !== 'default_instantiate')
+            ? instance.instantiateTag : undefined
+        };
+        const instanceKey = `${networkName}_${instance.instantiateTag}`;
+        checkpointJsonData[checkpointFileName][instanceKey] = checkpointInf;
+      });
     });
     // let existingData: Record<string, unknown> = {};  NOTE: need not merge, simply overwrite
     // if (fs.existsSync(dest)) {
@@ -72,7 +70,7 @@ export function createContractListJson (
     // const mergedData = { ...existingData, ...jsonData };
   }
   // write json schema of all contracts
-  fs.writeFileSync(dest, JSON.stringify(jsonData, null, 2));
+  fs.writeFileSync(dest, JSON.stringify(checkpointJsonData, null, 2));
 }
 
 export function convertTypescriptFileToJson (

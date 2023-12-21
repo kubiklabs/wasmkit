@@ -21,7 +21,11 @@ import type {
   WasmkitRuntimeEnvironment
 } from "../../types";
 import { loadCheckpoint, persistCheckpoint } from "../checkpoints";
-import { executeTransaction, getClient, getSigningClient, instantiateContract, sendQuery, storeCode } from "../client";
+import {
+  executeTransaction, getClient, getSigningClient,
+  instantiateContract, sendQuery,
+  storeCode
+} from "../client";
 
 export interface ExecArgs {
   account: Account | UserAccount
