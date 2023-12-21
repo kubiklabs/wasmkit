@@ -116,9 +116,9 @@ export const types = argumentTypes;
 
 /**
  * Register an environment extender what will be run after the
- * wasmKit Runtime Environment is initialized.
+ * WasmKit Runtime Environment is initialized.
  *
- * @param extender A function that receives the wasmKit Runtime
+ * @param extender A function that receives the WasmKit Runtime
  * Environment.
  */
 export function extendEnvironment (extender: EnvironmentExtender): void {
@@ -133,7 +133,7 @@ export function extendConfig (extender: ConfigExtender): void {
 }
 
 /**
- * Loads a wasmKit plugin
+ * Loads a WasmKit plugin
  * @param pluginName The plugin name.
  */
 export function usePlugin (pluginName: string): void {

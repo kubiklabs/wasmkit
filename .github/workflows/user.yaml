@@ -26,7 +26,7 @@ jobs:
         restore-keys: |
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
-    - name: Install wasmKit
+    - name: Install WasmKit
       run: npm i -g @arufa/wasmkit
     - name: Run commands
       run: wasmkit help

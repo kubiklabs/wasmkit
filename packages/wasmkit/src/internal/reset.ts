@@ -1,5 +1,5 @@
 /**
- * This function resets the wasmKit context.
+ * This function resets the WasmKit context.
  *
  * This doesn't unload any loaded WasmKit plugin, so those have to be unloaded
  * manually with `unloadModule`.
@@ -26,7 +26,7 @@ export function resetWasmkitContext (): void {
       try {
         configPath = getUserConfigPath();
       } catch (error) {
-        // We weren't in a wasmKit project
+        // We weren't in a WasmKit project
       }
 
       if (configPath !== undefined) {
@@ -36,7 +36,7 @@ export function resetWasmkitContext (): void {
     WasmkitContext.deleteWasmkitContext();
   }
 
-  // Unload all the wasmKit's entry-points.
+  // Unload all the WasmKit's entry-points.
   unloadModule("../register");
   unloadModule("./cli/cli");
   unloadModule("./lib/lib");

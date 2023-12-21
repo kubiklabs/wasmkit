@@ -184,8 +184,8 @@ Please check that the configured keypair are correct.`,
     INIT_INSIDE_PROJECT: {
       number: 17,
       message: "WasmKit project file was detected: '%clashingFile%'. Move the file or use an empty directory.",
-      title: "Directory contains a wasmKit file",
-      description: `You are trying to run WasmKit in a directory that contains wasmKit project file.`,
+      title: "Directory contains a WasmKit file",
+      description: `You are trying to run WasmKit in a directory that contains WasmKit project file.`,
       shouldBeReported: false
     },
     RUST_COMPILE_ERROR: {
@@ -200,7 +200,7 @@ Please check that the configured keypair are correct.`,
       message: "Error. Script '%script%' failed during load: %error%",
       title: "Script can't load",
       description: `Script failed during load.
-      Please check wasmKit output for more details.`,
+      Please check WasmKit output for more details.`,
       shouldBeReported: false
     },
     NO_DEFAULT_EXPORT_IN_SCRIPT: {
@@ -208,7 +208,7 @@ Please check that the configured keypair are correct.`,
       message: "Error. '%script%' doesn't have an exported default function.",
       title: "No exported default function",
       description: `Script doesn't export a default function.   
-      Please check wasmKit output for more details.`,
+      Please check WasmKit output for more details.`,
       shouldBeReported: false
     },
     ACCOUNT_NOT_PASSED: {
@@ -236,7 +236,7 @@ Please check that the configured keypair are correct.`,
       number: 24,
       message: "Account with %name% doesn't exist in wasmkit.config.js.",
       title: "Account doesn't exist",
-      description: `Account not present in wasmKit config.`,
+      description: `Account not present in WasmKit config.`,
       shouldBeReported: false
     },
     BALANCE_UNDEFINED: {
@@ -1062,7 +1062,7 @@ Please double check that schema have been generated.`,
       title: "Plugin not installed",
       description: `You are trying to use a plugin that hasn't been installed.
   
-  Please follow wasmKit's instructions to resolve this.`,
+  Please follow WasmKit's instructions to resolve this.`,
       shouldBeReported: false
     },
     MISSING_DEPENDENCIES: {
@@ -1083,7 +1083,7 @@ Please follow WasmKit's instructions to resolve this.`,
       title: "Plugin dependencies's version mismatch",
       description: `You are trying to use a plugin that requires a different version of one of its dependencies.
   
-  Please follow wasmKit's instructions to resolve this.`,
+  Please follow WasmKit's instructions to resolve this.`,
       shouldBeReported: false
     },
     OLD_STYLE_IMPORT_DETECTED: {

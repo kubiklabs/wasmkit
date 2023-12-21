@@ -21,11 +21,11 @@ function mergeUserAndDefaultConfigs (
 }
 
 /**
- * This functions resolves the wasmKit config by merging the user provided config
- * and the wasmKit default config.
+ * This functions resolves the WasmKit config by merging the user provided config
+ * and the WasmKit default config.
  *
  * @param userConfigPath the user config filepath
- * @param defaultConfig  the wasmKit's default config object
+ * @param defaultConfig  the WasmKit's default config object
  * @param userConfig     the user config object
  * @param configExtenders An array of ConfigExtenders
  *

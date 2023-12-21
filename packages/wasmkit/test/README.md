@@ -1,4 +1,4 @@
-# Secret Contracts Test
+# CosmWasm Contracts Test
 
-This template contains wasmKit tests.
+This template contains WasmKit tests.
 

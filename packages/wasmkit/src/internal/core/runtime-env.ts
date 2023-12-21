@@ -30,14 +30,14 @@ export class Environment implements WasmkitRuntimeEnvironment {
   private readonly _extenders: EnvironmentExtender[];
 
   /**
-   * Initializes the wasmKit Runtime Environment and the given
+   * Initializes the WasmKit Runtime Environment and the given
    * extender functions.
    *
    * @remarks The extenders' execution order is given by the order
-   * of the requires in the wasmKit's config file and its plugins.
+   * of the requires in the WasmKit's config file and its plugins.
    *
-   * @param config The wasmKit's config object.
-   * @param runtimeArgs The parsed wasmKit's arguments.
+   * @param config The WasmKit's config object.
+   * @param runtimeArgs The parsed WasmKit's arguments.
    * @param tasks A map of tasks.
    * @param extenders A list of extenders.
    * @param networkRequired if true it will assert that a requested network is defined.
@@ -100,7 +100,7 @@ export class Environment implements WasmkitRuntimeEnvironment {
   };
 
   /**
-   * Injects the properties of `this` (the wasmKit Runtime Environment) into the global scope.
+   * Injects the properties of `this` (the WasmKit Runtime Environment) into the global scope.
    *
    * @param blacklist a list of property names that won't be injected.
    *

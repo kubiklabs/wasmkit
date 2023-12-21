@@ -26,7 +26,7 @@ async function evaluate (code: string, context: Record<string, unknown>, filenam
 
 async function startConsole (runtimeEnv: WasmkitRuntimeEnvironment): Promise<void> {
   await new Promise<void>((resolve, reject) => {
-    console.log("★★★", chalk.blueBright(" Welcome to wasmKit REPL"), "★★★");
+    console.log("★★★", chalk.blueBright(" Welcome to WasmKit REPL"), "★★★");
     console.log(chalk.green('Try typing: config\n'));
 
     const server = repl.start({
@@ -46,7 +46,7 @@ async function startConsole (runtimeEnv: WasmkitRuntimeEnvironment): Promise<voi
 }
 
 export default function (): void {
-  task(TASK_REPL, "Opens wasmKit console")
+  task(TASK_REPL, "Opens WasmKit console")
     .setAction(
       async (
         _taskArgs: TaskArguments,

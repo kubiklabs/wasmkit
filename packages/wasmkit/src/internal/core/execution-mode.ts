@@ -5,7 +5,7 @@ import * as path from "path";
 const log = debug("wasmkit:core:execution-mode");
 
 /**
- * This module defines different wasmKit execution modes and autodetects them.
+ * This module defines different WasmKit execution modes and autodetects them.
  *
  * IMPORTANT: This will have to be revisited once Yarn PnP and npm's tink get
  * widely adopted.
@@ -24,7 +24,7 @@ export function getExecutionMode (): ExecutionMode {
 
   if (!isInstalled) {
     // When running the tests with ts-node we set the CWD to the root of
-    // wasmKit. We could check if the __filename ends with .ts
+    // WasmKit. We could check if the __filename ends with .ts
     if (__dirname.startsWith(workingDirectoryOnLoad)) {
       return ExecutionMode.EXECUTION_MODE_TS_NODE_TESTS;
     }
@@ -54,7 +54,7 @@ export function getExecutionMode (): ExecutionMode {
  * This is a somewhat more limited detection, but we use it if
  * is-installed-globally fails.
  *
- * If a user installs wasmKit locally, and executes it from outside the
+ * If a user installs WasmKit locally, and executes it from outside the
  * directory that contains the `node_module` with the installation, this will
  * fail and return `false`.
  */

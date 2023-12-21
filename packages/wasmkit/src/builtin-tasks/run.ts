@@ -118,7 +118,7 @@ async function executeRunTask (
 
 export default function (): void {
   task(TASK_RUN, "Runs a user-defined script after compiling the project")
-    .addVariadicPositionalParam("scripts", "A js file to be run within wasmKit's environment")
+    .addVariadicPositionalParam("scripts", "A js file to be run within WasmKit's environment")
     .addFlag("skipCheckpoints", "do not read from or write checkpoints")
     .setAction((input, env) => executeRunTask(input, env));
 }

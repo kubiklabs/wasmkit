@@ -4,9 +4,24 @@
   <img src="./assets/wasm_kit_logo_light.png" width=25% height=25%>
 </p>
 
-WasmKit is a development framework for building the cosmwasm contracts. The aim of the project is to make cosmwasm contracts development process simple, efficient and scalable. Users can focus on the logic of cosmwasm contracts and not much about further steps in development.
+WasmKit is a development framework for building the CosmWasm contracts. The aim of the project is to make CosmWasm contracts development process simple, efficient and scalable. Users can focus on the logic of CosmWasm contracts and not much about further steps in development.
 
 It facilitates features such as initiating project repo from contract templates, easy compilation of contracts, deployment, Interacting with contracts using schema and contract testing framework.
+
+## Support
+
+Join [WasmKit's discord chat](https://discord.gg/kXu8FBkw) for support, feedback, and general chatter.
+
+## Features
+
+✅ &nbsp;Bootstrap contract boilerplate<br/>
+✅ &nbsp;Contract compilation made simple<br/>
+✅ &nbsp;Typescript based interaction scripts<br/>
+✅ &nbsp;Abstractions over networks, accounts and contracts<br/>
+✅ &nbsp;Typescript based intergation tests<br/>
+✅ &nbsp;Easily spin up local networks<br/>
+✅ &nbsp;Autogenerate web based contract playgrounds with type safety<br/>
+🏗️ &nbsp;Network state forking<br/>
 
 ## Requirements
 
@@ -15,7 +30,7 @@ It facilitates features such as initiating project repo from contract templates,
 
 ## Setup rust environment
 
-WasmKit requires a Rust environment installed on a local machine to work properly. This Rust environment can be installed with the help of wasmKit in just a command.
+WasmKit requires a Rust environment installed on a local machine to work properly. This Rust environment can be installed with the help of WasmKit in just a command.
 
 ```bash
 wasmkit install
@@ -25,7 +40,7 @@ wasmkit install
 
 ### Installation from released version
 
-To install wasmKit globally in your system you can use:
+To install WasmKit globally in your system you can use:
 
 ```bash
 yarn global add @kubiklabs/wasmkit

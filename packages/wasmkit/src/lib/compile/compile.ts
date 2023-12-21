@@ -99,9 +99,9 @@ export async function compile (
 }
 
 export function readContractName (tomlFilePath: string): string {
-  const tomlFileContent: string = fs.readFileSync(tomlFilePath, 'utf-8');
+  const tomlFileContent = tomlParse(readFileSync(tomlFilePath).toString());
 
-  return replaceAll(tomlFileContent.split('\n')[1].split("\"")[1], '-', '_');
+  return replaceAll(tomlFileContent.package.name, '-', '_');
 }
 
 export function compileContract (

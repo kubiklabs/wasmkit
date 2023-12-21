@@ -5,7 +5,7 @@ import { getPackageJson } from "../internal/util/packageInfo";
 import { WasmkitRuntimeEnvironment } from "../types";
 import { TASK_HELP } from "./task-names";
 
-const WASMKIT_NAME = "wasmKit";
+const WASMKIT_NAME = "WasmKit";
 export default function (): void {
   task(TASK_HELP, "Prints this message")
     .addOptionalPositionalParam(
