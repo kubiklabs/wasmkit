@@ -17,13 +17,11 @@ export const createTypedObjectParams = async (
   const typedParams: any[] = [];
 
   // use json-to-ts generated type here
-  console.log('compile: ', 'before: 111');
   const testHash = await compile(jsonschema, 'testParamName', {
     additionalProperties: false,
     bannerComment: '',
     declareExternallyReferenced: true
   });
-  console.log('compile: ', 'after: 111');
 
   const testAST = parse(testHash, {
     allowImportExportEverywhere: true,
