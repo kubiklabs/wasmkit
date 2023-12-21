@@ -54,7 +54,7 @@ export class WasmkitError extends Error {
 }
 
 /**
- * This class is used to throw errors from wasmKit plugins made by third parties.
+ * This class is used to throw errors from WasmKit plugins made by third parties.
  */
 export class WasmKitPluginError extends Error {
   public static isWasmKitPluginError (other: any): other is WasmKitPluginError { // eslint-disable-line  

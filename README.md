@@ -15,7 +15,7 @@ It facilitates features such as initiating project repo from contract templates,
 
 ## Setup rust environment
 
-WasmKit requires a Rust environment installed on a local machine to work properly. This Rust environment can be installed with the help of wasmKit in just a command.
+WasmKit requires a Rust environment installed on a local machine to work properly. This Rust environment can be installed with the help of WasmKit in just a command.
 
 ```bash
 wasmkit install
@@ -25,7 +25,7 @@ wasmkit install
 
 ### Installation from released version
 
-To install wasmKit globally in your system you can use:
+To install WasmKit globally in your system you can use:
 
 ```bash
 yarn global add @kubiklabs/wasmkit

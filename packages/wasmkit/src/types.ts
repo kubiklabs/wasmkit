@@ -7,7 +7,7 @@
 // written in the user's config file.
 //
 // The other one, with the same name except without the User part, represents
-// the resolved value as used during the wasmKit execution.
+// the resolved value as used during the WasmKit execution.
 //
 // Note that while many declarations are repeated here (i.e. network types'
 // fields), we don't use `extends` as that can interfere with plugin authors
@@ -354,9 +354,9 @@ export interface ResolvedConfig extends WasmKitUserConfig {
  * WasmKit arguments:
  * + network: the network to be used (default="default").
  * + showStackTraces: flag to show stack traces.
- * + version: flag to show wasmKit's version.
- * + help: flag to show wasmKit's help message.
- * + config: used to specify wasmKit's config file.
+ * + version: flag to show WasmKit's version.
+ * + help: flag to show WasmKit's help message.
+ * + config: used to specify WasmKit's config file.
  */
 export interface RuntimeArgs {
   network: string

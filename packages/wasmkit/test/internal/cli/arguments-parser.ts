@@ -124,8 +124,8 @@ describe("ArgumentsParser", () => {
     );
   });
 
-  describe("wasmKit arguments", () => {
-    it("should parse wasmKit arguments with task", () => {
+  describe("WasmKit arguments", () => {
+    it("should parse WasmKit arguments with task", () => {
       const rawCLAs: string[] = [
         SHOW_STACK,
         "--network",
@@ -151,7 +151,7 @@ describe("ArgumentsParser", () => {
       assert.equal("--task-param", unparsedCLAs[0]);
     });
 
-    it("should parse wasmKit arguments after taskname", () => {
+    it("should parse WasmKit arguments after taskname", () => {
       const rawCLAs: string[] = [
         "compile",
         "--task-param",
@@ -192,7 +192,7 @@ describe("ArgumentsParser", () => {
         ERRORS.ARGUMENTS.UNRECOGNIZED_COMMAND_LINE_ARG);
     });
 
-    it("should parse a wasmKit argument", () => {
+    it("should parse a WasmKit argument", () => {
       const rawCLAs: string[] = [
         "--show-stack-traces",
         "--network",
@@ -223,7 +223,7 @@ describe("ArgumentsParser", () => {
       assert.equal(runtimeArgs.network, "local");
     });
 
-    it("should fail trying to parse wasmKit with invalid argument", () => {
+    it("should fail trying to parse WasmKit with invalid argument", () => {
       const rawCLAs: string[] = [
         SHOW_STACK,
         "--network",

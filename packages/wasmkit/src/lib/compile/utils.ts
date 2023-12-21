@@ -44,7 +44,9 @@ export const findAndParseTypes = async (
         typ.definitions[key].title = key;
       }
     }
+    console.log("compile: ", "before: 222", typ, typ.title);
     const result = await compile(typ, typ.title);
+    console.log("compile: ", "after: 222");
     allTypes.push(result);
   }
   return parser(allTypes);

@@ -210,7 +210,7 @@ export const inputFile: ArgumentType<string> = {
       const stats = fs.lstatSync(strValue);
 
       if (stats.isDirectory()) {
-        // This is caught and encapsulated in a wasmKit error.
+        // This is caught and encapsulated in a WasmKit error.
         // tslint:disable-next-line only-wasmkit-error
         throw new Error(`${strValue} is a directory, not a file`);
       }

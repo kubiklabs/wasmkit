@@ -14,7 +14,7 @@ export const WASMKIT_PARAM_DEFINITIONS: ParamDefinitions = {
   command: {
     name: "command",
     defaultValue: "",
-    description: "Name of wasmKit task ran.",
+    description: "Name of WasmKit task ran.",
     type: types.string,
     isFlag: false,
     isOptional: true,

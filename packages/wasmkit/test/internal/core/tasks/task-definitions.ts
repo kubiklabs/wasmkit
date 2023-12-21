@@ -160,7 +160,7 @@ describe("SimpleTaskDefinition", () => {
       });
     });
 
-    describe("param name clashes with wasmKit's ones", () => {
+    describe("param name clashes with WasmKit's ones", () => {
       function testClashWith (name: string): void {
         expectWasmkitError(
           () => taskDefinition.addParam(name),
@@ -193,7 +193,7 @@ describe("SimpleTaskDefinition", () => {
       }
 
       it("Should throw if a param clashes", () => {
-        // This is constructed to force a type error here if a wasmKit arg is
+        // This is constructed to force a type error here if a WasmKit arg is
         // added and not tested.
         const wasmKitArgs: RuntimeArgs = {
           showStackTraces: true,

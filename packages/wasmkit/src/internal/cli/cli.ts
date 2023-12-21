@@ -23,7 +23,7 @@ import { isSetupTask } from "../core/tasks/builtin-tasks";
 import { getPackageJson, PackageJson } from "../util/packageInfo";
 import { ArgumentsParser } from "./arguments-parser";
 
-const WASMKIT_NAME = "wasmKit";
+const WASMKIT_NAME = "WasmKit";
 const log = debug("wamkit:core:cli");
 
 async function printVersionMessage (packageJson: PackageJson): Promise<void> {
@@ -170,7 +170,7 @@ export async function loadEnvironmentAndArgs (
 
 /* eslint-disable sonarjs/cognitive-complexity */
 async function main (): Promise<void> {
-  log(`Initiating wasmKit task !`);
+  log(`Initiating WasmKit task !`);
   let showStackTraces = false;
   try {
     const {
@@ -196,7 +196,7 @@ async function main (): Promise<void> {
     );
     await env.run(taskName, taskArguments);
 
-    log(`Quitting wasmKit after successfully running task ${taskName}`);
+    log(`Quitting WasmKit after successfully running task ${taskName}`);
   } catch (error) {
     if (WasmkitError.isWasmkitError(error)) {
       console.error(chalk.red(`Error ${error.message}`));

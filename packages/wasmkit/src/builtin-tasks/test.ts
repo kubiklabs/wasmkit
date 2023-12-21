@@ -115,7 +115,7 @@ export default function (): void {
   task(TASK_TEST, "Runs a user-defined test script after compiling the project")
     .addOptionalVariadicPositionalParam(
       "tests",
-      "A js file to be run within wasmKit's environment"
+      "A js file to be run within WasmKit's environment"
     )
     .setAction((input, env) => executeTestTask(input, env));
 }
