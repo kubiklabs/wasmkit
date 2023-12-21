@@ -10,7 +10,7 @@
   "dependencies": {
     "@types/chai": "^4.3.0",
     "chai": "^4.3.4",
-    "@kubiklabs/wasmkit": "^0.2.6",
+    "@kubiklabs/wasmkit": "^0.2.8",
     "typescript": "^4.3.2"
   }
 }

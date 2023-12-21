@@ -518,5 +518,6 @@ export interface Structure {
 export interface ContractListInfo {
   chainId: string |undefined
   codeId: number | undefined
-  contractAddress: string |undefined
+  contractAddress: string | undefined
+  contractTag: string | undefined
 }

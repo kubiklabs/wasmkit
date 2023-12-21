@@ -49,7 +49,9 @@ export function createContractListJson (
       const checkpointInf: ContractListInfo = {
         chainId: env.config.networks[keys].chainId,
         codeId: info.deployInfo?.codeId,
-        contractAddress: info.instantiateInfo?.[0].contractAddress
+        contractAddress: info.instantiateInfo?.[0].contractAddress,
+        contractTag: (info.instantiateInfo?.[0].instantiateTag !== 'default_instantiate')
+          ? info.instantiateInfo?.[0].instantiateTag : undefined
       };
       const data: Record<string, ContractListInfo> = {
         [keys]: checkpointInf
