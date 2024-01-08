@@ -45,6 +45,25 @@ export class Contract {
   private checkpointData: Checkpoints;
   private readonly checkpointPath: string;
 
+  private loadInterval?: NodeJS.Timer;
+
+  private printLoadingAnimation (logMsg: string): void {
+    const loadingChars = ['/', '-', '\\', '|'];
+    let index = 0;
+
+    this.loadInterval = setInterval(() => {
+      process.stdout.write(`${logMsg} ${loadingChars[index]}\r`);
+      index = (index + 1) % loadingChars.length;
+    }, 100);
+  }
+
+  private stopLoadingAnimation (): void {
+    if (this.loadInterval) {
+      clearInterval(this.loadInterval);
+      process.stdout.write('\n');
+    }
+  }
+
   constructor (contractName: string, instantiateTag?: string) {
     this.contractName = replaceAll(contractName, "-", "_");
     this.codeId = 0;
@@ -203,7 +222,7 @@ export class Contract {
       this.env.runtimeArgs.command === "test"
         ? `deploy ${this.contractName} ${initTimestamp}`
         : label;
-    console.log(`Instantiating with label: ${label}`);
+    this.printLoadingAnimation(`Instantiating with lable: ${label}`);
 
     this.contractAddress = await instantiateContract(
       this.env.network,
@@ -217,7 +236,7 @@ export class Contract {
       transferAmount,
       customFees,
       contractAdmin
-    );
+    ).finally(() => { this.stopLoadingAnimation(); });
 
     const instantiateInfo: InstantiateInfo = {
       instantiateTag: this.instantiateTag,
@@ -244,8 +263,7 @@ export class Contract {
       });
     }
     // Query the contract
-    console.log("Querying", this.contractAddress, "=>", Object.keys(msgData)[0]);
-    console.log(this.contractAddress, msgData);
+    this.printLoadingAnimation(`Querying ${this.contractAddress} => ${Object.keys(msgData)[0]}`);
 
     if (this.client === undefined) {
       throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
@@ -253,7 +271,7 @@ export class Contract {
 
     return await sendQuery(
       this.client, this.env.network, msgData, this.contractAddress, this.contractCodeHash
-    );
+    ).finally(() => { this.stopLoadingAnimation(); });
   }
 
   async executeMsg (
@@ -274,7 +292,7 @@ export class Contract {
     }
     // Send execute msg to the contract
     const signingClient = await getSigningClient(this.env.network, accountVal);
-    console.log("Executing", this.contractAddress, msgData);
+    this.printLoadingAnimation(`Executing ${this.contractAddress} ${JSON.stringify(msgData)}`);
 
     return await executeTransaction(
       this.env.network,
@@ -286,6 +304,6 @@ export class Contract {
       transferAmount,
       customFees,
       memo
-    );
+    ).finally(() => { this.stopLoadingAnimation(); });
   }
 }
