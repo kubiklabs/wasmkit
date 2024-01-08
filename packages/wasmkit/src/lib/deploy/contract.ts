@@ -119,7 +119,7 @@ export class Contract {
     const deployInfo: DeployInfo = {
       codeId: codeId,
       contractCodeHash: contractCodeHash.code_hash,
-      deployTimestamp: String(new Date())
+      deployTimestamp: (new Date()).toISOString()
     };
 
     if (this.env.runtimeArgs.useCheckpoints === true) {
@@ -138,7 +138,9 @@ export class Contract {
     address: string,
     timestamp?: Date | undefined
   ): void {
-    const initTimestamp = timestamp !== undefined ? String(timestamp) : String(new Date());
+    const initTimestamp = timestamp !== undefined
+      ? timestamp.toISOString()
+      : (new Date()).toISOString();
 
     // contract address already exists
     if (this.contractAddress !== "mock_address") {
@@ -196,7 +198,7 @@ export class Contract {
       return info;
     }
     const signingClient = await getSigningClient(this.env.network, accountVal);
-    const initTimestamp = String(new Date());
+    const initTimestamp = (new Date()).toISOString();
     label =
       this.env.runtimeArgs.command === "test"
         ? `deploy ${this.contractName} ${initTimestamp}`
