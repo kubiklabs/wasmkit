@@ -19,11 +19,11 @@ export async function stopLocalnet (
 
   // stop the node container if running
   if (containerExists.toString().length > 0) {
-    console.log(`Stopping container: ${chalk.green(nodeType)}`);
+    console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Stopping container: ${chalk.green(nodeType)}`);
 
     // stop container if running
     execSync(`docker container stop ${nodeType}`);
   } else {
-    console.log(`Container not running: ${chalk.green(nodeType)}`);
+    console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Container not running: ${chalk.green(nodeType)}`);
   }
 }

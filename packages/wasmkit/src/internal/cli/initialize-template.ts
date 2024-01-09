@@ -55,7 +55,7 @@ async function checkDir (destination: string, force: boolean): Promise<void> {
     };
 
     if (initDir.length) {
-      console.log(`This directory is non-empty...`);
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.yellow("WARN")}`, `This directory is non-empty...`);
       try {
         responses = await enquirer.prompt([
           createConfirmationPrompt(
@@ -70,7 +70,7 @@ async function checkDir (destination: string, force: boolean): Promise<void> {
         throw e;
       }
       if (!responses.shouldProceedWithNonEmptyDir) {
-        console.log("Initialization cancelled");
+        console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, "Initialization cancelled");
         process.exit();
       }
     }
@@ -88,7 +88,7 @@ async function checkTemplateExists (
 ): Promise<[string, string]> {
   const templatePath = path.join(basePath, templateName);
   if (fse.existsSync(templatePath)) { return [templatePath, templateName]; } else {
-    console.log(chalk.red(`Error occurred: template "${templateName}" does not exist in ${TEMPLATES_GIT_REMOTE}`));
+    console.log(`[${chalk.gray("wasmkit")}] ${chalk.red("ERR")}`, chalk.red(`Error occurred: template "${templateName}" does not exist in ${TEMPLATES_GIT_REMOTE}`));
     const prompt = new (enquirer as any).Select({ // eslint-disable-line  @typescript-eslint/no-explicit-any
       name: 'Select an option',
       message: 'Do you want to pick an existing template or exit?',
@@ -96,7 +96,7 @@ async function checkTemplateExists (
     });
     const response = await prompt.run();
     if (response === 'exit') {
-      console.log("Initialization cancelled");
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, "Initialization cancelled");
       process.exit();
     } else {
       const dApps = fse.readdirSync(basePath, { withFileTypes: true })
@@ -160,7 +160,7 @@ export async function initialize ({ force, projectName, templateName, destinatio
   console.info(`* Fetching templates from ${TEMPLATES_GIT_REMOTE} *`);
   await fetchRepository(TEMPLATES_GIT_REMOTE, tempDirPath);
   if (templateName === undefined) {
-    console.log(`Template name not passed: using default template ${chalk.green(DEFAULT_TEMPLATE)}`);
+    console.log(`[${chalk.gray("wasmkit")}] ${chalk.yellow("WARN")}`, `Template name not passed: using default template ${chalk.green(DEFAULT_TEMPLATE)}`);
     templateName = DEFAULT_TEMPLATE;
   }
   let templatePath;
@@ -170,6 +170,7 @@ export async function initialize ({ force, projectName, templateName, destinatio
   tempDirCleanup(); // clean temporary directory
 
   console.log(
+    `[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`,
     chalk.greenBright(`\n★ Template ${templateName} initialized in ${normalizedDestination} ★\n`));
 
   // install dependencies in /templatePath
@@ -181,6 +182,7 @@ export async function initialize ({ force, projectName, templateName, destinatio
     const installed = await installDependencies(packageManager, ['install'], normalizedDestination);
     if (!installed) {
       console.warn(
+        `[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`,
         chalk.red("Failed to install the sample project's dependencies")
       );
     }
@@ -191,6 +193,7 @@ export async function initialize ({ force, projectName, templateName, destinatio
 
   if (shouldShowInstallationInstructions) {
     console.log(
+      `[${chalk.gray("wasmkit")}] ${chalk.yellow("WARN")}`,
       chalk.yellow(`\nInstall your project dependencies using '${packageManager} install'`)
     );
   }

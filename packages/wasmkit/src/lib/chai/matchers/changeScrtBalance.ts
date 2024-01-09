@@ -49,7 +49,7 @@ export function supportChangeScrtBalance (Assertion: Chai.AssertionStatic): void
 function extractScrtBalance (
   balances: Coin[]
 ): number {
-  console.log(balances);
+  console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, balances);
   for (const coin of balances) {
     if (coin.denom === 'uscrt') {
       return Number(coin.amount);
@@ -81,7 +81,7 @@ export async function getBalanceChange ( // eslint-disable-line sonarjs/cognitiv
 
   const txResponse = await transaction();
   if (logResponse === true) {
-    console.log(`${chalk.green("Transaction response:")} ${txResponse as string}`);
+    console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `${chalk.green("Transaction response:")} ${txResponse as string}`);
   }
   const txnEvents = txResponse.logs[0].events;
   let msgEvent;

@@ -6,6 +6,7 @@ export async function buildTsScripts (
   options: ts.CompilerOptions
 ): Promise<void> {
   console.log(
+    `[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`,
     `🛠 Compiling TS files: ${chalk.gray(fileNames)}`
   );
   console.log("===========================================");
@@ -23,9 +24,9 @@ export async function buildTsScripts (
         diagnostic.start! // eslint-disable-line @typescript-eslint/no-non-null-assertion
       );
       const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
-      console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
     } else {
-      console.log(ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n"));
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n"));
     }
   });
 }

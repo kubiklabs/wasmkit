@@ -21,7 +21,7 @@ export function printSuggestedCommands (
 ): void {
   const currDir = process.cwd();
   const destinationPath = path.join(currDir, 'playground');
-  console.log(`Success! Created project at ${chalk.greenBright(destinationPath)}.`);
+  console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Success! Created project at ${chalk.greenBright(destinationPath)}.`);
 
   console.log(`Begin by typing:`);
   console.log(chalk.yellow(`  cd playground`));
@@ -313,7 +313,7 @@ export async function installDependencies (
     const childProcess = exec(command, { cwd: location });
 
     childProcess.stdout?.on("data", (data: string) => {
-      console.log(data.toString());
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, data.toString());
     });
 
     childProcess.stderr?.on("data", (data: string) => {

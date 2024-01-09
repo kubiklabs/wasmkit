@@ -27,13 +27,13 @@ export default function (): void {
       const contractNameNew = contractName.toString().replace(/-/g, '_');
       const comp = './artifacts/contracts/' + contractNameNew + '.wasm';
       if (!isCwdProjectDir()) {
-        console.log(`Not in a valid WasmKit project repo, exiting`);
+        console.log(`[${chalk.gray("wasmkit")}] ${chalk.red("ERR")} Not in a valid WasmKit project repo, exiting`);
         process.exit(1);
       } else if (!fsExtra.existsSync(`./${ARTIFACTS_DIR}`) && contractName.length) {
         throw new WasmkitError(ERRORS.GENERAL.ARTIFACTS_NOT_FOUND);
       } else if (contractNameNew.length !== 0 && fsExtra.existsSync(comp)) {
         const artifactsAbsPath = path.resolve(process.cwd(), ARTIFACTS_DIR);
-        console.log(`Cleaning Artifacts directory: ${chalk.gray(artifactsAbsPath)}`);
+        console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Cleaning Artifacts directory: ${chalk.gray(artifactsAbsPath)}`);
         await fsExtra.remove(comp);
         await fsExtra.remove('./artifacts/schema/' + contractNameNew + '/');
         await fsExtra.remove('./artifacts/checkpoints/' + contractNameNew + '.yaml}');
@@ -41,7 +41,7 @@ export default function (): void {
         throw new WasmkitError(ERRORS.GENERAL.INCORRECT_CONTRACT_NAME);
       } else {
         const artifactsAbsPath = path.resolve(process.cwd(), ARTIFACTS_DIR);
-        console.log(`Cleaning Artifacts directory: ${chalk.gray(artifactsAbsPath)}`);
+        console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Cleaning Artifacts directory: ${chalk.gray(artifactsAbsPath)}`);
         await fsExtra.remove(ARTIFACTS_DIR);
       }
     });
