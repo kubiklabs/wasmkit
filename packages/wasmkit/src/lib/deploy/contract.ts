@@ -264,22 +264,27 @@ export class Contract {
     return instantiateInfo;
   }
 
-  async queryMsg (msgData: Record<string, unknown>): Promise<any> { // eslint-disable-line  @typescript-eslint/no-explicit-any
+  async queryMsg (msgData: Record<string, unknown>, skipLogs?: boolean): Promise<any> { // eslint-disable-line  @typescript-eslint/no-explicit-any
     if (this.contractAddress === "mock_address") {
       throw new WasmkitError(ERRORS.GENERAL.CONTRACT_NOT_INSTANTIATED, {
         param: this.contractName
       });
     }
     // Query the contract
-    this.printLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Querying ${this.contractAddress} => ${Object.keys(msgData)[0]}`);
-
+    if (!skipLogs) {
+      this.printLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Querying ${this.contractAddress} => ${Object.keys(msgData)[0]}`);
+    }
     if (this.client === undefined) {
       throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
     }
 
     return await sendQuery(
       this.client, this.env.network, msgData, this.contractAddress, this.contractCodeHash
-    ).finally(() => { this.stopLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Querying ${this.contractAddress} => ${Object.keys(msgData)[0]}`); });
+    ).finally(() => {
+      if (!skipLogs) {
+        this.stopLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Querying ${this.contractAddress} => ${Object.keys(msgData)[0]}`);
+      }
+    });
   }
 
   async executeMsg (
@@ -287,7 +292,8 @@ export class Contract {
     account: Account | UserAccount,
     customFees?: TxnStdFee,
     memo?: string,
-    transferAmount?: readonly Coin[]
+    transferAmount?: readonly Coin[],
+    skipLogs?: boolean
   ): Promise<any> { // eslint-disable-line  @typescript-eslint/no-explicit-any
     const accountVal: Account =
       (account as UserAccount).account !== undefined
@@ -300,7 +306,9 @@ export class Contract {
     }
     // Send execute msg to the contract
     const signingClient = await getSigningClient(this.env.network, accountVal);
-    this.printLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Executing ${this.contractAddress} ${JSON.stringify(msgData)}`);
+    if (!skipLogs) {
+      this.printLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Executing ${this.contractAddress} ${JSON.stringify(msgData)}`);
+    }
 
     return await executeTransaction(
       this.env.network,
@@ -313,8 +321,10 @@ export class Contract {
       customFees,
       memo
     ).then((result) => {
-      this.stopLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Executing ${this.contractAddress} ${JSON.stringify(msgData)}`);
-      console.log(`[${chalk.gray("wasmkit")}] TransactionHash: '${chalk.green(result.transactionHash)}'`);
+      if (!skipLogs) {
+        this.stopLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Executing ${this.contractAddress} ${JSON.stringify(msgData)}`);
+        console.log(`[${chalk.gray("wasmkit")}] TransactionHash: '${chalk.green(result.transactionHash)}'`);
+      }
       return result;
     });
   }
