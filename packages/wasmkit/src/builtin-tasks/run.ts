@@ -37,7 +37,7 @@ async function runScripts (
   const log = debug(logDebugTag);
 
   // log the details of network the script is running on
-  console.log(
+  console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`,
     `Network: { RpcUrl: '${chalk.green(runtimeEnv.network.config.endpoint)}'` +
     `, ChainId: '${chalk.green(runtimeEnv.network.config.chainId)}' }`
   );

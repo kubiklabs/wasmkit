@@ -49,19 +49,26 @@ export class Contract {
   private loadInterval?: NodeJS.Timer;
 
   private printLoadingAnimation (logMsg: string): void {
-    const loadingChars = ['/', '-', '\\', '|'];
-    let index = 0;
+    const spinner = {
+      interval: 50,
+      frames: [
+        "◢",
+        "◣",
+        "◤",
+        "◥"
+      ]
+    };
 
     this.loadInterval = setInterval(() => {
-      process.stdout.write(`${logMsg} ${loadingChars[index]}\r`);
-      index = (index + 1) % loadingChars.length;
-    }, 100);
+      process.stdout.write(`\r[${chalk.yellow(spinner.frames[spinner.interval % spinner.frames.length])}]${logMsg}`);
+      spinner.interval += 1;
+    }, spinner.interval);
   }
 
-  private stopLoadingAnimation (): void {
+  private stopLoadingAnimation (logMsg: string): void {
     if (this.loadInterval) {
       clearInterval(this.loadInterval);
-      process.stdout.write('\n');
+      console.log(`\r[${chalk.green('●')}] ${logMsg}`);
     }
   }
 
@@ -117,7 +124,7 @@ export class Contract {
         : (account as Account);
     const info = this.checkpointData[this.env.network.name]?.deployInfo;
     if (info) {
-      console.log("Warning: contract already deployed, using checkpoints");
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.yellow("WARN")} Contract already deployed, using checkpoints`);
       return info;
     }
     await compress(this.contractName, this.env);
@@ -165,7 +172,7 @@ export class Contract {
     // contract address already exists
     if (this.contractAddress !== "mock_address") {
       console.log(
-        `Contract ${this.contractName} already has address: ${this.contractAddress}, skipping`
+        `[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Contract ${this.contractName} already has address: ${this.contractAddress}, skipping`
       );
       return;
     } else {
@@ -214,7 +221,7 @@ export class Contract {
       }
     }
     if (info) {
-      console.log("Warning: contract already instantiated, using checkpoints");
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.yellow("WARN")} Contract already instantiated, using checkpoints`);
       return info;
     }
     const signingClient = await getSigningClient(this.env.network, accountVal);
@@ -223,7 +230,7 @@ export class Contract {
       this.env.runtimeArgs.command === "test"
         ? `deploy ${this.contractName} ${initTimestamp}`
         : label;
-    this.printLoadingAnimation(`Instantiating with lable: ${label}`);
+    this.printLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Instantiating with label: ${label}`);
 
     this.contractAddress = await instantiateContract(
       this.env.network,
@@ -237,7 +244,7 @@ export class Contract {
       transferAmount,
       customFees,
       contractAdmin
-    ).finally(() => { this.stopLoadingAnimation(); });
+    ).finally(() => { this.stopLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Instantiating with label: ${label}`); });
 
     const instantiateInfo: InstantiateInfo = {
       instantiateTag: this.instantiateTag,
@@ -264,7 +271,7 @@ export class Contract {
       });
     }
     // Query the contract
-    this.printLoadingAnimation(`Querying ${this.contractAddress} => ${Object.keys(msgData)[0]}`);
+    this.printLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Querying ${this.contractAddress} => ${Object.keys(msgData)[0]}`);
 
     if (this.client === undefined) {
       throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
@@ -272,7 +279,7 @@ export class Contract {
 
     return await sendQuery(
       this.client, this.env.network, msgData, this.contractAddress, this.contractCodeHash
-    ).finally(() => { this.stopLoadingAnimation(); });
+    ).finally(() => { this.stopLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Querying ${this.contractAddress} => ${Object.keys(msgData)[0]}`); });
   }
 
   async executeMsg (
@@ -293,7 +300,7 @@ export class Contract {
     }
     // Send execute msg to the contract
     const signingClient = await getSigningClient(this.env.network, accountVal);
-    this.printLoadingAnimation(`Executing ${this.contractAddress} ${JSON.stringify(msgData)}`);
+    this.printLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Executing ${this.contractAddress} ${JSON.stringify(msgData)}`);
 
     return await executeTransaction(
       this.env.network,
@@ -306,8 +313,8 @@ export class Contract {
       customFees,
       memo
     ).then((result) => {
-      this.stopLoadingAnimation();
-      console.log(`TransactionHash: '${chalk.green(result.transactionHash)}'`);
+      this.stopLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Executing ${this.contractAddress} ${JSON.stringify(msgData)}`);
+      console.log(`[${chalk.gray("wasmkit")}] TransactionHash: '${chalk.green(result.transactionHash)}'`);
       return result;
     });
   }
