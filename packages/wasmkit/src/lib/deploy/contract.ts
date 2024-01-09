@@ -1,5 +1,6 @@
 import { ArchwayClient } from "@archwayhq/arch3.js/build";
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import chalk from "chalk";
 import fs from "fs-extra";
 import path from "path";
 import { SecretNetworkClient } from "secretjs";
@@ -304,6 +305,10 @@ export class Contract {
       transferAmount,
       customFees,
       memo
-    ).finally(() => { this.stopLoadingAnimation(); });
+    ).then((result) => {
+      this.stopLoadingAnimation();
+      console.log(`TransactionHash: '${chalk.green(result.transactionHash)}'`);
+      return result;
+    });
   }
 }
