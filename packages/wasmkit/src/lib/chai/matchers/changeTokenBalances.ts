@@ -98,7 +98,7 @@ export async function getBalanceChanges (
 
   const txResponse = await transaction();
   if (logResponse === true) {
-    console.log(`${chalk.green("Transaction response:")} ${txResponse as string}`);
+    console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `${chalk.green("Transaction response:")} ${txResponse as string}`);
   }
 
   const balancesAfter = await getBalances(accountAddresses, token);

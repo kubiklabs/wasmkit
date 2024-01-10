@@ -112,7 +112,7 @@ export function compileContract (
   const cargoCommands = env.config.commands;
   const currDir = process.cwd();
   process.chdir(contractDir);
-  console.log(`🛠 Compiling your contract in directory: ${chalk.gray(contractDir)}`);
+  console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `🛠 Compiling your contract in directory: ${chalk.gray(contractDir)}`);
   console.log("=============================================");
   // Compiles the contract and creates .wasm file alongside others
   try {
@@ -138,7 +138,7 @@ export async function generateSchema (
   const cargoCommands = env.config.commands;
   const currDir = process.cwd();
   process.chdir(contractDir);
-  console.log(`Creating schema for contract in directory: ${chalk.gray(contractDir)}`);
+  console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Creating schema for contract in directory: ${chalk.gray(contractDir)}`);
 
   // Creates schema .json files
   execSync(cargoCommands.schema, { stdio: 'inherit' });
@@ -151,7 +151,7 @@ export async function generateSchema (
   if (!fs.existsSync(contractTsSchemaDir)) {
     fs.mkdirSync(contractTsSchemaDir, { recursive: true });
   }
-  console.log(`Creating TS schema objects for contract in directory: ${chalk.gray(contractTsSchemaDir)}`);
+  console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Creating TS schema objects for contract in directory: ${chalk.gray(contractTsSchemaDir)}`);
 
   const srcSchemas = readSchemas(
     path.join(contractDir, "schema"),
@@ -184,7 +184,7 @@ export function createArtifacts (
       continue;
     }
 
-    console.log(`Copying file ${filename} from ${chalk.gray(targetDir)} to ${chalk.gray(artifactsDir)}`);
+    console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Copying file ${filename} from ${chalk.gray(targetDir)} to ${chalk.gray(artifactsDir)}`);
     const sourcePath = path.resolve(targetDir, filename);
     const destPath = path.resolve(artifactsDir, filename);
     fs.copyFileSync(sourcePath, destPath);
@@ -203,6 +203,7 @@ export function createArtifacts (
     }
 
     console.log(
+      `[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`,
       `Copying file ${filename} from ${chalk.gray(sourceSchemaDir)} to ${chalk.gray(schemaDir)}`
     );
     const sourcePath = path.resolve(sourceSchemaDir, filename);

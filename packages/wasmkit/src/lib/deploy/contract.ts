@@ -1,5 +1,6 @@
 import { ArchwayClient } from "@archwayhq/arch3.js/build";
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import chalk from "chalk";
 import fs from "fs-extra";
 import path from "path";
 import { SecretNetworkClient } from "secretjs";
@@ -44,6 +45,32 @@ export class Contract {
   public instantiateTag: string;
   private checkpointData: Checkpoints;
   private readonly checkpointPath: string;
+
+  private loadInterval?: NodeJS.Timer;
+
+  private printLoadingAnimation (logMsg: string): void {
+    const spinner = {
+      interval: 50,
+      frames: [
+        "◢",
+        "◣",
+        "◤",
+        "◥"
+      ]
+    };
+
+    this.loadInterval = setInterval(() => {
+      process.stdout.write(`\r[${chalk.yellow(spinner.frames[spinner.interval % spinner.frames.length])}]${logMsg}`);
+      spinner.interval += 1;
+    }, spinner.interval);
+  }
+
+  private stopLoadingAnimation (logMsg: string): void {
+    if (this.loadInterval) {
+      clearInterval(this.loadInterval);
+      console.log(`\r[${chalk.green('●')}] ${logMsg}`);
+    }
+  }
 
   constructor (contractName: string, instantiateTag?: string) {
     this.contractName = replaceAll(contractName, "-", "_");
@@ -97,7 +124,7 @@ export class Contract {
         : (account as Account);
     const info = this.checkpointData[this.env.network.name]?.deployInfo;
     if (info) {
-      console.log("Warning: contract already deployed, using checkpoints");
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.yellow("WARN")} Contract already deployed, using checkpoints`);
       return info;
     }
     await compress(this.contractName, this.env);
@@ -119,7 +146,7 @@ export class Contract {
     const deployInfo: DeployInfo = {
       codeId: codeId,
       contractCodeHash: contractCodeHash.code_hash,
-      deployTimestamp: String(new Date())
+      deployTimestamp: (new Date()).toISOString()
     };
 
     if (this.env.runtimeArgs.useCheckpoints === true) {
@@ -138,12 +165,14 @@ export class Contract {
     address: string,
     timestamp?: Date | undefined
   ): void {
-    const initTimestamp = timestamp !== undefined ? String(timestamp) : String(new Date());
+    const initTimestamp = timestamp !== undefined
+      ? timestamp.toISOString()
+      : (new Date()).toISOString();
 
     // contract address already exists
     if (this.contractAddress !== "mock_address") {
       console.log(
-        `Contract ${this.contractName} already has address: ${this.contractAddress}, skipping`
+        `[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Contract ${this.contractName} already has address: ${this.contractAddress}, skipping`
       );
       return;
     } else {
@@ -192,16 +221,16 @@ export class Contract {
       }
     }
     if (info) {
-      console.log("Warning: contract already instantiated, using checkpoints");
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.yellow("WARN")} Contract already instantiated, using checkpoints`);
       return info;
     }
     const signingClient = await getSigningClient(this.env.network, accountVal);
-    const initTimestamp = String(new Date());
+    const initTimestamp = (new Date()).toISOString();
     label =
       this.env.runtimeArgs.command === "test"
         ? `deploy ${this.contractName} ${initTimestamp}`
         : label;
-    console.log(`Instantiating with label: ${label}`);
+    this.printLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Instantiating with label: ${label}`);
 
     this.contractAddress = await instantiateContract(
       this.env.network,
@@ -215,7 +244,7 @@ export class Contract {
       transferAmount,
       customFees,
       contractAdmin
-    );
+    ).finally(() => { this.stopLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Instantiating with label: ${label}`); });
 
     const instantiateInfo: InstantiateInfo = {
       instantiateTag: this.instantiateTag,
@@ -235,23 +264,27 @@ export class Contract {
     return instantiateInfo;
   }
 
-  async queryMsg (msgData: Record<string, unknown>): Promise<any> { // eslint-disable-line  @typescript-eslint/no-explicit-any
+  async queryMsg (msgData: Record<string, unknown>, logFlag = true): Promise<any> { // eslint-disable-line  @typescript-eslint/no-explicit-any
     if (this.contractAddress === "mock_address") {
       throw new WasmkitError(ERRORS.GENERAL.CONTRACT_NOT_INSTANTIATED, {
         param: this.contractName
       });
     }
     // Query the contract
-    console.log("Querying", this.contractAddress, "=>", Object.keys(msgData)[0]);
-    console.log(this.contractAddress, msgData);
-
+    if (logFlag) {
+      this.printLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Querying ${this.contractAddress} => ${Object.keys(msgData)[0]}`);
+    }
     if (this.client === undefined) {
       throw new WasmkitError(ERRORS.GENERAL.CLIENT_NOT_LOADED);
     }
 
     return await sendQuery(
       this.client, this.env.network, msgData, this.contractAddress, this.contractCodeHash
-    );
+    ).finally(() => {
+      if (logFlag) {
+        this.stopLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Querying ${this.contractAddress} => ${Object.keys(msgData)[0]}`);
+      }
+    });
   }
 
   async executeMsg (
@@ -259,7 +292,8 @@ export class Contract {
     account: Account | UserAccount,
     customFees?: TxnStdFee,
     memo?: string,
-    transferAmount?: readonly Coin[]
+    transferAmount?: readonly Coin[],
+    logFlag = true
   ): Promise<any> { // eslint-disable-line  @typescript-eslint/no-explicit-any
     const accountVal: Account =
       (account as UserAccount).account !== undefined
@@ -272,7 +306,9 @@ export class Contract {
     }
     // Send execute msg to the contract
     const signingClient = await getSigningClient(this.env.network, accountVal);
-    console.log("Executing", this.contractAddress, msgData);
+    if (logFlag) {
+      this.printLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Executing ${this.contractAddress} ${JSON.stringify(msgData)}`);
+    }
 
     return await executeTransaction(
       this.env.network,
@@ -284,6 +320,12 @@ export class Contract {
       transferAmount,
       customFees,
       memo
-    );
+    ).then((result) => {
+      if (logFlag) {
+        this.stopLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Executing ${this.contractAddress} ${JSON.stringify(msgData)}`);
+        console.log(`[${chalk.gray("wasmkit")}] TransactionHash: '${chalk.green(result.transactionHash)}'`);
+      }
+      return result;
+    });
   }
 }

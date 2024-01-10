@@ -3,7 +3,7 @@ import { getAccountByName } from "@kubiklabs/wasmkit";
 import { CounterContract } from "../artifacts/typescript_schema/CounterContract";
 
 export default async function run () {
-  const runTs = String(new Date());
+  const runTs = (new Date()).toISOString();
   const contract_owner = await getAccountByName("account_0");
   const counter_contract = new CounterContract();
   await counter_contract.setupClient();

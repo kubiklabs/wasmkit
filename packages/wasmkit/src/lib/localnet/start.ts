@@ -31,7 +31,7 @@ export async function startLocalnet (
 
   // start the node with proper flags and env variables
   if (clean && containerExists.toString().length > 0) {
-    console.log(`Removing existing container: ${chalk.green(nodeType)}`);
+    console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Removing existing container: ${chalk.green(nodeType)}`);
 
     // stop container if running
     execSync(`docker container stop ${nodeType}`);
@@ -40,14 +40,14 @@ export async function startLocalnet (
     execSync(`docker container rm ${nodeType}`);
   }
 
-  console.log(`Starting container: ${chalk.green(nodeType)}`);
+  console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Starting container: ${chalk.green(nodeType)}`);
 
   execSync(`
   docker run -d --name ${nodeType} -p ${restPort}:1317 -p ${rpcPort}:26657 ${flags} ${localNetworkImage}:latest ${command}
   `);
 
   // if started, prompt the user with endpoints
-  console.log(`Local network started with RPC port: ${chalk.green(rpcPort)}, REST port: ${chalk.green(restPort)}`);
+  console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Local network started with RPC port: ${chalk.green(rpcPort)}, REST port: ${chalk.green(restPort)}`);
 
   // if explorer yes then start a wasmkit-explorer with same localnetwork cfg
 }

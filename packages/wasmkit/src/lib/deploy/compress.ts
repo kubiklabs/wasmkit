@@ -17,18 +17,18 @@ export async function compress (
   const destPath = path.join(CONTRACTS_OUT_DIR, `${contractName}_compressed.wasm`);
 
   if (fs.existsSync(destPath)) {
-    console.log(`Compressed .wasm file exists for contract ${contractName}, skipping compression`);
+    console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Compressed .wasm file exists for contract ${contractName}, skipping compression`);
     return;
   }
 
   if (!fs.existsSync(srcPath)) {
-    console.log(`${contractName}.wasm file does not exist in artifacts dir, compiling...`);
+    console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `${contractName}.wasm file does not exist in artifacts dir, compiling...`);
     await compile(false, [], false, false, false, env);
   }
 
   const compressCmd = `cp ${srcPath} ${destPath}`;
 
-  console.log(chalk.greenBright(`Creating compressed .wasm file for ${contractName}`));
+  console.log(chalk.greenBright(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Creating compressed .wasm file for ${contractName}`));
   execSync(compressCmd, { stdio: 'inherit' });
 
   if (!fs.existsSync(destPath)) {

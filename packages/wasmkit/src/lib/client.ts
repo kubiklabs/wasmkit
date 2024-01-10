@@ -1,6 +1,7 @@
 import { ArchwayClient, SigningArchwayClient } from '@archwayhq/arch3.js';
 import { CosmWasmClient, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet, makeCosmoshubPath } from "@cosmjs/proto-signing";
+import chalk from "chalk";
 import { SecretNetworkClient, Wallet } from "secretjs";
 import { Coin } from "secretjs/dist/protobuf/cosmos/base/v1beta1/coin";
 
@@ -36,7 +37,7 @@ export async function getClient (
 
     // }
     default: {
-      console.log("Error from client");
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.red("ERR")}`, "Error from client");
 
       throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
@@ -148,7 +149,7 @@ export async function getSigningClient (
 
     // }
     default: {
-      console.log("Error from signing client");
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.red("ERR")}`, "Error from signing client");
       throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }
@@ -528,7 +529,7 @@ export async function getBalance (
 
     // }
     default: {
-      console.log("Error fetching balance");
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.red("ERR")}`, "Error fetching balance");
       throw new WasmkitError(ERRORS.NETWORK.UNKNOWN_NETWORK,
         { account: network.config.accounts[0].address });
     }

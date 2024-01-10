@@ -57,7 +57,7 @@ async function checkDir (destination: string, force: boolean): Promise<void> {
     };
 
     if (initDir.length) {
-      console.log(`This directory is non-empty...`);
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.yellow("WARN")}`, `This directory is non-empty...`);
       try {
         responses = await enquirer.prompt([
           createConfirmationPrompt(
@@ -72,7 +72,7 @@ async function checkDir (destination: string, force: boolean): Promise<void> {
         throw e;
       }
       if (!responses.shouldProceedWithNonEmptyDir) {
-        console.log("Initialization cancelled");
+        console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, "Initialization cancelled");
         process.exit();
       }
     }
@@ -95,6 +95,7 @@ async function checkTemplateExists (
     return [templatePath, templateName];
   } else {
     console.log(
+      `[${chalk.gray("wasmkit")}] ${chalk.red("ERR")}`,
       chalk.red(
         `Error occurred: template "${templateName}" does not exist in ${projectPath}`
       )
@@ -107,7 +108,7 @@ async function checkTemplateExists (
     });
     const response = await prompt.run();
     if (response === "exit") {
-      console.log("Initialization cancelled");
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, "Initialization cancelled");
       process.exit();
     } else {
       const dApps = fse
@@ -183,6 +184,7 @@ export async function initialize ({
   await fetchRepository(projectPath, tempDirPath);
   if (templateName === undefined) {
     console.log(
+      `[${chalk.gray("wasmkit")}] ${chalk.yellow("WARN")}`,
       `Template name not passed: using default template ${chalk.green(DEFAULT_TEMPLATE_PLAYGROUND)}`
     );
     templateName = DEFAULT_TEMPLATE_PLAYGROUND;

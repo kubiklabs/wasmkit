@@ -47,7 +47,7 @@ async function promptOverwrites (
   };
 
   for (const file of contentCollisions) {
-    console.log(chalk.yellow(`${file} already exists in this directory..`));
+    console.log(`[${chalk.gray("wasmkit")}] ${chalk.yellow("WARN")}`, chalk.yellow(`${file} already exists in this directory..`));
     const overwriteToggle = [
       {
         type: "Toggle",

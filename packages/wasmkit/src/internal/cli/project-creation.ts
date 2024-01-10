@@ -28,7 +28,7 @@ function copySampleProject (projectName: string): void {
 
   const currDir = process.cwd();
   const projectPath = path.join(currDir, projectName);
-  console.log(chalk.greenBright("Initializing new project in " + projectPath + "."));
+  console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, chalk.greenBright("Initializing new project in " + projectPath + "."));
 
   fsExtra.copySync(sampleProjDir, projectPath, {
     // User doesn't choose the directory so overwrite should be avoided
@@ -54,7 +54,7 @@ function copySampleProject (projectName: string): void {
 export function printSuggestedCommands (projectName: string): void {
   const currDir = process.cwd();
   const projectPath = path.join(currDir, projectName);
-  console.log(`Success! Created project at ${chalk.greenBright(projectPath)}.`);
+  console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Success! Created project at ${chalk.greenBright(projectPath)}.`);
   // TODO: console.log(`Inside that directory, you can run several commands:`);
   // list commands and respective description
 
@@ -66,6 +66,7 @@ export function printSuggestedCommands (projectName: string): void {
 
 async function printPluginInstallationInstructions (): Promise<void> {
   console.log(
+    `[${chalk.gray("wasmkit")}] ${chalk.yellow("WARN")}`,
     `You need to install these dependencies to run the sample project:`
   );
 

@@ -19,21 +19,21 @@ async function nodeInfo (
   env: WasmkitRuntimeEnvironment
 ): Promise<void> {
   const client = await getClient(env.network);
-  console.log("Network:", chalk.green(env.network.name));
-  console.log("RPC URL:", chalk.green(env.network.config.endpoint));
+  console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, "Network:", chalk.green(env.network.name));
+  console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, "RPC URL:", chalk.green(env.network.config.endpoint));
   const chain = getChainFromAccount(env.network);
 
   switch (chain) {
     case ChainType.Secret: {
       const tendermintClient = (client as SecretNetworkClient).query.tendermint;
       const blockInfo = await tendermintClient.getLatestBlock({});
-      console.log("Block height:", chalk.green(blockInfo));
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, "Block height:", chalk.green(blockInfo));
       // console.log("ChainId:", await tendermintClient.getChainId()); // TODO: replace this
 
       const nodeInfo = await tendermintClient.getNodeInfo({})
         // eslint-disable-next-line
         .catch((err: any) => { throw new Error(`Could not fetch node info: ${err}`); });
-      console.log("Node Info:", chalk.green(nodeInfo));
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, "Node Info:", chalk.green(nodeInfo));
       break;
     }
     case ChainType.Juno:
@@ -44,8 +44,8 @@ async function nodeInfo (
     case ChainType.Umee:
     case ChainType.Nibiru:
     case ChainType.Terra: {
-      console.log("ChainId:", chalk.green(await (client as CosmWasmClient).getChainId()));
-      console.log("Block height:", chalk.green(await (client as CosmWasmClient).getHeight()));
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, "ChainId:", chalk.green(await (client as CosmWasmClient).getChainId()));
+      console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, "Block height:", chalk.green(await (client as CosmWasmClient).getHeight()));
       break;
     }
     // case ChainType.Injective: {

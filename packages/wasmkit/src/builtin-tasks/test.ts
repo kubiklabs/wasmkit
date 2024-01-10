@@ -29,7 +29,7 @@ async function runTests (
   const mocha = new Mocha(runtimeEnv.config.mocha);
 
   // log the details of network the test is running on
-  console.log(
+  console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`,
     `Network: { RpcUrl: '${chalk.green(runtimeEnv.network.config.endpoint)}'` +
     `, ChainId: '${chalk.green(runtimeEnv.network.config.chainId)}' }`
   );
@@ -65,8 +65,8 @@ async function executeTestTask (
         tests.push(relativeFilePath);
       }
     }
-    console.log(`Reading test files in ${chalk.cyan(TESTS_DIR)} directory`);
-    console.log(`Found ${tests.length} test files: ${chalk.green(tests)}`);
+    console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Reading test files in ${chalk.cyan(TESTS_DIR)} directory`);
+    console.log(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")}`, `Found ${tests.length} test files: ${chalk.green(tests)}`);
   }
 
   const nonExistent = filterNonExistent(tests);
