@@ -264,14 +264,14 @@ export class Contract {
     return instantiateInfo;
   }
 
-  async queryMsg (msgData: Record<string, unknown>, skipLogs?: boolean): Promise<any> { // eslint-disable-line  @typescript-eslint/no-explicit-any
+  async queryMsg (msgData: Record<string, unknown>, logFlag = true): Promise<any> { // eslint-disable-line  @typescript-eslint/no-explicit-any
     if (this.contractAddress === "mock_address") {
       throw new WasmkitError(ERRORS.GENERAL.CONTRACT_NOT_INSTANTIATED, {
         param: this.contractName
       });
     }
     // Query the contract
-    if (!skipLogs) {
+    if (logFlag) {
       this.printLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Querying ${this.contractAddress} => ${Object.keys(msgData)[0]}`);
     }
     if (this.client === undefined) {
@@ -281,7 +281,7 @@ export class Contract {
     return await sendQuery(
       this.client, this.env.network, msgData, this.contractAddress, this.contractCodeHash
     ).finally(() => {
-      if (!skipLogs) {
+      if (logFlag) {
         this.stopLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Querying ${this.contractAddress} => ${Object.keys(msgData)[0]}`);
       }
     });
@@ -293,7 +293,7 @@ export class Contract {
     customFees?: TxnStdFee,
     memo?: string,
     transferAmount?: readonly Coin[],
-    skipLogs?: boolean
+    logFlag = true
   ): Promise<any> { // eslint-disable-line  @typescript-eslint/no-explicit-any
     const accountVal: Account =
       (account as UserAccount).account !== undefined
@@ -306,7 +306,7 @@ export class Contract {
     }
     // Send execute msg to the contract
     const signingClient = await getSigningClient(this.env.network, accountVal);
-    if (!skipLogs) {
+    if (logFlag) {
       this.printLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Executing ${this.contractAddress} ${JSON.stringify(msgData)}`);
     }
 
@@ -321,7 +321,7 @@ export class Contract {
       customFees,
       memo
     ).then((result) => {
-      if (!skipLogs) {
+      if (logFlag) {
         this.stopLoadingAnimation(`[${chalk.gray("wasmkit")}] ${chalk.green("INF")} Executing ${this.contractAddress} ${JSON.stringify(msgData)}`);
         console.log(`[${chalk.gray("wasmkit")}] TransactionHash: '${chalk.green(result.transactionHash)}'`);
       }
